@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +20,9 @@ import android.widget.ImageButton;
 
 import com.example.anna.Alerts.Alert;
 import com.example.anna.Alerts.BadPasswordAlert;
-import com.example.anna.Alerts.EmailFieldEmptyAlert;
+import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.PasswordsNotEqualAlert;
+import com.example.anna.Alerts.UnSuccessfulSignUpAlert;
 import com.example.anna.Inicio.MainActivity;
 import com.example.anna.Inicio.UserTuple;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
@@ -60,7 +60,8 @@ public class SignUpFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(String.valueOf
                 (R.string.sharedpreferencesfile),Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        reference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://annaapp-3222q19-default-rtdb.firebaseio.com");
+        reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        //reference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     }
 
     @Override
@@ -96,7 +97,7 @@ public class SignUpFragment extends Fragment {
             public void onClick(View v) {
                 if(TextUtils.isEmpty(emailSignUp.getText())) {
                     //showAlert();
-                    showAlert(new EmailFieldEmptyAlert());
+                    showAlert(new EmptyEmailFieldAlert(getContext()));
                 }else{
                     if(!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
                             passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())){
@@ -114,15 +115,15 @@ public class SignUpFragment extends Fragment {
                                     getActivity().finish();
 
                                 }else{
-                                    showAlert();
+                                    showAlert(new UnSuccessfulSignUpAlert(getContext()));
                                 }
                             }
                         });
 
                     }else if(TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())){
-                        showAlert(new BadPasswordAlert());
+                        showAlert(new BadPasswordAlert(getContext()));
                     }else{
-                        showAlert(new PasswordsNotEqualAlert());
+                        showAlert(new PasswordsNotEqualAlert(getContext()));
                     }
                 }
             }
@@ -160,27 +161,27 @@ public class SignUpFragment extends Fragment {
                                 getActivity().finish();
 
                             }else{
-                                showAlert();
+                                showAlert(new UnSuccessfulSignUpAlert(getContext()));
                             }
                         }
                     });
 
                 }
             } catch (ApiException e) {
-                showAlert();
+                showAlert(new UnSuccessfulSignUpAlert(getContext()));
             }
         }
     }
 
     private void showAlert(Alert alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(String.valueOf(R.string.error));
+        builder.setTitle(getString(R.string.error));
         builder.setMessage(alert.getAlertMessage());
-        builder.setPositiveButton(String.valueOf(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok),null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+/*
 
     private void showAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -190,6 +191,8 @@ public class SignUpFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+*/
 /*
     public void uploadUser(){
 

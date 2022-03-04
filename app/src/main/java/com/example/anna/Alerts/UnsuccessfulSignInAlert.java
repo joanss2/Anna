@@ -5,14 +5,14 @@ import android.content.res.Resources;
 
 import com.example.anna.R;
 
-public class PasswordsNotEqualAlert extends Alert{
+public class UnsuccessfulSignInAlert extends Alert{
 
-    public PasswordsNotEqualAlert(Context context){
+    public UnsuccessfulSignInAlert(Context context){
         super(context);
     }
 
     @Override
     public String getAlertMessage() {
-        return this.context.getString(R.string.passwordsNotEqual);
+        return this.context.getString(R.string.SignInNotSuccessful);
     }
 }

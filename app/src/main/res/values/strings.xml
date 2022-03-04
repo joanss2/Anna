@@ -52,5 +52,8 @@
     <string name="badPasswordAlert"> The introduced password is incorrect.</string>
     <string name="passwordsNotEqual"> Passwords don\'t match. Please revalidate it.</string>
     <string name="emailFieldCannotBeEmpty"> Email field can not be empty.</string>
+    <string name="SignInNotSuccessful"> It looks like signing in has not been successful. </string>
+    <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
+
 
 </resources>

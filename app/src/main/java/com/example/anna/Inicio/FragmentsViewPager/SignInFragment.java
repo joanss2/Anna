@@ -18,10 +18,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.example.anna.Alerts.Alert;
-import com.example.anna.Alerts.EmailFieldEmptyAlert;
+import com.example.anna.Alerts.BadPasswordAlert;
+import com.example.anna.Alerts.EmptyEmailFieldAlert;
+import com.example.anna.Alerts.UnsuccessfulSignInAlert;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -49,6 +50,7 @@ public class SignInFragment extends Fragment{
     private Intent intent;
     private Uri userPic;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,8 @@ public class SignInFragment extends Fragment{
         email.setText(received);
 
 
+
+
         btnSignIn.setOnClickListener(new View.OnClickListener() {
 
             /* En aquesta part es voldria separar varios casos:
@@ -85,10 +89,13 @@ public class SignInFragment extends Fragment{
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.buttonsignin:
+
+                        if(TextUtils.isEmpty(email.getText())) {
+                            showAlert(new EmptyEmailFieldAlert(getContext()));
                         /*
                         Part de codi que serviria per comprovar el format de l'email.
 
-                        if(validateEmail(mEdtTxtEmail.getText().toString().trim())){
+                        else if(validateEmail(mEdtTxtEmail.getText().toString().trim())){
                             // your code
                         }
 
@@ -98,9 +105,13 @@ public class SignInFragment extends Fragment{
                         return emailMatcher.matches();
 
                         */
-                        if(TextUtils.isEmpty(email.getText())) {
-                            showAlert(new EmailFieldEmptyAlert());
+
                         }else if(!TextUtils.isEmpty(email.getText()) && !TextUtils.isEmpty(password.getText())){
+
+                            /*
+                            Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
+
+                             */
                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
@@ -111,14 +122,13 @@ public class SignInFragment extends Fragment{
                                                 startActivity(intent);
                                                 getActivity().finish();
                                             }else{
-
-                                                showAlert();
+                                                showAlert(new BadPasswordAlert(getContext()));
                                             }
                                         }
                                     });
 
                         }else{
-                            showAlert();
+                            showAlert(new UnsuccessfulSignInAlert(getContext()));
                         }
                 }
             }
@@ -165,19 +175,19 @@ public class SignInFragment extends Fragment{
                                 getActivity().finish();
 
                             }else{
-                                showAlert();
+                                showAlert(new UnsuccessfulSignInAlert(getContext()));
                             }
                         }
                     });
 
                 }
             } catch (ApiException e) {
-                showAlert();
+                showAlert(new UnsuccessfulSignInAlert(getContext()));
             }
         }
     }
 
-
+/*
     private void showAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Error");
@@ -186,6 +196,10 @@ public class SignInFragment extends Fragment{
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+ */
+
+
 
     @Override
     public void onResume() {
@@ -197,9 +211,9 @@ public class SignInFragment extends Fragment{
 
     private void showAlert(Alert alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(String.valueOf(R.string.error));
+        builder.setTitle(getString(R.string.error));
         builder.setMessage(alert.getAlertMessage());
-        builder.setPositiveButton(String.valueOf(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok),null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
