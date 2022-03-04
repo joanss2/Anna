@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".Discounts">
+
+    <GridView
+        android:id="@+id/griddiscounts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:background="@color/purple_700"
+        android:numColumns="auto_fit"
+        android:horizontalSpacing="4dp"
+        android:verticalSpacing="4dp"
+        android:layout_gravity="center"/>
+</LinearLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="30dp"
+    android:orientation="vertical"
+    tools:context=".ContactUs">
+
+    <TextView
+        android:id="@+id/SendMailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:text="@string/sendmailtitle"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/mailfromtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/emailto"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/addressmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:clickable="false"
+        android:editable="false"
+        android:enabled="false"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:longClickable="false"
+        android:text="@string/supportemail"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/subjectmailtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_subject"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/subjectmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:hint="@string/hint_subject"
+        android:inputType="textEmailAddress"
+        android:textSize="16sp"></EditText>
+
+    <TextView
+        android:id="@+id/messagetitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_message"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/messagemail"
+        android:layout_width="match_parent"
+        android:layout_height="226dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="top"
+        android:hint="@string/hint_message"
+        android:inputType="textEmailAddress"
+        android:textSize="16sp"></EditText>
+
+    <Button
+        android:id="@+id/buttonsendmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonsend" />
+
+
+</LinearLayout>

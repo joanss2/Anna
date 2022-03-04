@@ -1,0 +1,4 @@
+De tant en quant tenim problemes amb la dependencia apply
+plugin: 'com.google.gms.google-services' ja que en els fragments SignIn SignUp
+tenim un problema amb R.string.default_web_client_id que no el reconeix.
+Se soluciona borrant la dependencia i fent un sync, i tornant a afegir-la i sync.

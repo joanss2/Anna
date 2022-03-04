@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Inicio.FragmentsViewPager.SignInFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/mainactivityfragmentshape"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/mainactivityfragmentshape"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+
+        <ImageButton
+            android:id="@+id/googleIn"
+            android:layout_width="126dp"
+            android:layout_height="62dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/cornersrounded"
+            android:backgroundTint="#FFFFFF"
+            android:scaleType="fitCenter"
+            android:src="@drawable/google"/>
+
+        <Button
+            android:id="@+id/buttonsignin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signin" />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "57497303605",
+    "firebase_url": "https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "annaapp-322219",
+    "storage_bucket": "annaapp-322219.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57497303605:android:30d59fe6616d02bf870f7c",
+        "android_client_info": {
+          "package_name": "com.example.anna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57497303605-bkflcvnb8ngfscmggersmbtekssdccop.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anna",
+            "certificate_hash": "4bdc8bec2a0123164d2fcfca14a8448c7554f94c"
+          }
+        },
+        {
+          "client_id": "57497303605-8e2fbs21shk85993q90v80cq0qvhppa1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4OyXusve5Sdw8Asv2hdZCZ8Pf8NgK2-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57497303605-8e2fbs21shk85993q90v80cq0qvhppa1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
