@@ -85,7 +85,6 @@ public class SignInFragment extends Fragment{
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.buttonsignin:
-
                         /*
                         Part de codi que serviria per comprovar el format de l'email.
 
