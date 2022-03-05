@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.anna.Alerts.Alert;
 import com.example.anna.Alerts.BadPasswordAlert;
@@ -38,8 +39,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUpFragment extends Fragment {
 
@@ -153,10 +158,12 @@ public class SignUpFragment extends Fragment {
                                 editor.putString("username",name);
                                 editor.putString("email",email);
                                 editor.commit();
-                                //uploadUser();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-                                DatabaseReference ref =  database.getReference("PROBES");
-                                ref.push().setValue(new UserTuple(name,email,null));
+                                DatabaseReference ref =  database.getReference("users");
+                                UserTuple userTuple = new UserTuple(name,email,null);
+                                if(!emailIsInUse(ref,email)) {
+                                    ref.push().setValue(userTuple);
+                                }
                                 startActivity(toMenu);
                                 getActivity().finish();
 
@@ -181,29 +188,27 @@ public class SignUpFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-/*
 
-    private void showAlert(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Error");
-        builder.setMessage("Se ha producido un error registrando al usuario");
-        builder.setPositiveButton("Aceptar",null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    private boolean emailIsInUse(DatabaseReference reference, String email){
+        boolean isInUse = false;
+        Query query = reference.orderByChild("email").equalTo("iscoralarcon@gmail.com");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.exists()) {
+                    //isInUse=true;// NO EM DEIXA FICARHO A TRUE
+                    Toast.makeText(getContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        return isInUse;
     }
 
-*/
-/*
-    public void uploadUser(){
 
-        DatabaseReference rootReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersRef = rootReference.child("users");
-
-        userTuple = new UserTuple(name,email,null);
-        usersRef.push().setValue(userTuple);
-        return;
-    }
-
- */
 
 }

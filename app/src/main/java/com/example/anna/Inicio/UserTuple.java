@@ -6,13 +6,10 @@ public class UserTuple {
 
     private String username, email, telefon;
 
-
-
     public UserTuple(String username, String email, String telefon) {
         this.username = username;
         this.email = email;
         this.telefon = telefon;
-
     }
 
     public String getUsername(){
@@ -25,4 +22,7 @@ public class UserTuple {
         return this.telefon;
     }
 
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
 }

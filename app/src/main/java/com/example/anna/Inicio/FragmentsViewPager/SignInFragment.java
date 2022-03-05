@@ -1,6 +1,7 @@
 package com.example.anna.Inicio.FragmentsViewPager;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignInFragment extends Fragment{
 
@@ -112,6 +119,7 @@ public class SignInFragment extends Fragment{
                             Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
 
                              */
+
                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
@@ -156,7 +164,6 @@ public class SignInFragment extends Fragment{
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-
                 if(account!=null){
 
                     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
@@ -187,19 +194,6 @@ public class SignInFragment extends Fragment{
         }
     }
 
-/*
-    private void showAlert(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Error");
-        builder.setMessage("Se ha producido un error iniciando sesion");
-        builder.setPositiveButton("Aceptar",null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
- */
-
-
 
     @Override
     public void onResume() {
@@ -216,6 +210,28 @@ public class SignInFragment extends Fragment{
         builder.setPositiveButton(getString(R.string.ok),null);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private boolean emailIsInUse(DatabaseReference reference, String email){
+        boolean isInUse = false;
+        Query query = reference.orderByChild("email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                    changeboolean(isInUse); // NO EM DEIXA FICARHO A TRUE
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                return;
+            }
+        });
+        return isInUse;
+    }
+
+    public boolean changeboolean(boolean bool){
+        return !bool;
     }
 
 
