@@ -53,5 +53,7 @@
     <string name="emailFieldCannotBeEmpty"> Email field can not be empty.</string>
     <string name="SignInNotSuccessful"> It looks like signing in has not been successful. </string>
     <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
+    <string name="userNotRegisteredFromSignIn"> This user is not registered. You should first sign up. </string>
+
 
 </resources>

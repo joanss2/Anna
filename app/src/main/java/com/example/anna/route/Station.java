@@ -12,7 +12,6 @@ public abstract class Station {
     protected Dialog dialog;
     protected LatLng latLng;
 
-
     public Station (Context context, LatLng latLng){
         this.context = context;
         this.latLng = latLng;

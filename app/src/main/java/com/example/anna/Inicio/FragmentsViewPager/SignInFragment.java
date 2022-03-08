@@ -24,8 +24,12 @@ import com.example.anna.Alerts.Alert;
 import com.example.anna.Alerts.BadPasswordAlert;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
+import com.example.anna.Alerts.UserNotRegisteredAlert;
+import com.example.anna.Inicio.MainActivity;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
+import com.firebase.ui.auth.data.model.Resource;
+import com.firebase.ui.auth.util.data.TaskFailureLogger;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -44,17 +48,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import kotlin.Result;
+
 public class SignInFragment extends Fragment{
 
 
     private final int GOOGLE_SIGN_IN = 101;
-    private EditText email, password;
+    private EditText emailSignIn, passwordSignIn;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ImageButton googleButton;
     private Button btnSignIn;
-    private String received;
-    private Intent intent;
+    private String received, name, email;
+    private Intent toMenu;
     private Uri userPic;
 
 
@@ -76,10 +82,10 @@ public class SignInFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         googleButton = view.findViewById(R.id.googleIn);
         btnSignIn = view.findViewById(R.id.buttonsignin);
-        intent = new Intent(getContext(), MenuMainActivity.class);
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-        email.setText(received);
+        toMenu = new Intent(getContext(), MenuMainActivity.class);
+        emailSignIn = view.findViewById(R.id.email);
+        passwordSignIn = view.findViewById(R.id.password);
+        emailSignIn.setText(received);
 
 
 
@@ -97,7 +103,7 @@ public class SignInFragment extends Fragment{
                 switch (v.getId()){
                     case R.id.buttonsignin:
 
-                        if(TextUtils.isEmpty(email.getText())) {
+                        if(TextUtils.isEmpty(emailSignIn.getText())) {
                             showAlert(new EmptyEmailFieldAlert(getContext()));
                         /*
                         Part de codi que serviria per comprovar el format de l'email.
@@ -113,21 +119,21 @@ public class SignInFragment extends Fragment{
 
                         */
 
-                        }else if(!TextUtils.isEmpty(email.getText()) && !TextUtils.isEmpty(password.getText())){
+                        }else if(!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())){
 
                             /*
                             Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
 
                              */
 
-                           FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
+                           FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(),passwordSignIn.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if(task.isSuccessful()) {
-                                                editor.putString("email",email.getText().toString());
+                                                editor.putString("email",emailSignIn.getText().toString());
                                                 editor.commit();
-                                                startActivity(intent);
+                                                startActivity(toMenu);
                                                 getActivity().finish();
                                             }else{
                                                 showAlert(new BadPasswordAlert(getContext()));
@@ -151,10 +157,13 @@ public class SignInFragment extends Fragment{
                 GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(),googleConf);
                 googleClient.signOut();
                 startActivityForResult(googleClient.getSignInIntent(),GOOGLE_SIGN_IN);
+                //Resource.forFailure()
+                TaskFailureLogger
             }
         });
 
         return view;
+
     }
 
     @Override
@@ -173,15 +182,23 @@ public class SignInFragment extends Fragment{
                             if(task.isSuccessful()){
                                 //userPic = account.getPhotoUrl();
                                 //editor.putString("fotouri",userPic.toString());
-                                String name = account.getDisplayName();
-                                String mail = account.getEmail();
-                                editor.putString("email",mail);
+                                name = account.getDisplayName();
+                                email = account.getEmail();
+                                FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+                                DatabaseReference ref =  database.getReference("users");
+                                /*if(!emailIsInUse(ref,email)){
+                                    showAlert(new UserNotRegisteredAlert(getContext()));
+                                }
+
+                                 */
+                                editor.putString("email",email);
                                 editor.putString("username",name);
                                 editor.commit();
-                                startActivity(intent);
+                                startActivity(toMenu);
                                 getActivity().finish();
 
                             }else{
+                                //task.getException().getMessage()
                                 showAlert(new UnsuccessfulSignInAlert(getContext()));
                             }
                         }
@@ -199,7 +216,7 @@ public class SignInFragment extends Fragment{
     public void onResume() {
         super.onResume();
        if(sharedPreferences.getString("email",null)!=null){
-            email.setText(sharedPreferences.getString("email",null));
+            emailSignIn.setText(sharedPreferences.getString("email",null));
         }
     }
 
@@ -224,7 +241,6 @@ public class SignInFragment extends Fragment{
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                return;
             }
         });
         return isInUse;
