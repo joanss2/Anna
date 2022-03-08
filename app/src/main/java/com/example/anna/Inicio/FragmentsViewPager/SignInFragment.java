@@ -158,7 +158,6 @@ public class SignInFragment extends Fragment{
                 googleClient.signOut();
                 startActivityForResult(googleClient.getSignInIntent(),GOOGLE_SIGN_IN);
                 //Resource.forFailure()
-                TaskFailureLogger
             }
         });
 
