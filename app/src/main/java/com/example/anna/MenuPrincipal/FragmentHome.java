@@ -1,21 +1,15 @@
 package com.example.anna.MenuPrincipal;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -24,13 +18,11 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.anna.Discounts;
-import com.example.anna.Inicio.MainActivity;
+import com.example.anna.DiscountsActivity;
 import com.example.anna.R;
 import com.example.anna.databinding.ActivityFragmentHomeBinding;
 import com.example.anna.route.MyRoute;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 
 public class FragmentHome extends Fragment {
@@ -52,7 +44,7 @@ public class FragmentHome extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         toRoute = new Intent(getActivity(),MyRoute.class);
-        toDiscounts = new Intent(getActivity(), Discounts.class);
+        toDiscounts = new Intent(getActivity(), DiscountsActivity.class);
 
 
         binding = ActivityFragmentHomeBinding.inflate(getLayoutInflater());

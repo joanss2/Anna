@@ -56,6 +56,7 @@ public class SignUpFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String name, email;
+    //private static boolean emailIsInUse;
     private DatabaseReference reference;
 
 
@@ -161,9 +162,11 @@ public class SignUpFragment extends Fragment {
                                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
                                 DatabaseReference ref =  database.getReference("users");
                                 UserTuple userTuple = new UserTuple(name,email,null);
-                                if(!emailIsInUse(ref,email)) {
+                                /*if(!emailIsInUse(ref,email)) {
                                     ref.push().setValue(userTuple);
                                 }
+
+                                 */
                                 startActivity(toMenu);
                                 getActivity().finish();
 
@@ -188,16 +191,18 @@ public class SignUpFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+/*
     private boolean emailIsInUse(DatabaseReference reference, String email){
-        boolean isInUse = false;
+        //boolean isInUse = false;
+        emailIsInUse = false;
         Query query = reference.orderByChild("email").equalTo("iscoralarcon@gmail.com");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if(snapshot.exists()) {
-                    //isInUse=true;// NO EM DEIXA FICARHO A TRUE
+                   //isInUse=true;// NO EM DEIXA FICARHO A TRUE
+                    emailIsInUse = true;
                     Toast.makeText(getContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -206,9 +211,11 @@ public class SignUpFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        return isInUse;
+        return emailIsInUse;
     }
 
 
+
+ */
 
 }

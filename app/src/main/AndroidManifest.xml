@@ -32,7 +32,7 @@
             tools:ignore="Instantiatable" />
         <activity android:name=".Faqs" />
         <activity android:name=".ContactUs" />
-        <activity android:name=".Discounts" />
+        <activity android:name=".DiscountsActivity" />
         <activity android:name=".route.MyRoute" />
         <activity android:name=".Ajustes" />
         <activity
