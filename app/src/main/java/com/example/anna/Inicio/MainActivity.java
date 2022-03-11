@@ -58,14 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().getExtras()!=null){
             emailToSignIn = getIntent().getExtras().getString("emailfromsignup");
-            //fromup = true;
+            fromup = true;
         }
 
         pagerAdapter = new PagerController(getSupportFragmentManager(), tabLayout.getTabCount(), emailToSignIn);
         viewPager.setAdapter(pagerAdapter);
 
-        //if(fromup)
-          //  viewPager.setCurrentItem(1);
+        if(fromup)
+            viewPager.setCurrentItem(1);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

@@ -87,9 +87,6 @@ public class SignInFragment extends Fragment{
         passwordSignIn = view.findViewById(R.id.password);
         emailSignIn.setText(received);
 
-
-
-
         btnSignIn.setOnClickListener(new View.OnClickListener() {
 
             /* En aquesta part es voldria separar varios casos:
@@ -102,7 +99,6 @@ public class SignInFragment extends Fragment{
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.buttonsignin:
-
                         if(TextUtils.isEmpty(emailSignIn.getText())) {
                             showAlert(new EmptyEmailFieldAlert(getContext()));
                         /*
@@ -118,14 +114,11 @@ public class SignInFragment extends Fragment{
                         return emailMatcher.matches();
 
                         */
-
                         }else if(!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())){
-
                             /*
                             Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
 
                              */
-
                            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(),passwordSignIn.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
@@ -136,7 +129,7 @@ public class SignInFragment extends Fragment{
                                                 startActivity(toMenu);
                                                 getActivity().finish();
                                             }else{
-                                                showAlert(new BadPasswordAlert(getContext()));
+                                                showAlert(task.getException().getMessage());
                                             }
                                         }
                                     });
@@ -223,6 +216,15 @@ public class SignInFragment extends Fragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(alert.getAlertMessage());
+        builder.setPositiveButton(getString(R.string.ok),null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showAlert(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.error));
+        builder.setMessage(message);
         builder.setPositiveButton(getString(R.string.ok),null);
         AlertDialog dialog = builder.create();
         dialog.show();

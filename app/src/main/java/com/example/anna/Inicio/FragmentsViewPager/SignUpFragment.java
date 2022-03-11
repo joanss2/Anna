@@ -37,6 +37,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
@@ -56,8 +57,9 @@ public class SignUpFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String name, email;
-    //private static boolean emailIsInUse;
-    private DatabaseReference reference;
+    //private DatabaseReference reference;
+    private FirebaseDatabase database;
+    private Intent same;
 
 
     @Override
@@ -65,9 +67,9 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = getActivity().getSharedPreferences(String.valueOf
                 (R.string.sharedpreferencesfile),Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        //reference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        //editor = sharedPreferences.edit();
+        //reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     }
 
     @Override
@@ -95,47 +97,37 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
-            /*Ch */
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(emailSignUp.getText())) {
-                    //showAlert();
-                    showAlert(new EmptyEmailFieldAlert(getContext()));
-                }else{
-                    if(!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
-                            passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())){
+                if(!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
+                        passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())) {
 
-                        FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailSignUp.getText().toString(),
-                                passwordSignUp.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Intent same = new Intent(getActivity(), MainActivity.class);
-                                    Bundle b = new Bundle();
-                                    b.putString("emailfromsignup",emailSignUp.getText().toString());
-                                    same.putExtras(b);
-                                    startActivity(same);
-                                    getActivity().finish();
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailSignUp.getText().toString(),
+                            passwordSignUp.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                same = new Intent(getActivity(), MainActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString("emailfromsignup", emailSignUp.getText().toString());
+                                same.putExtras(b);
+                                startActivity(same);
+                                getActivity().finish();
 
-                                }else{
-                                    showAlert(new UnSuccessfulSignUpAlert(getContext()));
-                                }
+                            } else {
+                                showAlert(task.getException().getMessage());
                             }
-                        });
-
-                    }else if(TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())){
-                        showAlert(new BadPasswordAlert(getContext()));
-                    }else{
-                        showAlert(new PasswordsNotEqualAlert(getContext()));
-                    }
+                        }
+                    });
+                }else if(TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())){
+                    showAlert(new BadPasswordAlert(getContext()));
+                }else{
+                    showAlert(new PasswordsNotEqualAlert(getContext()));
                 }
             }
         });
-
-
         return view;
     }
 
@@ -159,7 +151,6 @@ public class SignUpFragment extends Fragment {
                                 editor.putString("username",name);
                                 editor.putString("email",email);
                                 editor.commit();
-                                FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
                                 DatabaseReference ref =  database.getReference("users");
                                 UserTuple userTuple = new UserTuple(name,email,null);
                                 /*if(!emailIsInUse(ref,email)) {
@@ -171,7 +162,7 @@ public class SignUpFragment extends Fragment {
                                 getActivity().finish();
 
                             }else{
-                                showAlert(new UnSuccessfulSignUpAlert(getContext()));
+                                showAlert(task.getException().getMessage());
                             }
                         }
                     });
@@ -191,18 +182,25 @@ public class SignUpFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    private void showAlert(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.error));
+        builder.setMessage(message);
+        builder.setPositiveButton(getString(R.string.ok),null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 /*
     private boolean emailIsInUse(DatabaseReference reference, String email){
-        //boolean isInUse = false;
-        emailIsInUse = false;
+        boolean isInUse = false;
         Query query = reference.orderByChild("email").equalTo("iscoralarcon@gmail.com");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if(snapshot.exists()) {
-                   //isInUse=true;// NO EM DEIXA FICARHO A TRUE
-                    emailIsInUse = true;
+                    //isInUse=true;// NO EM DEIXA FICARHO A TRUE
                     Toast.makeText(getContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -211,11 +209,9 @@ public class SignUpFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        return emailIsInUse;
+        return isInUse;
     }
 
 
-
  */
-
 }
