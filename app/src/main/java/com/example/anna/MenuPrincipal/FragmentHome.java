@@ -31,13 +31,12 @@ public class FragmentHome extends Fragment {
     private Intent toRoute, toDiscounts;
     private SharedPreferences sharedPreferences;
     private Animation scaleUp, scaleDown;
-    private FloatingActionButton signoutButton;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(String.valueOf(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
 
     }
 

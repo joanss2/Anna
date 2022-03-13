@@ -47,6 +47,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SignUpFragment extends Fragment {
 
 
@@ -60,16 +63,16 @@ public class SignUpFragment extends Fragment {
     //private DatabaseReference reference;
     private FirebaseDatabase database;
     private Intent same;
+    private List<String> list;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(String.valueOf
-                (R.string.sharedpreferencesfile),Context.MODE_PRIVATE);
-        //editor = sharedPreferences.edit();
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile),Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         //reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     }
 
     @Override
@@ -83,6 +86,7 @@ public class SignUpFragment extends Fragment {
         passwordSignUp = view.findViewById(R.id.passwordsignup);
         confirmPassword = view.findViewById(R.id.passwordconfirm);
         googleButton = view.findViewById(R.id.googleIn);
+        list = new ArrayList<>();
 
 
 
@@ -113,6 +117,8 @@ public class SignUpFragment extends Fragment {
                                 Bundle b = new Bundle();
                                 b.putString("emailfromsignup", emailSignUp.getText().toString());
                                 same.putExtras(b);
+                                DatabaseReference ref =  database.getReference("users");
+                                UserTuple userTuple = new UserTuple(null,email,null,list);
                                 startActivity(same);
                                 getActivity().finish();
 
@@ -151,8 +157,10 @@ public class SignUpFragment extends Fragment {
                                 editor.putString("username",name);
                                 editor.putString("email",email);
                                 editor.commit();
+
+                                //
                                 DatabaseReference ref =  database.getReference("users");
-                                UserTuple userTuple = new UserTuple(name,email,null);
+                                UserTuple userTuple = new UserTuple(name,email,null,list);
                                 /*if(!emailIsInUse(ref,email)) {
                                     ref.push().setValue(userTuple);
                                 }

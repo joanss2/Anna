@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -40,7 +41,7 @@ public class MenuMainActivity extends AppCompatActivity {
     private ActivityMenuMainBinding binding;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Session session;
+    private Session session; //NO SE SI TENIR AQUESTA CLASSE, DES DELS FRAGMENTS NO PUC ACCEDIR
     private View header;
     private TextView profileEmail, profileName;
     private FloatingActionButton signOutButton;
@@ -50,7 +51,7 @@ public class MenuMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        sharedPreferences = getSharedPreferences(String.valueOf(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         session = new Session(sharedPreferences.getString("email", null));
         if (sharedPreferences.getString("username", null) != null) {
@@ -120,9 +121,13 @@ public class MenuMainActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
+                System.out.println("AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
+                sharedPreferences.edit().clear().commit();
+                System.out.println("AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
+                //SharedPreferences.Editor editor = sharedPreferences.edit();
+                //editor.clear();
+                //editor.commit();
+                Toast.makeText(getApplicationContext(),"i have been clicked",Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();

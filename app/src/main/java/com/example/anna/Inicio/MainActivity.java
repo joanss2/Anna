@@ -38,7 +38,12 @@ public class MainActivity extends AppCompatActivity {
         * Quan fem el onCreate de l'activitat principal mirem si a SharedPreferences tenim guardat un
         * valor d'email, i si és així entrem directament al menú principal de quan ja hem iniciat sessió.
         */
-        sharedPreferences = getSharedPreferences(String.valueOf(R.string.sharedpreferencesfile),MODE_PRIVATE);
+
+
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedpreferencesfile),MODE_PRIVATE);
+        System.out.println("PRINCIPAL AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
+        sharedPreferences.edit().clear().commit();
+        System.out.println("PRINCIPAL AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
         if(sharedPreferences.getString("email",null)!=null){
             startActivity(new Intent(this, MenuMainActivity.class));
             finish();

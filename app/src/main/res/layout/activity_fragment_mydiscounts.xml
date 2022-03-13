@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/mydiscountstitle"
+        android:id="@+id/mydiscountsfragmenttitle"
         android:layout_width="295dp"
         android:layout_height="72dp"
         android:gravity="center"
@@ -26,6 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mydiscountstitle"
+        app:layout_constraintTop_toBottomOf="@+id/mydiscountsfragmenttitle"
         app:layout_constraintVertical_bias="0.239" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
