@@ -11,9 +11,11 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.anna.Inicio.MainActivity;
 import com.example.anna.Inicio.Session;
 import com.example.anna.R;
@@ -45,6 +47,7 @@ public class MenuMainActivity extends AppCompatActivity {
     private View header;
     private TextView profileEmail, profileName;
     private FloatingActionButton signOutButton;
+    private String urlPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +91,15 @@ public class MenuMainActivity extends AppCompatActivity {
         profileEmail = (TextView) header.findViewById(R.id.nav_user_email);
         profileEmail.setText(session.getEmailAccount());
 
+        urlPicture = sharedPreferences.getString("fotourl",null);//
+        Glide.with(this).load(urlPicture).into((ImageView) header.findViewById(R.id.nav_user_pic));
+
         header.findViewById(R.id.nav_user_pic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.nav_profile);
             }
         });
-
 
 
     }
@@ -114,20 +119,16 @@ public class MenuMainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void leaving_confirmation(){
+    public void leaving_confirmation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit Confirmation");
         builder.setTitle("Are you sure you want to log out?");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                System.out.println("AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
-                sharedPreferences.edit().clear().commit();
-                System.out.println("AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
-                //SharedPreferences.Editor editor = sharedPreferences.edit();
-                //editor.clear();
-                //editor.commit();
-                Toast.makeText(getApplicationContext(),"i have been clicked",Toast.LENGTH_SHORT).show();
+
+                sharedPreferences.edit().clear().apply();
+                Toast.makeText(getApplicationContext(), "i have been clicked", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();

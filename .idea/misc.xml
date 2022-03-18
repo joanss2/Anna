@@ -16,6 +16,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/mainactivityfragmentshape.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/menuimagesshape.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/pressedzoom.xml" value="0.1" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/roundshape.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/signoutbutton.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_contact_us.xml" value="0.15198087431693988" />
@@ -48,7 +49,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/main_toolbar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/naturlandiacard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_main.xml" value="0.1" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_menu_main.xml" value="0.116015625" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_menu_main.xml" value="0.18" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santamariadepontscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santperedepontscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/menu/activity_main_drawer.xml" value="0.18" />

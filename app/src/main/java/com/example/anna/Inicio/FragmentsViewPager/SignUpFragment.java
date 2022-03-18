@@ -50,7 +50,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends Fragment implements ValueEventListener {
 
 
     private EditText emailSignUp, passwordSignUp, confirmPassword;
@@ -64,6 +64,7 @@ public class SignUpFragment extends Fragment {
     private FirebaseDatabase database;
     private Intent same;
     private List<String> list;
+    private boolean isInUse;
 
 
     @Override
@@ -119,6 +120,7 @@ public class SignUpFragment extends Fragment {
                                 same.putExtras(b);
                                 DatabaseReference ref =  database.getReference("users");
                                 UserTuple userTuple = new UserTuple(null,email,null,list);
+                                ref.push().setValue(userTuple);
                                 startActivity(same);
                                 getActivity().finish();
 
@@ -157,15 +159,11 @@ public class SignUpFragment extends Fragment {
                                 editor.putString("username",name);
                                 editor.putString("email",email);
                                 editor.commit();
-
-                                //
                                 DatabaseReference ref =  database.getReference("users");
                                 UserTuple userTuple = new UserTuple(name,email,null,list);
-                                /*if(!emailIsInUse(ref,email)) {
+                                if(!emailIsInUse(ref,email)) {
                                     ref.push().setValue(userTuple);
                                 }
-
-                                 */
                                 startActivity(toMenu);
                                 getActivity().finish();
 
@@ -199,27 +197,24 @@ public class SignUpFragment extends Fragment {
         dialog.show();
     }
 
-/*
-    private boolean emailIsInUse(DatabaseReference reference, String email){
-        boolean isInUse = false;
+
+    private  synchronized boolean emailIsInUse(DatabaseReference reference, String email){
+        isInUse = false;
         Query query = reference.orderByChild("email").equalTo("iscoralarcon@gmail.com");
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if(snapshot.exists()) {
-                    //isInUse=true;// NO EM DEIXA FICARHO A TRUE
-                    Toast.makeText(getContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        query.addListenerForSingleValueEvent(this);
         return isInUse;
     }
 
+    @Override
+    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        if(snapshot.exists()) {
+            isInUse=true;
+            //Toast.makeText(getActivity().getApplicationContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
+        }
+    }
 
- */
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+
+    }
 }

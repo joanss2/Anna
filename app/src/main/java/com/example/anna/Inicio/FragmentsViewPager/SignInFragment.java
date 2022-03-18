@@ -103,23 +103,19 @@ public class SignInFragment extends Fragment{
                             showAlert(new EmptyEmailFieldAlert(getContext()));
                         /*
                         Part de codi que serviria per comprovar el format de l'email.
-
                         else if(validateEmail(mEdtTxtEmail.getText().toString().trim())){
                             // your code
                         }
-
                         private boolean validateEmail(String data){
                         Pattern emailPattern = Pattern.compile(".+@.+\\.[a-z]+");
                         Matcher emailMatcher = emailPattern.matcher(data);
                         return emailMatcher.matches();
-
                         */
                         }else if(!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())){
                             /*
                             Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
-
                              */
-                           FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(),passwordSignIn.getText().toString())
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(),passwordSignIn.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -172,15 +168,17 @@ public class SignInFragment extends Fragment{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                //userPic = account.getPhotoUrl();
-                                //editor.putString("fotouri",userPic.toString());
+                                userPic = account.getPhotoUrl();
+                                editor.putString("fotourl",userPic.toString());
                                 name = account.getDisplayName();
                                 email = account.getEmail();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
                                 DatabaseReference ref =  database.getReference("users");
-                                /*if(!emailIsInUse(ref,email)){
+                                /*
+                                if(!emailIsInUse(ref,email)){
                                     showAlert(new UserNotRegisteredAlert(getContext()));
                                 }
+
 
                                  */
                                 editor.putString("email",email);
@@ -190,8 +188,7 @@ public class SignInFragment extends Fragment{
                                 getActivity().finish();
 
                             }else{
-                                //task.getException().getMessage()
-                                showAlert(new UnsuccessfulSignInAlert(getContext()));
+                                showAlert(task.getException().getMessage());
                             }
                         }
                     });
@@ -207,7 +204,7 @@ public class SignInFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-       if(sharedPreferences.getString("email",null)!=null){
+        if(sharedPreferences.getString("email",null)!=null){
             emailSignIn.setText(sharedPreferences.getString("email",null));
         }
     }
