@@ -22,4 +22,17 @@
         android:name="com.example.anna.MenuPrincipal.FragmentProfile"
         android:label="Profile"
         tools:layout="@layout/activity_fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_mydiscounts"
+        android:name="com.example.anna.MenuPrincipal.FragmentMyDiscounts"
+        android:label="MyDiscounts"
+        tools:layout="@layout/activity_fragment_mydiscounts" />
+
+    <fragment
+        android:id="@+id/nav_myroutes"
+        android:name="com.example.anna.MenuPrincipal.FragmentMyRoutes"
+        android:label="MyRoutes"
+        tools:layout="@layout/activity_fragment_myroutes" />
+
 </navigation>

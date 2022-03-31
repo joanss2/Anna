@@ -31,10 +31,11 @@ public class DiscountsActivity extends AppCompatActivity {
     ,"Cal Solsona", "Sort Rafting","Pastisseria Serra"};
     private int[] idPlaces = {R.drawable.condis, R.drawable.foratdebuli, R.drawable.pantarialb,
     R.drawable.andorra, R.drawable.balaguer, R.drawable.calsolsona, R.drawable.sortrafting, R.drawable.serra};
+    private String[] descriptions = new String[places.length];
 
     public void initializeList(){
         for (int i=0; i<places.length; i++){
-            discountList.add(new Discount(places[i],idPlaces[i]));
+            discountList.add(new Discount(places[i],idPlaces[i], descriptions[i]));
         }
     }
 

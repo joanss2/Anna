@@ -3,30 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#C1FB7D">
 
     <TextView
         android:id="@+id/mydiscountsfragmenttitle"
-        android:layout_width="295dp"
-        android:layout_height="72dp"
+        android:layout_width="309dp"
+        android:layout_height="115dp"
         android:gravity="center"
         android:text="DISCOUNTS USED"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111" />
+        app:layout_constraintVertical_bias="0.107" />
 
     <GridView
         android:id="@+id/mydiscountsgrid"
-        android:layout_width="310dp"
-        android:layout_height="465dp"
+        android:layout_width="309dp"
+        android:layout_height="467dp"
+        android:numColumns="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mydiscountsfragmenttitle"
-        app:layout_constraintVertical_bias="0.239" />
+        app:layout_constraintVertical_bias="0.265" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

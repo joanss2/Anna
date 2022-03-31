@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +35,10 @@ public class FragmentMyDiscounts extends Fragment {
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private String[] places = {"Forat de Buli", "Cal Solsona"};
+    private int[] idPlaces = {R.drawable.foratdebuli, R.drawable.calsolsona};
+    private String[] descriptions = {"Hola \n\n\n Hola \n\nHola \n\n\n Hola \n\n",""};//new String[places.length];
+    private List<Discount> discountsUsed = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +48,11 @@ public class FragmentMyDiscounts extends Fragment {
         usermail = sharedPreferences.getString("email",null);
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
         reference = database.getReference("users");
+
+        for (int i=0; i<this.places.length; i++){
+            discountsUsed.add(new Discount(places[i],idPlaces[i],descriptions[i]));
+        }
+
 
     }
     /*
@@ -73,10 +84,10 @@ public class FragmentMyDiscounts extends Fragment {
 
         //PASSAR LLISTA DE DESCOMPTES UTILITZATS PER USUARI
 
-
+        //LLISTA SIMULADA DE DESCOMPTES UTILITZATS. S'HAURIEN D'AGAFAR DE LA BBDD
 
         GridView gridMyDiscounts = (GridView) root.findViewById(R.id.mydiscountsgrid);
-        myDiscountsAdapter = new CustomAdapter();
+        myDiscountsAdapter = new CustomAdapter(discountsUsed,getContext());
         gridMyDiscounts.setAdapter(myDiscountsAdapter);
         return root;
 
@@ -84,9 +95,19 @@ public class FragmentMyDiscounts extends Fragment {
 
     private class CustomAdapter extends BaseAdapter{
 
+        private List<Discount> discountList;
+        Context context;
+        private LayoutInflater inflater;
+
+        private CustomAdapter(List<Discount> discountList, Context context){
+            this.discountList = discountList;
+            this.context = context;
+            this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
         @Override
         public int getCount() {
-            return 0;
+            return discountList.size();
         }
 
         @Override
@@ -100,8 +121,18 @@ public class FragmentMyDiscounts extends Fragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            return null;
+        public View getView(int position, View view, ViewGroup viewGroup) {
+
+            View viewcustomAdapter = inflater.inflate(R.layout.discount_cardview, null);
+
+            ImageView img = (ImageView) viewcustomAdapter.findViewById(R.id.mydiscountimage);
+            img.setImageResource(this.discountList.get(position).getImageId());
+            TextView imgTitle = (TextView) viewcustomAdapter.findViewById(R.id.mydiscounttitle);
+            imgTitle.setText(discountList.get(position).getName());
+            TextView imgDescription = (TextView) viewcustomAdapter.findViewById(R.id.mydiscountdescription);
+            imgDescription.setText(this.discountList.get(position).getDescription());
+
+            return viewcustomAdapter;
         }
     }
 }

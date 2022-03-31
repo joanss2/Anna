@@ -49,13 +49,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SignUpFragment extends Fragment implements ValueEventListener {
 
 
     private EditText emailSignUp, passwordSignUp, confirmPassword;
     private Button btnSignUp;
-    private ImageButton  googleButton;
+    private ImageButton googleButton;
     private final int GOOGLE_SIGN_UP = 100;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -65,15 +68,19 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
     private Intent same;
     private List<String> list;
     private boolean isInUse;
+    private Lock lock;
+    private Condition condition;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile),Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         //reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        lock = new ReentrantLock();
+        condition = lock.newCondition();
     }
 
     @Override
@@ -90,15 +97,14 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
         list = new ArrayList<>();
 
 
-
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
 
-                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(),googleConf);
-                startActivityForResult(googleClient.getSignInIntent(),GOOGLE_SIGN_UP);
+                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(), googleConf);
+                startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_UP);
             }
         });
 
@@ -106,7 +112,7 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
 
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
+                if (!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
                         passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())) {
 
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailSignUp.getText().toString(),
@@ -118,8 +124,8 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
                                 Bundle b = new Bundle();
                                 b.putString("emailfromsignup", emailSignUp.getText().toString());
                                 same.putExtras(b);
-                                DatabaseReference ref =  database.getReference("users");
-                                UserTuple userTuple = new UserTuple(null,email,null,list);
+                                DatabaseReference ref = database.getReference("users");
+                                UserTuple userTuple = new UserTuple(null, email, null, list);
                                 ref.push().setValue(userTuple);
                                 startActivity(same);
                                 getActivity().finish();
@@ -129,9 +135,9 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
                             }
                         }
                     });
-                }else if(TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())){
+                } else if (TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())) {
                     showAlert(new BadPasswordAlert(getContext()));
-                }else{
+                } else {
                     showAlert(new PasswordsNotEqualAlert(getContext()));
                 }
             }
@@ -142,32 +148,33 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==GOOGLE_SIGN_UP){
+        if (requestCode == GOOGLE_SIGN_UP) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
 
-                if(account!=null){
-                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
+                if (account != null) {
+                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Intent toMenu = new Intent(getActivity(), MenuMainActivity.class);
                                 name = account.getDisplayName();
                                 email = account.getEmail();
-                                editor.putString("username",name);
-                                editor.putString("email",email);
+                                editor.putString("username", name);
+                                editor.putString("email", email);
                                 editor.commit();
-                                DatabaseReference ref =  database.getReference("users");
-                                UserTuple userTuple = new UserTuple(name,email,null,list);
-                                if(!emailIsInUse(ref,email)) {
+                                DatabaseReference ref = database.getReference("users");
+                                UserTuple userTuple = new UserTuple(name, email, null, list);
+
+                                if (!emailIsInUse(ref, email)) {
                                     ref.push().setValue(userTuple);
                                 }
                                 startActivity(toMenu);
                                 getActivity().finish();
 
-                            }else{
+                            } else {
                                 showAlert(task.getException().getMessage());
                             }
                         }
@@ -180,37 +187,43 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
         }
     }
 
-    private void showAlert(Alert alert){
+    private void showAlert(Alert alert) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(alert.getAlertMessage());
-        builder.setPositiveButton(getString(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok), null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    private void showAlert(String message){
+
+    private void showAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(message);
-        builder.setPositiveButton(getString(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok), null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
 
-    private  synchronized boolean emailIsInUse(DatabaseReference reference, String email){
+    private boolean emailIsInUse(DatabaseReference reference, String email) {
+
         isInUse = false;
-        Query query = reference.orderByChild("email").equalTo("iscoralarcon@gmail.com");
+        Query query = reference.orderByChild("email").equalTo(email);
         query.addListenerForSingleValueEvent(this);
+        Toast.makeText(getActivity().getApplicationContext(), "IS IN USE = " + String.valueOf(isInUse), Toast.LENGTH_SHORT).show();
         return isInUse;
     }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
-        if(snapshot.exists()) {
-            isInUse=true;
-            //Toast.makeText(getActivity().getApplicationContext(),"EN TEORIA ESTA A LA BBDD",Toast.LENGTH_SHORT).show();
+        if (snapshot.exists()) {
+            isInUse = true;
+            Toast.makeText(getActivity().getApplicationContext(), "EN TEORIA ESTA A LA BBDD", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), " NONONO ESTA A LA BBDD", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
