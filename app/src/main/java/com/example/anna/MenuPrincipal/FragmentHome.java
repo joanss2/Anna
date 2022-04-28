@@ -29,14 +29,16 @@ public class FragmentHome extends Fragment {
 
     private ActivityFragmentHomeBinding binding;
     private Intent toRoute, toDiscounts;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences userInfoPrefs;
+    private SharedPreferences.Editor userInfoEditor;
     private Animation scaleUp, scaleDown;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
+        userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        userInfoEditor = userInfoPrefs.edit();
 
     }
 
@@ -48,8 +50,6 @@ public class FragmentHome extends Fragment {
 
         binding = ActivityFragmentHomeBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
-
-        String uri = sharedPreferences.getString("fotouri",null);
 
         scaleUp = AnimationUtils.loadAnimation(getActivity(),R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(getActivity(),R.anim.scale_down);

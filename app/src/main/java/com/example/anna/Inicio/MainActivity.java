@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences userInfoPrefs;
+    private SharedPreferences.Editor userInfoEditor;
 
     TabItem tabSignUp, tabSignIn;
     PagerController pagerAdapter;
@@ -39,12 +40,10 @@ public class MainActivity extends AppCompatActivity {
         * valor d'email, i si és així entrem directament al menú principal de quan ja hem iniciat sessió.
         */
 
+        userInfoPrefs = getSharedPreferences("USERINFO",MODE_PRIVATE);
+        userInfoEditor = userInfoPrefs.edit();
 
-        sharedPreferences = getSharedPreferences(getString(R.string.sharedpreferencesfile),MODE_PRIVATE);
-        System.out.println("PRINCIPAL AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
-        sharedPreferences.edit().clear().commit();
-        System.out.println("PRINCIPAL AIXO SON SHARED PREFERENCES MAIL"+sharedPreferences.getString("email",null));
-        if(sharedPreferences.getString("email",null)!=null){
+        if(userInfoPrefs.getString("email",null)!=null){
             startActivity(new Intent(this, MenuMainActivity.class));
             finish();
         }
@@ -61,16 +60,11 @@ public class MainActivity extends AppCompatActivity {
         * i utilitzar-lo per a iniciar sessió.
         */
 
-        if(getIntent().getExtras()!=null){
-            emailToSignIn = getIntent().getExtras().getString("emailfromsignup");
-            fromup = true;
-        }
+
 
         pagerAdapter = new PagerController(getSupportFragmentManager(), tabLayout.getTabCount(), emailToSignIn);
         viewPager.setAdapter(pagerAdapter);
-
-        if(fromup)
-            viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(1);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -93,24 +87,5 @@ public class MainActivity extends AppCompatActivity {
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
-
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        session();
-    }
-
-
-    private void session(){
-        String session = MainActivity.sharedPreferences.getString("email",null);
-        if(session!=null){
-            startActivity(new Intent(this, MainMenu.class));
-            finish();
-        }
-    }
-
-     */
-
 
 }

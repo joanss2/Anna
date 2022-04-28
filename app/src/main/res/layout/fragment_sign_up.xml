@@ -13,6 +13,16 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/usernamesignup"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/mainactivityfragmentshape"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="text" />
+
+        <EditText
             android:id="@+id/emailsignup"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -41,16 +51,6 @@
             android:ems="10"
             android:hint="@string/confirmpassword"
             android:inputType="textPassword" />
-
-        <ImageButton
-            android:id="@+id/googleIn"
-            android:layout_width="126dp"
-            android:layout_height="62dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/cornersrounded"
-            android:backgroundTint="#FFFFFF"
-            android:scaleType="fitCenter"
-            android:src="@drawable/google"/>
 
         <Button
             android:id="@+id/buttonsignup"

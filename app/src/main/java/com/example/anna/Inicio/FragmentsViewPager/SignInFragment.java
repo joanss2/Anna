@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.anna.Alerts.Alert;
 import com.example.anna.Alerts.BadPasswordAlert;
@@ -26,6 +28,7 @@ import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
 import com.example.anna.Alerts.UserNotRegisteredAlert;
 import com.example.anna.Inicio.MainActivity;
+import com.example.anna.Inicio.UserTuple;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.firebase.ui.auth.data.model.Resource;
@@ -48,89 +51,71 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import kotlin.Result;
 
-public class SignInFragment extends Fragment{
+public class SignInFragment extends Fragment {
 
 
     private final int GOOGLE_SIGN_IN = 101;
     private EditText emailSignIn, passwordSignIn;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private ImageButton googleButton;
-    private Button btnSignIn;
-    private String received, name, email;
+    private SharedPreferences userInfoPreferences;
+    private SharedPreferences.Editor userInfoEditor;
+    private String name, email;
     private Intent toMenu;
     private Uri userPic;
+    private UserTuple userTuple;
+    Lock lock = new ReentrantLock();
+    Condition condition = lock.newCondition();
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
+        userInfoPreferences = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        userInfoEditor = userInfoPreferences.edit();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if(getArguments()!=null){
-            received = getArguments().getString("emailfromsignup");
-        }
 
-        editor = sharedPreferences.edit();
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        googleButton = view.findViewById(R.id.googleIn);
-        btnSignIn = view.findViewById(R.id.buttonsignin);
+        ImageButton googleButton = view.findViewById(R.id.googleIn);
+        Button btnSignIn = view.findViewById(R.id.buttonsignin);
         toMenu = new Intent(getContext(), MenuMainActivity.class);
         emailSignIn = view.findViewById(R.id.email);
         passwordSignIn = view.findViewById(R.id.password);
-        emailSignIn.setText(received);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
 
-            /* En aquesta part es voldria separar varios casos:
-            -   Primer de tot si el format del string en el camp email es incorrecte avisar que el format no es correcte.
-            -   Si passa l'anterior, Que es fagi una query per a l'existència de l'usuari.
-            -   Si l'usuari existeix que comprovi si la contrasenya es o no correcta.
-            -   Si aconsegueix passar tot l'anterior que inicii la sessio.
-             */
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
+                switch (v.getId()) {
                     case R.id.buttonsignin:
-                        if(TextUtils.isEmpty(emailSignIn.getText())) {
+                        if (TextUtils.isEmpty(emailSignIn.getText())) {
                             showAlert(new EmptyEmailFieldAlert(getContext()));
-                        /*
-                        Part de codi que serviria per comprovar el format de l'email.
-                        else if(validateEmail(mEdtTxtEmail.getText().toString().trim())){
-                            // your code
-                        }
-                        private boolean validateEmail(String data){
-                        Pattern emailPattern = Pattern.compile(".+@.+\\.[a-z]+");
-                        Matcher emailMatcher = emailPattern.matcher(data);
-                        return emailMatcher.matches();
-                        */
-                        }else if(!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())){
-                            /*
-                            Fer la comprovacio, query a la base de dades de si existeix o no l'usuari. Indicar-ho en cas que no, seguir amb el proces en cas que si.
-                             */
-                            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(),passwordSignIn.getText().toString())
+                        } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if(task.isSuccessful()) {
-                                                editor.putString("email",emailSignIn.getText().toString());
-                                                editor.commit();
+                                            if (task.isSuccessful()) {
+                                                userInfoEditor.putString("email", emailSignIn.getText().toString()).commit();
                                                 startActivity(toMenu);
                                                 getActivity().finish();
-                                            }else{
+                                            } else {
                                                 showAlert(task.getException().getMessage());
                                             }
                                         }
                                     });
 
-                        }else{
+                        } else {
                             showAlert(new UnsuccessfulSignInAlert(getContext()));
                         }
                 }
@@ -143,10 +128,9 @@ public class SignInFragment extends Fragment{
                 GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
 
-                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(),googleConf);
+                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(), googleConf);
                 googleClient.signOut();
-                startActivityForResult(googleClient.getSignInIntent(),GOOGLE_SIGN_IN);
-                //Resource.forFailure()
+                startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_IN);
             }
         });
 
@@ -157,37 +141,30 @@ public class SignInFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==GOOGLE_SIGN_IN){
+        if (requestCode == GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                if(account!=null){
+                if (account != null) {
 
-                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
+                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 userPic = account.getPhotoUrl();
-                                editor.putString("fotourl",userPic.toString());
                                 name = account.getDisplayName();
                                 email = account.getEmail();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-                                DatabaseReference ref =  database.getReference("users");
-                                /*
-                                if(!emailIsInUse(ref,email)){
-                                    showAlert(new UserNotRegisteredAlert(getContext()));
-                                }
-
-
-                                 */
-                                editor.putString("email",email);
-                                editor.putString("username",name);
-                                editor.commit();
+                                DatabaseReference ref = database.getReference("users");
+                                userTuple = new UserTuple(name, email, null, null, null);
+                                uploadUserInfoPrefs(userTuple);
+                                new UserInDatabase().execute();
                                 startActivity(toMenu);
-                                getActivity().finish();
+                                requireActivity().finish();
 
-                            }else{
+
+                            } else {
                                 showAlert(task.getException().getMessage());
                             }
                         }
@@ -204,49 +181,79 @@ public class SignInFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        if(sharedPreferences.getString("email",null)!=null){
-            emailSignIn.setText(sharedPreferences.getString("email",null));
+        if (userInfoPreferences.getString("email", null) != null) {
+            emailSignIn.setText(userInfoPreferences.getString("email", null));
         }
     }
 
-    private void showAlert(Alert alert){
+    private void showAlert(Alert alert) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(alert.getAlertMessage());
-        builder.setPositiveButton(getString(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok), null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void showAlert(String message){
+    private void showAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(message);
-        builder.setPositiveButton(getString(R.string.ok),null);
+        builder.setPositiveButton(getString(R.string.ok), null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private boolean emailIsInUse(DatabaseReference reference, String email){
-        boolean isInUse = false;
-        Query query = reference.orderByChild("email").equalTo(email);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists())
-                    changeboolean(isInUse); // NO EM DEIXA FICARHO A TRUE
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        return isInUse;
+    public void uploadUserInfoPrefs(UserTuple userTuple) {
+        this.userInfoEditor.putString("username", userTuple.getUsername());
+        this.userInfoEditor.putString("email", userTuple.getEmail());
+        this.userInfoEditor.putString("uid", null);
+        this.userInfoEditor.putString("telefon", null);
+        this.userInfoEditor.putString("fotourl", userPic.toString());
+        this.userInfoEditor.apply();
     }
 
-    public boolean changeboolean(boolean bool){
-        return !bool;
-    }
+    private class UserInDatabase extends AsyncTask<String, String, String> {
+        private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        private final DatabaseReference reference = database.getReference("users");
+        private String s = "";
 
+        @Override
+        protected String doInBackground(String... strings) {
+            Query query = reference.orderByChild("email").equalTo(SignInFragment.this.userInfoPreferences.getString("email", null));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    lock.lock();
+                    if (snapshot.exists()) {
+                        System.out.println("EXISTEIX, INUSE HAURIA DE SER TRUE");
+                        s = "true";
+                        condition.signal();
+                    } else {
+                        reference.push().setValue(userTuple);
+                    }
+                    lock.unlock();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+            try {
+                lock.lock();
+                condition.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
 
 }

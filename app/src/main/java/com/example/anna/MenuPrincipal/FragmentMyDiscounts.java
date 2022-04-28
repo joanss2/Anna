@@ -31,7 +31,7 @@ public class FragmentMyDiscounts extends Fragment {
 
     private CustomAdapter myDiscountsAdapter;
     private List<Discount> myDiscountsList;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences userInfoPrefs;
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
@@ -44,8 +44,8 @@ public class FragmentMyDiscounts extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDiscountsList = new ArrayList<>();
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
-        usermail = sharedPreferences.getString("email",null);
+        userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        usermail = userInfoPrefs.getString("email",null);
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
         reference = database.getReference("users");
 

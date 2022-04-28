@@ -53,34 +53,24 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SignUpFragment extends Fragment implements ValueEventListener {
+public class SignUpFragment extends Fragment {
 
 
-    private EditText emailSignUp, passwordSignUp, confirmPassword;
-    private Button btnSignUp;
-    private ImageButton googleButton;
-    private final int GOOGLE_SIGN_UP = 100;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private String name, email;
-    //private DatabaseReference reference;
+    private EditText usernameSignUp, emailSignUp, passwordSignUp, confirmPassword;
+    private SharedPreferences.Editor userInfoEditor;
+    private String email, usernName;
     private FirebaseDatabase database;
-    private Intent same;
+    private Intent registerAndStart;
     private List<String> list;
-    private boolean isInUse;
-    private Lock lock;
-    private Condition condition;
+    private UserTuple userTuple;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedpreferencesfile), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        //reference = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        SharedPreferences userInfoPreferences = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        userInfoEditor = userInfoPreferences.edit();
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-        lock = new ReentrantLock();
-        condition = lock.newCondition();
     }
 
     @Override
@@ -89,24 +79,12 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        btnSignUp = view.findViewById(R.id.buttonsignup);
+        Button btnSignUp = view.findViewById(R.id.buttonsignup);
+        usernameSignUp = view.findViewById(R.id.usernamesignup);
         emailSignUp = view.findViewById(R.id.emailsignup);
         passwordSignUp = view.findViewById(R.id.passwordsignup);
         confirmPassword = view.findViewById(R.id.passwordconfirm);
-        googleButton = view.findViewById(R.id.googleIn);
         list = new ArrayList<>();
-
-
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-
-                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(), googleConf);
-                startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_UP);
-            }
-        });
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
@@ -120,15 +98,15 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                same = new Intent(getActivity(), MainActivity.class);
-                                Bundle b = new Bundle();
-                                b.putString("emailfromsignup", emailSignUp.getText().toString());
-                                same.putExtras(b);
+                                registerAndStart = new Intent(getActivity(), MenuMainActivity.class);
+                                email = emailSignUp.getText().toString();
+                                usernName = usernameSignUp.getText().toString();
                                 DatabaseReference ref = database.getReference("users");
-                                UserTuple userTuple = new UserTuple(null, email, null, list);
+                                userTuple = new UserTuple(usernName, email, null,null, list);
+                                uploadUserInfoPrefs(userTuple);
                                 ref.push().setValue(userTuple);
-                                startActivity(same);
-                                getActivity().finish();
+                                startActivity(registerAndStart);
+                                requireActivity().finish();
 
                             } else {
                                 showAlert(task.getException().getMessage());
@@ -145,46 +123,12 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GOOGLE_SIGN_UP) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-
-                if (account != null) {
-                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Intent toMenu = new Intent(getActivity(), MenuMainActivity.class);
-                                name = account.getDisplayName();
-                                email = account.getEmail();
-                                editor.putString("username", name);
-                                editor.putString("email", email);
-                                editor.commit();
-                                DatabaseReference ref = database.getReference("users");
-                                UserTuple userTuple = new UserTuple(name, email, null, list);
-
-                                if (!emailIsInUse(ref, email)) {
-                                    ref.push().setValue(userTuple);
-                                }
-                                startActivity(toMenu);
-                                getActivity().finish();
-
-                            } else {
-                                showAlert(task.getException().getMessage());
-                            }
-                        }
-                    });
-
-                }
-            } catch (ApiException e) {
-                showAlert(new UnSuccessfulSignUpAlert(getContext()));
-            }
-        }
+    public void uploadUserInfoPrefs(UserTuple userTuple){
+        this.userInfoEditor.putString("username",userTuple.getUsername());
+        this.userInfoEditor.putString("email",userTuple.getEmail());
+        this.userInfoEditor.putString("uid",null);
+        this.userInfoEditor.putString("telefon",null);
+        this.userInfoEditor.apply();
     }
 
     private void showAlert(Alert alert) {
@@ -205,29 +149,4 @@ public class SignUpFragment extends Fragment implements ValueEventListener {
         dialog.show();
     }
 
-
-    private boolean emailIsInUse(DatabaseReference reference, String email) {
-
-        isInUse = false;
-        Query query = reference.orderByChild("email").equalTo(email);
-        query.addListenerForSingleValueEvent(this);
-        Toast.makeText(getActivity().getApplicationContext(), "IS IN USE = " + String.valueOf(isInUse), Toast.LENGTH_SHORT).show();
-        return isInUse;
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot snapshot) {
-        if (snapshot.exists()) {
-            isInUse = true;
-            Toast.makeText(getActivity().getApplicationContext(), "EN TEORIA ESTA A LA BBDD", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity().getApplicationContext(), " NONONO ESTA A LA BBDD", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-
-    }
 }
