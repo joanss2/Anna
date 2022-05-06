@@ -12,6 +12,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_home.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_menu.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_more.xml" value="0.1" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_myroutes.xml" value="0.178" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_signout.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/mainactivityfragmentshape.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/menuimagesshape.xml" value="0.1" />
@@ -25,7 +26,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_discounts.xml" value="0.26024590163934425" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_faqs.xml" value="0.125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_home.xml" value="0.18" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_mydiscounts.xml" value="0.26024590163934425" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_mydiscounts.xml" value="0.15" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_myroutes.xml" value="0.26024590163934425" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_profile.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_main.xml" value="0.130859375" />
@@ -39,7 +40,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/condiscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/content_menu_main.xml" value="0.1287568306010929" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/discount_cardview.xml" value="0.275" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/discount_cardview.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_gallery.xml" value="0.116015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_home.xml" value="0.125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_sign_in.xml" value="0.18" />

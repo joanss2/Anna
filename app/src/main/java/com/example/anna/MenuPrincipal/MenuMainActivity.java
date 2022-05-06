@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -19,7 +20,14 @@ import com.example.anna.databinding.ActivityMenuMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,12 +35,22 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 
 public class MenuMainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private SharedPreferences userInfoPrefs;
     private SharedPreferences.Editor userInfoEditor;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+    private final DatabaseReference reference = database.getReference("users");
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
+    private TextView profileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +86,9 @@ public class MenuMainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         View header = navigationView.getHeaderView(0);
-        TextView profileName = (TextView) header.findViewById(R.id.nav_user_name);
+
+        new UserNameFromFirebase().execute();
+        profileName = (TextView) header.findViewById(R.id.nav_user_name);
         profileName.setText(userInfoPrefs.getString("username",null));
         TextView profileEmail = (TextView) header.findViewById(R.id.nav_user_email);
         profileEmail.setText(userInfoPrefs.getString("email",null));
@@ -83,7 +103,54 @@ public class MenuMainActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    private class UserNameFromFirebase extends AsyncTask<String, String, String> {
+        private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        private final DatabaseReference reference = database.getReference("users");
+        private String s = "";
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Query query = reference.orderByChild("email").equalTo(MenuMainActivity.this.userInfoPrefs.getString("email", null));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    lock.lock();
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            s = snapshot.child(Objects.requireNonNull(ds.getKey())).child("username").getValue(String.class);
+                            condition.signal();
+                        }
+                    }
+                    lock.unlock();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            try {
+                lock.lock();
+                condition.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            MenuMainActivity.this.userInfoEditor.putString("username",s);
+            MenuMainActivity.this.userInfoEditor.commit();
+            MenuMainActivity.this.updateUsername();
+        }
     }
 
     @Override
@@ -91,6 +158,10 @@ public class MenuMainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public void updateUsername(){
+        this.profileName.setText(userInfoPrefs.getString("username",null));
     }
 
 

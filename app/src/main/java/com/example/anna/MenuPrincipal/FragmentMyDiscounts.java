@@ -35,9 +35,11 @@ public class FragmentMyDiscounts extends Fragment {
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
-    private String[] places = {"Forat de Buli", "Cal Solsona"};
-    private int[] idPlaces = {R.drawable.foratdebuli, R.drawable.calsolsona};
-    private String[] descriptions = {"Hola \n\n\n Hola \n\nHola \n\n\n Hola \n\n",""};//new String[places.length];
+    private String[] places = {"Forat de Buli", "Cal Solsona",""};
+    private int[] idPlaces = {R.drawable.foratdebuli, R.drawable.calsolsona, R.drawable.calsolsona};
+    private String[] descriptions = {"Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","jjj",""};//new String[places.length];
     private List<Discount> discountsUsed = new ArrayList<>();
 
     @Override

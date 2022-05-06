@@ -66,21 +66,19 @@ public class FragmentProfile extends Fragment {
 
         binding = ActivityFragmentProfileBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
-        userName  = binding.profileUsername;
+        userName = binding.profileUsername;
         userName.setClickable(false);
         userName.setEnabled(false);
-        userName.setText(userInfoPrefs.getString("username",null));
+        userName.setText(userInfoPrefs.getString("username", null));
         userMail = binding.profileUseremail;
-        userMail.setText(userInfoPrefs.getString("email",null));
+        userMail.setText(userInfoPrefs.getString("email", null));
         userMail.setClickable(false);
         userMail.setEnabled(false);
         userTel = binding.profileUsertelefono;
-        userTel.setText(userInfoPrefs.getString("usertel",null));
+        userTel.setText(userInfoPrefs.getString("usertel", null));
         profileImageView = binding.profileImageView;
-        urlPicture = userInfoPrefs.getString("fotourl",null);//
+        urlPicture = userInfoPrefs.getString("fotourl", null);//
         Glide.with(getContext()).load(urlPicture).into(profileImageView);
-
-        new UserNameFromFirebase().execute();
 
         editButton = (FloatingActionButton) root.findViewById(R.id.editnamebutton);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +98,6 @@ public class FragmentProfile extends Fragment {
 
             }
         });
-
-
 
 
         return root;
@@ -127,51 +123,6 @@ public class FragmentProfile extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+        ((MenuMainActivity) getActivity()).updateUsername();
     }
-
-    private class UserNameFromFirebase extends AsyncTask<String, String, String> {
-        private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-        private final DatabaseReference reference = database.getReference("users");
-        private String s = "";
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Query query = reference.orderByChild("email").equalTo(FragmentProfile.this.userInfoPrefs.getString("email", null));
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    lock.lock();
-                    if (snapshot.exists()) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            s = snapshot.child(Objects.requireNonNull(ds.getKey())).child("username").getValue(String.class);
-                            condition.signal();
-                        }
-                    }
-                    lock.unlock();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            try {
-                lock.lock();
-                condition.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                lock.unlock();
-            }
-            return s;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            userName.setText(s);
-        }
-    }
-
-
 }
