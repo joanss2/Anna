@@ -1,5 +1,7 @@
 package com.example.anna.MenuPrincipal;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.anna.Discount;
@@ -35,6 +38,7 @@ public class FragmentMyDiscounts extends Fragment {
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private Dialog dialog;
     private String[] places = {"Forat de Buli", "Cal Solsona",""};
     private int[] idPlaces = {R.drawable.foratdebuli, R.drawable.calsolsona, R.drawable.calsolsona};
     private String[] descriptions = {"Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
@@ -50,6 +54,7 @@ public class FragmentMyDiscounts extends Fragment {
         usermail = userInfoPrefs.getString("email",null);
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
         reference = database.getReference("users");
+        dialog = new Dialog(getContext());
 
         for (int i=0; i<this.places.length; i++){
             discountsUsed.add(new Discount(places[i],idPlaces[i],descriptions[i]));
@@ -127,12 +132,17 @@ public class FragmentMyDiscounts extends Fragment {
 
             View viewcustomAdapter = inflater.inflate(R.layout.discount_cardview, null);
 
+            CardView discountCardview = (CardView) viewcustomAdapter.findViewById(R.id.discountTemplate);
             ImageView img = (ImageView) viewcustomAdapter.findViewById(R.id.mydiscountimage);
             img.setImageResource(this.discountList.get(position).getImageId());
             TextView imgTitle = (TextView) viewcustomAdapter.findViewById(R.id.mydiscounttitle);
             imgTitle.setText(discountList.get(position).getName());
             TextView imgDescription = (TextView) viewcustomAdapter.findViewById(R.id.mydiscountdescription);
             imgDescription.setText(this.discountList.get(position).getDescription());
+
+            discountCardview.setOnClickListener(view1 -> {
+                new DiscountClickedDialog(this.discountList.get(position).getImageId(),discountList.get(position).getName(),getContext());
+            });
 
             return viewcustomAdapter;
         }
