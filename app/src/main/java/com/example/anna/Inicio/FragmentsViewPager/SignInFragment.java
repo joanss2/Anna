@@ -71,6 +71,8 @@ public class SignInFragment extends Fragment {
     private UserTuple userTuple;
     Lock lock = new ReentrantLock();
     Condition condition = lock.newCondition();
+    FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+    DatabaseReference ref = database.getReference("users");
 
 
     @Override
@@ -159,7 +161,10 @@ public class SignInFragment extends Fragment {
                                 DatabaseReference ref = database.getReference("users");
                                 userTuple = new UserTuple(name, email, null, null, null);
                                 uploadUserInfoPrefs(userTuple);
-                                new UserInDatabase().execute();
+                                newUserCreatedIfNonExistent();
+                                //
+                                //
+                                // new UserInDatabase().execute();
                                 startActivity(toMenu);
                                 requireActivity().finish();
 
@@ -175,6 +180,25 @@ public class SignInFragment extends Fragment {
                 showAlert(new UnsuccessfulSignInAlert(getContext()));
             }
         }
+    }
+
+    private void newUserCreatedIfNonExistent() {
+
+        Query query = ref.orderByChild("email").equalTo(SignInFragment.this.userInfoPreferences.getString("email", null));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                lock.lock();
+                if (!snapshot.exists()) {
+                    ref.push().setValue(userTuple);
+                }
+                lock.unlock();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
 
@@ -213,6 +237,8 @@ public class SignInFragment extends Fragment {
         this.userInfoEditor.apply();
     }
 
+
+/*
     private class UserInDatabase extends AsyncTask<String, String, String> {
         private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
         private final DatabaseReference reference = database.getReference("users");
@@ -255,5 +281,7 @@ public class SignInFragment extends Fragment {
             super.onPostExecute(s);
         }
     }
+
+ */
 
 }
