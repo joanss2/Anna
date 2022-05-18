@@ -54,7 +54,7 @@
     <string name="SignInNotSuccessful"> It looks like signing in has not been successful. </string>
     <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
     <string name="userNotRegisteredFromSignIn"> This user is not registered. You should first sign up. </string>
-
+    <string name="discount_activation">Discount Activation</string>
 
 
 </resources>
