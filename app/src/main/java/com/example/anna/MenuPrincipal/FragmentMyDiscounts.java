@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,139 +16,126 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.anna.Discount;
 import com.example.anna.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class FragmentMyDiscounts extends Fragment {
+public class FragmentMyDiscounts extends Fragment implements DiscountAdapter.OnMyDiscountsListener {
 
-    private CustomAdapter myDiscountsAdapter;
-    private List<Discount> myDiscountsList;
+    private RecyclerView rvDiscounts;
+    private DiscountAdapter discountAdapter;
     private SharedPreferences userInfoPrefs;
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
-    private Dialog dialog;
-    private String[] places = {"Forat de Buli", "Cal Solsona",""};
-    private int[] idPlaces = {R.drawable.foratdebuli, R.drawable.calsolsona, R.drawable.calsolsona};
-    private String[] descriptions = {"Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","jjj",""};//new String[places.length];
-    private List<Discount> discountsUsed = new ArrayList<>();
+    private List<Discount> discountsUsed;
+    private FirebaseFirestore firebaseFirestore;
+    private CollectionReference discountsDBRef;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        myDiscountsList = new ArrayList<>();
         userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
-        usermail = userInfoPrefs.getString("email",null);
+        usermail = userInfoPrefs.getString("email", null);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        discountsDBRef = firebaseFirestore.collection("Discounts");
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
         reference = database.getReference("users");
-        dialog = new Dialog(getContext());
-
-        for (int i=0; i<this.places.length; i++){
-            discountsUsed.add(new Discount(places[i],idPlaces[i],descriptions[i]));
-        }
 
 
     }
-    /*
-
-    private List<Discount> DiscountsUsed(DatabaseReference reference, String email){
-        List<Discount> discList = new ArrayList<>();
-        Query query = reference.orderByChild("email").equalTo(usermail).orderByChild("discounts");
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        }
-        return list;
-    }
-
-     */
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.activity_fragment_mydiscounts, container, false);
+        rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
+        discountAdapter = new DiscountAdapter(getContext(), loadDiscountsFromFirestore(),this);
+        rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDiscounts.setAdapter(discountAdapter);
 
-        //PASSAR LLISTA DE DESCOMPTES UTILITZATS PER USUARI
-
-        //LLISTA SIMULADA DE DESCOMPTES UTILITZATS. S'HAURIEN D'AGAFAR DE LA BBDD
-
-        GridView gridMyDiscounts = (GridView) root.findViewById(R.id.mydiscountsgrid);
-        myDiscountsAdapter = new CustomAdapter(discountsUsed,getContext());
-        gridMyDiscounts.setAdapter(myDiscountsAdapter);
         return root;
 
     }
 
-    private class CustomAdapter extends BaseAdapter{
+    public List<Discount> loadDiscountsFromFirestore() {
 
-        private List<Discount> discountList;
-        Context context;
-        private LayoutInflater inflater;
+        List<Discount> discountList = new ArrayList<>();
 
-        private CustomAdapter(List<Discount> discountList, Context context){
-            this.discountList = discountList;
-            this.context = context;
-            this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
+        discountsDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot documentDiscount : task.getResult()) {
+                    Discount auxiliarDisc = new Discount();
 
-        @Override
-        public int getCount() {
-            return discountList.size();
-        }
+                    Map<String, Object> data = documentDiscount.getData();
+                    System.out.println("\n\n" + data + "\n\n");
 
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
+                    auxiliarDisc.setDescription(data.get("description").toString());
+                    auxiliarDisc.setDiscountPercentage(Integer.parseInt(data.get("discountPercentage").toString()));
+                    auxiliarDisc.setImageRef(data.get("imageRef").toString());
+                    auxiliarDisc.setName(data.get("name").toString());
+                    System.out.println("\n\nAIXO ES EL AUXILIAR DISCOUNT\n" + auxiliarDisc.toString());
+                    discountList.add(auxiliarDisc);
+                }
 
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
+                discountAdapter = new DiscountAdapter(getContext(), discountList, FragmentMyDiscounts.this);
+                rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvDiscounts.setAdapter(discountAdapter);
 
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        return discountList;
 
-            View viewcustomAdapter = inflater.inflate(R.layout.discount_cardview, null);
+    }
 
-            CardView discountCardview = (CardView) viewcustomAdapter.findViewById(R.id.discountTemplate);
-            ImageView img = (ImageView) viewcustomAdapter.findViewById(R.id.mydiscountimage);
-            img.setImageResource(this.discountList.get(position).getImageId());
-            TextView imgTitle = (TextView) viewcustomAdapter.findViewById(R.id.mydiscounttitle);
-            imgTitle.setText(discountList.get(position).getName());
-            TextView imgDescription = (TextView) viewcustomAdapter.findViewById(R.id.mydiscountdescription);
-            imgDescription.setText(this.discountList.get(position).getDescription());
-
-            discountCardview.setOnClickListener(view1 -> {
-                new DiscountClickedDialog(this.discountList.get(position).getImageId(),discountList.get(position).getName(),getContext());
-            });
-
-            return viewcustomAdapter;
-        }
+    @Override
+    public void onMyDiscountsClick(Discount discount) {
+        new DiscountClickedDialog(discount.getUriImg(),discount.getName(),getContext());
     }
 }

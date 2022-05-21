@@ -35,7 +35,7 @@ public class DiscountsActivity extends AppCompatActivity {
 
     public void initializeList(){
         for (int i=0; i<places.length; i++){
-            discountList.add(new Discount(places[i],idPlaces[i], descriptions[i]));
+            discountList.add(new Discount(descriptions[i],10,idPlaces[i], places[i]));
         }
     }
 
