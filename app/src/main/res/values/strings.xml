@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Anna</string>
     <string name="error">Error</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
     <string name="ok">OK</string>
     <string name="signup">Sign up</string>
     <string name="Register">Register</string>
@@ -8,6 +10,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirmpassword">Confirm Password</string>
+    <string name="username">Username</string>
     <string name="haveAccount">Do you already have an account?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="myroute">MY ROUTE</string>
@@ -47,6 +50,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_menu_main">MenuMain</string>
 
+    <string name="discount_activation">Discount Activation</string>
 
     //ALERTS
     <string name="badPasswordAlert"> The introduced password is incorrect.</string>
@@ -55,8 +59,6 @@
     <string name="SignInNotSuccessful"> It looks like signing in has not been successful. </string>
     <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
     <string name="userNotRegisteredFromSignIn"> This user is not registered. You should first sign up. </string>
-    <string name="username">Username</string>
-    <string name="discount_activation"><b>Discount Activation</b></string>
 
 
 </resources>

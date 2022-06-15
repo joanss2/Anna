@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/routemap"
-    tools:context=".route.MyRoute">
+    tools:context=".MenuPrincipal.Routes.RoutesActivity">
 
     <ImageView
         android:id="@+id/imageViewsantpere"

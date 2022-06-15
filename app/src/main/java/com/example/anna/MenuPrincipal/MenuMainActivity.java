@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.anna.Inicio.MainActivity;
+import com.example.anna.Register.MainActivity;
 import com.example.anna.R;
 import com.example.anna.databinding.ActivityMenuMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,6 +58,8 @@ public class MenuMainActivity extends AppCompatActivity {
 
 
         userInfoPrefs = getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        Toast.makeText(this,userInfoPrefs.getString("userKey",null),Toast.LENGTH_LONG).show();
+
         userInfoEditor = userInfoPrefs.edit();
 
         com.example.anna.databinding.ActivityMenuMainBinding binding = ActivityMenuMainBinding.inflate(getLayoutInflater());

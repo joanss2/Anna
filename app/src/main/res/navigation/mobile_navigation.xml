@@ -7,31 +7,31 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.anna.MenuPrincipal.FragmentHome"
+        android:name="com.example.anna.MenuPrincipal.Home.FragmentHome"
         android:label="@string/menu_home"
         tools:layout="@layout/activity_fragment_home" />
 
     <fragment
         android:id="@+id/nav_faqs"
-        android:name="com.example.anna.MenuPrincipal.FragmentFaqs"
+        android:name="com.example.anna.MenuPrincipal.Faqs.FragmentFaqs"
         android:label="@string/faqs"
         tools:layout="@layout/activity_fragment_faqs" />
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.example.anna.MenuPrincipal.FragmentProfile"
+        android:name="com.example.anna.MenuPrincipal.Profile.FragmentProfile"
         android:label="Profile"
         tools:layout="@layout/activity_fragment_profile" />
 
     <fragment
         android:id="@+id/nav_mydiscounts"
-        android:name="com.example.anna.MenuPrincipal.FragmentMyDiscounts"
+        android:name="com.example.anna.MenuPrincipal.MyDiscounts.FragmentMyDiscounts"
         android:label="MyDiscounts"
         tools:layout="@layout/activity_fragment_mydiscounts" />
 
     <fragment
         android:id="@+id/nav_myroutes"
-        android:name="com.example.anna.MenuPrincipal.FragmentMyRoutes"
+        android:name="com.example.anna.MenuPrincipal.MyRoutes.FragmentMyRoutes"
         android:label="MyRoutes"
         tools:layout="@layout/activity_fragment_myroutes" />
 

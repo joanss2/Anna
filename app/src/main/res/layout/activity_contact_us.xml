@@ -7,7 +7,7 @@
     android:layout_gravity="center_horizontal"
     android:layout_margin="30dp"
     android:orientation="vertical"
-    tools:context=".ContactUs">
+    tools:context=".MenuPrincipal.Faqs.ContactUs">
 
     <TextView
         android:id="@+id/SendMailTextView"

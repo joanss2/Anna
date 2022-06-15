@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingStart="15dp"
     android:paddingEnd="15dp"
-    tools:context=".MenuPrincipal.FragmentProfile">
+    tools:context=".MenuPrincipal.Profile.FragmentProfile">
 
     <!--
        <ImageView

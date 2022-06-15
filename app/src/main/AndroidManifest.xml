@@ -19,24 +19,24 @@
             android:label="@string/title_activity_menu_main"
             android:theme="@style/Theme.Anna.NoActionBar" />
         <activity
-            android:name=".MenuPrincipal.FragmentFaqs"
+            android:name=".MenuPrincipal.Faqs.FragmentFaqs"
             android:exported="true"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".MenuPrincipal.FragmentProfile"
+            android:name=".MenuPrincipal.Profile.FragmentProfile"
             android:exported="true"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".MenuPrincipal.FragmentHome"
+            android:name=".MenuPrincipal.Home.FragmentHome"
             android:exported="true"
             tools:ignore="Instantiatable" />
-        <activity android:name=".Faqs" />
-        <activity android:name=".ContactUs" />
-        <activity android:name=".DiscountsActivity" />
-        <activity android:name=".route.MyRoute" />
+        <activity android:name=".MenuPrincipal.Faqs.Faqs" />
+        <activity android:name=".MenuPrincipal.Faqs.ContactUs" />
+        <activity android:name=".MenuPrincipal.Home.Discounts.DiscountsActivity" />
+        <activity android:name=".MenuPrincipal.Routes.RoutesActivity" />
         <activity android:name=".Ajustes" />
         <activity
-            android:name=".Inicio.MainActivity"
+            android:name=".Register.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

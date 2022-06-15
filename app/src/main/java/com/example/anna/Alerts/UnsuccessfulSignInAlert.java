@@ -1,11 +1,11 @@
 package com.example.anna.Alerts;
 
 import android.content.Context;
-import android.content.res.Resources;
 
+import com.example.anna.Models.Alert;
 import com.example.anna.R;
 
-public class UnsuccessfulSignInAlert extends Alert{
+public class UnsuccessfulSignInAlert extends Alert {
 
     public UnsuccessfulSignInAlert(Context context){
         super(context);

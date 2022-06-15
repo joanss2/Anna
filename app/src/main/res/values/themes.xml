@@ -14,6 +14,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+
     <style name="Theme.Anna.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -31,7 +33,10 @@
         <item name="android:windowEnterAnimation">@anim/dialog_up_slide</item>
         <item name="android:windowExitAnimation">@anim/dialog_out_down_slide</item>
     </style>
+
     <style name="DialogSlideAnim" parent="@android:style/Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
     </style>
+
+
 </resources>

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Anna</string>
     <string name="error">Error</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
     <string name="ok">OK</string>
     <string name="signup">Registrarse</string>
     <string name="Register">Registrarse</string>
@@ -8,6 +10,7 @@
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
     <string name="confirmpassword">Confirmar contraseña</string>
+    <string name="username">Username</string>
     <string name="haveAccount">Ya tienes una cuenta?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="myroute">MI RUTA</string>
@@ -46,6 +49,7 @@
     <string name="menu_gallery">Galería</string>
     <string name="menu_slideshow">Desplegable</string>
     <string name="title_activity_menu_main">MenuMain</string>
+
 
     //ALERTS
     <string name="badPasswordAlert"> The introduced password is incorrect.</string>
