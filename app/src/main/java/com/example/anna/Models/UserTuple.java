@@ -6,14 +6,13 @@ import java.util.List;
 public class UserTuple {
 
     private String username, email, userKey;
-    private List<String> discountList;
 
-    public UserTuple(String username, String email, String userKey, List<String> discountList) {
+    public UserTuple(String username, String email, String userKey) {
         this.username = username;
         this.email = email;
         this.userKey = userKey;
-        this.discountList = new ArrayList<>();
     }
+    public UserTuple(){}
 
     public String getUsername() {
         return this.username;
@@ -28,16 +27,16 @@ public class UserTuple {
         return this.userKey;
     }
 
-    public List<String> getDiscountList() {
-        return this.discountList;
-    }
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
     }
 
-    public void addDiscountUsed(String discountName) {
-        this.discountList.add(discountName);
+    public void setEmail(String email) {
+        this.email = email;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

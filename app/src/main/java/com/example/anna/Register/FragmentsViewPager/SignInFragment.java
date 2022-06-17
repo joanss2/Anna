@@ -172,8 +172,6 @@ public class SignInFragment extends Fragment {
                                 name = account.getDisplayName();
                                 email = account.getEmail();
                                 newUserCreatedIfNonExistent();
-                                startActivity(toMenu);
-                                requireActivity().finish();
 
                             } else {
                                 showAlert(task.getException().getMessage());
@@ -190,17 +188,27 @@ public class SignInFragment extends Fragment {
 
     private void newUserCreatedIfNonExistent() {
 
-        Query query = ref.orderByChild("email").equalTo(SignInFragment.this.userInfoPreferences.getString("email", null));
+        Query query = ref.orderByChild("email").equalTo(email);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     String key = ref.push().getKey();
                     assert key != null;
-                    UserTuple userTuple = new UserTuple(name, email, key, null);
+                    UserTuple userTuple = new UserTuple(name, email, key);
                     createMyDiscountsUserEntry(key);
                     uploadUserInfoPrefs(userTuple);
                     ref.child(key).setValue(userTuple);
+                    startActivity(toMenu);
+                    requireActivity().finish();
+                } else {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+
+                        UserTuple user = ds.getValue(UserTuple.class);
+                        uploadUserInfoPrefs(user);
+                        startActivity(toMenu);
+                        requireActivity().finish();
+                    }
                 }
             }
 
@@ -210,7 +218,7 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    private void createMyDiscountsUserEntry(String key){
+    private void createMyDiscountsUserEntry(String key) {
         myDiscountsRef.document(key).collection("MyDiscounts").add(new Discount()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -219,7 +227,7 @@ public class SignInFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("UserDiscount Entry",e.getMessage());
+                Log.d("UserDiscount Entry", e.getMessage());
 
             }
         });

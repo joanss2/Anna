@@ -2,6 +2,7 @@ package com.example.anna.MenuPrincipal.MyDiscounts;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.text.SymbolTable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +41,10 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
     private MyDiscountsAdapter myDiscountsAdapter;
     private SharedPreferences userInfoPrefs;
     private String usermail;
+    private List<String> discountsUsedRefs;
     private FirebaseDatabase database;
-    private DatabaseReference reference;
-    private List<Discount> discountsUsed;
     private FirebaseFirestore firebaseFirestore;
-    private CollectionReference discountsDBRef;
+    private CollectionReference discountsUsedDBRef;
 
 
     @Override
@@ -53,12 +55,30 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         usermail = userInfoPrefs.getString("email", null);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        discountsDBRef = firebaseFirestore.collection("DiscountsUsed")
+        discountsUsedDBRef = firebaseFirestore.collection("DiscountsUsed")
                 .document(userInfoPrefs.getString("userKey",null))
-                .collection("MyDiscounts");
+                .collection("DiscountsReferenceList");
+        discountsUsedRefs = new ArrayList<>();
+
+        discountsUsedDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(QueryDocumentSnapshot document: task.getResult()){
+                    discountsUsedRefs.add((document.getData().toString()));
+                    System.out.println(discountsUsedRefs.toString());
+
+                }}
+
+            }
+        ).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
 
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-        reference = database.getReference("users");
+
 
     }
 
@@ -70,15 +90,20 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
 
 
+
+/*
         FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
-                .setQuery(discountsDBRef, Discount.class)
+                .setQuery(discountsUsedDBRef, Discount.class)
                 .build();
+
+
+
 
         myDiscountsAdapter = new MyDiscountsAdapter(options, this, getContext());
         rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDiscounts.setAdapter(myDiscountsAdapter);
-
-        discountsDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+ */
+        discountsUsedDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(QueryDocumentSnapshot document: task.getResult()){

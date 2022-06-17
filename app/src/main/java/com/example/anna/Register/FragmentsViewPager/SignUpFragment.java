@@ -43,7 +43,6 @@ public class SignUpFragment extends Fragment {
     private String email, usernName, key;
     private FirebaseDatabase database;
     private Intent registerAndStart;
-    private List<String> list;
     private UserTuple userTuple;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     CollectionReference myDiscountsRef = firestore.collection("DiscountsUsed");
@@ -68,7 +67,6 @@ public class SignUpFragment extends Fragment {
         emailSignUp = view.findViewById(R.id.emailsignup);
         passwordSignUp = view.findViewById(R.id.passwordsignup);
         confirmPassword = view.findViewById(R.id.passwordconfirm);
-        list = new ArrayList<>();
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
@@ -88,7 +86,7 @@ public class SignUpFragment extends Fragment {
                                 DatabaseReference ref = database.getReference("users");
                                 key = ref.push().getKey();
                                 assert key!=null;
-                                userTuple = new UserTuple(usernName, email, key , list);
+                                userTuple = new UserTuple(usernName, email, key);
                                 ref.child(key).setValue(userTuple);
                                 uploadUserInfoPrefs(userTuple);
                                 startActivity(registerAndStart);
