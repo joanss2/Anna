@@ -1,18 +1,27 @@
 package com.example.anna.Models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserTuple {
+public class User {
 
     private String username, email, userKey;
+    /*
+    private Roles role;
+    public Roles getRole() {
+        return this.role;
+    }
+    public void setRole(Roles role) {
+        this.role = role;
+    }
 
-    public UserTuple(String username, String email, String userKey) {
+     */
+
+    public User(String username, String email, String userKey) {
         this.username = username;
         this.email = email;
         this.userKey = userKey;
     }
-    public UserTuple(){}
+
+    public User() {
+    }
 
     public String getUsername() {
         return this.username;
@@ -21,7 +30,6 @@ public class UserTuple {
     public String getEmail() {
         return this.email;
     }
-
 
     public String getUserKey() {
         return this.userKey;
@@ -39,4 +47,6 @@ public class UserTuple {
     public void setUsername(String username) {
         this.username = username;
     }
+
+
 }

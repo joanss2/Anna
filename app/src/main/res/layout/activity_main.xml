@@ -37,7 +37,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="@string/signup" />
-
                                 <com.google.android.material.tabs.TabItem
                                     android:id="@+id/tabsignin"
                                     android:layout_width="match_parent"

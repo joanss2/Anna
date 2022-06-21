@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,14 +26,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FragmentMyDiscounts extends Fragment implements OnDiscountClickListener {
 
@@ -41,7 +45,7 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
     private MyDiscountsAdapter myDiscountsAdapter;
     private SharedPreferences userInfoPrefs;
     private String usermail;
-    private List<String> discountsUsedRefs;
+    private Set<String> setOfDiscounts;
     private FirebaseDatabase database;
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference discountsUsedDBRef;
@@ -55,27 +59,20 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         usermail = userInfoPrefs.getString("email", null);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        discountsUsedDBRef = firebaseFirestore.collection("DiscountsUsed")
-                .document(userInfoPrefs.getString("userKey",null))
-                .collection("DiscountsReferenceList");
-        discountsUsedRefs = new ArrayList<>();
+        discountsUsedDBRef = firebaseFirestore.collection("Discounts");
 
-        discountsUsedDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(QueryDocumentSnapshot document: task.getResult()){
-                    discountsUsedRefs.add((document.getData().toString()));
-                    System.out.println(discountsUsedRefs.toString());
-
-                }}
-
+        if (userInfoPrefs.getStringSet("setOfDiscounts",null)!=null){
+            setOfDiscounts = userInfoPrefs.getStringSet("setOfDiscounts",null);
+            Iterator<String> iterator = setOfDiscounts.iterator();
+            while (iterator.hasNext()){
+                String current = iterator.next();
             }
-        ).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+        }else{
+            Toast.makeText(getContext(),"STILL NO DISCOUNTS USED",Toast.LENGTH_LONG).show();
+        }
+
+
 
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
 

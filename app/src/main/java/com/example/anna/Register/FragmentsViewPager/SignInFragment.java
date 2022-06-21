@@ -24,7 +24,7 @@ import com.example.anna.Models.Alert;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
 import com.example.anna.Models.Discount;
-import com.example.anna.Models.UserTuple;
+import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -139,7 +139,7 @@ public class SignInFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        UserTuple user = ds.getValue(UserTuple.class);
+                        User user = ds.getValue(User.class);
                         userInfoEditor.putString("email", emailSignIn.getText().toString());
                         userInfoEditor.putString("userKey", user.getUserKey());
                         userInfoEditor.putString("username", user.getUsername());
@@ -195,7 +195,7 @@ public class SignInFragment extends Fragment {
                 if (!snapshot.exists()) {
                     String key = ref.push().getKey();
                     assert key != null;
-                    UserTuple userTuple = new UserTuple(name, email, key);
+                    User userTuple = new User(name, email, key);
                     createMyDiscountsUserEntry(key);
                     uploadUserInfoPrefs(userTuple);
                     ref.child(key).setValue(userTuple);
@@ -204,7 +204,7 @@ public class SignInFragment extends Fragment {
                 } else {
                     for (DataSnapshot ds : snapshot.getChildren()) {
 
-                        UserTuple user = ds.getValue(UserTuple.class);
+                        User user = ds.getValue(User.class);
                         uploadUserInfoPrefs(user);
                         startActivity(toMenu);
                         requireActivity().finish();
@@ -259,7 +259,7 @@ public class SignInFragment extends Fragment {
         dialog.show();
     }
 
-    public void uploadUserInfoPrefs(UserTuple userTuple) {
+    public void uploadUserInfoPrefs(User userTuple) {
         userInfoEditor.putString("username", userTuple.getUsername());
         userInfoEditor.putString("email", userTuple.getEmail());
         userInfoEditor.putString("userKey", userTuple.getUserKey());

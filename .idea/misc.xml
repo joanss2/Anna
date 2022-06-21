@@ -38,6 +38,8 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/app_bar_main.xml" value="0.15198087431693988" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/app_bar_menu_main.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/buttonlayout.xml" value="0.12" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/collaborator_fragment_register.xml" value="0.226171875" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/collaborator_shop.xml" value="0.275" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/condiscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/content_menu_main.xml" value="0.1287568306010929" />
@@ -46,7 +48,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_gallery.xml" value="0.116015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_home.xml" value="0.125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_sign_in.xml" value="0.18" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_sign_up.xml" value="0.14140625" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_sign_up.xml" value="0.21" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/gridmydiscounts.xml" value="0.26024590163934425" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/homiliescard.xml" value="0.153125" />
@@ -57,6 +59,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_menu_main.xml" value="0.18" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santamariadepontscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santperedepontscard.xml" value="0.153125" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/tarifflayout.xml" value="0.275" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/menu/activity_main_drawer.xml" value="0.18" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/menu/activity_menu_main_drawer.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/menu/main.xml" value="0.153125" />

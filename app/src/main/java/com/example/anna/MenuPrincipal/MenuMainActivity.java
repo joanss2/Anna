@@ -17,6 +17,9 @@ import com.bumptech.glide.Glide;
 import com.example.anna.Register.MainActivity;
 import com.example.anna.R;
 import com.example.anna.databinding.ActivityMenuMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +29,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -35,7 +43,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -48,6 +59,8 @@ public class MenuMainActivity extends AppCompatActivity {
     private SharedPreferences.Editor userInfoEditor;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference reference = database.getReference("users");
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    CollectionReference collectionReference;
     private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
     private TextView profileName;
@@ -58,7 +71,7 @@ public class MenuMainActivity extends AppCompatActivity {
 
 
         userInfoPrefs = getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
-        Toast.makeText(this,userInfoPrefs.getString("userKey",null),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, userInfoPrefs.getString("userKey", null), Toast.LENGTH_LONG).show();
 
         userInfoEditor = userInfoPrefs.edit();
 
@@ -91,9 +104,9 @@ public class MenuMainActivity extends AppCompatActivity {
 
         new UserNameFromFirebase().execute();
         profileName = (TextView) header.findViewById(R.id.nav_user_name);
-        profileName.setText(userInfoPrefs.getString("username",null));
+        profileName.setText(userInfoPrefs.getString("username", null));
         TextView profileEmail = (TextView) header.findViewById(R.id.nav_user_email);
-        profileEmail.setText(userInfoPrefs.getString("email",null));
+        profileEmail.setText(userInfoPrefs.getString("email", null));
 
         String urlPicture = userInfoPrefs.getString("fotourl", null);
         Glide.with(this).load(urlPicture).into((ImageView) header.findViewById(R.id.nav_user_pic));
@@ -104,6 +117,11 @@ public class MenuMainActivity extends AppCompatActivity {
                 navController.navigate(R.id.nav_profile);
             }
         });
+        collectionReference = firebaseFirestore.collection("DiscountsUsed")
+                .document(userInfoPrefs.getString("userKey",null))
+                .collection("DiscountsReferenceList");
+
+        getUserUsedDiscounts();
 
     }
 
@@ -149,7 +167,7 @@ public class MenuMainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            MenuMainActivity.this.userInfoEditor.putString("username",s);
+            MenuMainActivity.this.userInfoEditor.putString("username", s);
             MenuMainActivity.this.userInfoEditor.commit();
             MenuMainActivity.this.updateUsername();
         }
@@ -162,8 +180,8 @@ public class MenuMainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void updateUsername(){
-        this.profileName.setText(userInfoPrefs.getString("username",null));
+    public void updateUsername() {
+        this.profileName.setText(userInfoPrefs.getString("username", null));
     }
 
 
@@ -195,5 +213,28 @@ public class MenuMainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+
+    public void getUserUsedDiscounts() {
+        Set<String> set = new HashSet<>();
+
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Map<String, Object> map = document.getData();
+                    set.add((String) map.get("key"));
+                }
+                userInfoEditor.putStringSet("setOfDiscounts",set);
+                userInfoEditor.commit();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 }
