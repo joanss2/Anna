@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.anna.Models.Tariff;
 import com.example.anna.R;
-import com.example.anna.Register.FragmentsViewPager.ShopAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +22,7 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.collaborator_shop);
 
@@ -40,5 +40,17 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
     @Override
     public void onTariffClick(Tariff tariff) {
         Toast.makeText(this,"You have clicked the "+tariff.getCondition()+" tariff. Enjoy!",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStart() {
+        shopAdapter.startListening();
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        shopAdapter.stopListening();
+        super.onStop();
     }
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.anna.MenuPrincipal.OnDiscountClickListener;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -32,14 +33,13 @@ import java.util.Map;
 public class DiscountsActivity extends AppCompatActivity implements OnDiscountClickListener {
 
     private RecyclerView rvDiscounts;
-    private DiscountAdapterForActivity discountAdapter;
     private SharedPreferences userInfoPrefs;
     private String usermail;
     private FirebaseDatabase database;
     private DatabaseReference reference;
-    private List<Discount> discountsUsed;
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference discountsDBRef;
+    private DiscountActivityAdapter discountActAdapter;
 
 
     @Override
@@ -55,49 +55,31 @@ public class DiscountsActivity extends AppCompatActivity implements OnDiscountCl
 
         setContentView(R.layout.activity_discounts);
         rvDiscounts = findViewById(R.id.recyclerDiscountsActivity);
-        discountAdapter = new DiscountAdapterForActivity(this, loadDiscountsFromFirestore(), this);
+
+
+        FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
+                .setQuery(discountsDBRef,Discount.class).build();
+        discountActAdapter = new DiscountActivityAdapter(options,this, this);
         rvDiscounts.setLayoutManager(new LinearLayoutManager(this));
-        rvDiscounts.setAdapter(discountAdapter);
+        rvDiscounts.setAdapter(discountActAdapter);
 
     }
 
-    public List<Discount> loadDiscountsFromFirestore() {
-
-        List<Discount> discountList = new ArrayList<>();
-        discountsDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot documentDiscount : task.getResult()) {
-                    Discount auxiliarDisc = new Discount();
-
-                    Map<String, Object> data = documentDiscount.getData();
-                    System.out.println("\n\n" + data + "\n\n");
-                    auxiliarDisc.setKey(data.get("key").toString());
-                    auxiliarDisc.setDescription(data.get("description").toString());
-                    auxiliarDisc.setDiscountPercentage(Integer.parseInt(data.get("discountPercentage").toString()));
-                    auxiliarDisc.setImageRef(data.get("imageRef").toString());
-                    auxiliarDisc.setName(data.get("name").toString());
-                    System.out.println("\n\nAIXO ES EL AUXILIAR DISCOUNT\n" + auxiliarDisc.toString());
-                    discountList.add(auxiliarDisc);
-                }
-
-                discountAdapter = new DiscountAdapterForActivity(getApplicationContext(), discountList, DiscountsActivity.this);
-                rvDiscounts.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                rvDiscounts.setAdapter(discountAdapter);
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        return discountList;
-
-    }
 
     @Override
     public void onDiscountClick(Discount discount) {
         new DiscountClickedDialog(discount.getUriImg(),discount.getName(),this, discount.getKey());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        discountActAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        discountActAdapter.stopListening();
     }
 }

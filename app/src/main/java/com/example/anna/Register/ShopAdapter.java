@@ -1,4 +1,4 @@
-package com.example.anna.Register.FragmentsViewPager;
+package com.example.anna.Register;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ public class ShopAdapter extends FirestoreRecyclerAdapter<Tariff, ShopAdapter.Ta
 
     @Override
     protected void onBindViewHolder(@NonNull ShopAdapter.TariffHolder holder, int position, @NonNull Tariff model) {
-        holder.price.setText(String.valueOf(model.getPrice()));
+        holder.price.setText(String.valueOf(model.getPrice())+"€");
         holder.condition.setText(model.getCondition());
         holder.description.setText(model.getDescription());
         System.out.println("OnbindViewHolder");

@@ -4,51 +4,74 @@
     package="com.example.anna">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Anna">
+        android:theme="@style/Theme.Anna.NoActionBar"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MenuPrincipal.MenuMainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_menu_main"
             android:theme="@style/Theme.Anna.NoActionBar" />
         <activity
             android:name=".MenuPrincipal.Faqs.FragmentFaqs"
-            android:exported="true"
+            android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
             android:name=".MenuPrincipal.Profile.FragmentProfile"
-            android:exported="true"
+            android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
             android:name=".MenuPrincipal.Home.FragmentHome"
-            android:exported="true"
             tools:ignore="Instantiatable" />
-        <activity android:name=".MenuPrincipal.Faqs.Faqs" />
-        <activity android:name=".MenuPrincipal.Faqs.ContactUs" />
-        <activity android:name=".MenuPrincipal.Home.Discounts.DiscountsActivity" />
-        <activity android:name=".MenuPrincipal.Routes.RoutesActivity" />
-        <activity android:name=".Ajustes" />
+        <activity
+            android:name=".MenuPrincipal.Faqs.Faqs"
+            android:exported="false" />
+        <activity
+            android:name=".MenuPrincipal.Faqs.ContactUs"
+            android:exported="false" />
+        <activity
+            android:name=".MenuPrincipal.Home.Discounts.DiscountsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MenuPrincipal.Routes.RoutesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Ajustes"
+            android:exported="false" />
         <activity
             android:name=".Register.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register.CollaboratorTariffActivity" />
+        <activity android:name=".Register.CollaboratorTariffActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".Register.PaymentSelected"
+            android:exported="true" />
+        <activity android:name=".MenuPrincipal.MyRoutes.MyRoutesClickedActivity"
+            android:exported="true"/>
+        <activity android:name=".MenuPrincipal.Routes.StationDetail" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

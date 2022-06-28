@@ -1,65 +1,46 @@
 package com.example.anna.MenuPrincipal.Routes;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.WindowManager;
+import android.widget.Toast;
 
-import com.example.anna.Models.Station;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.anna.MenuPrincipal.MyRoutes.MyRoutesChoiceAdapter;
+import com.example.anna.Models.RouteChoice;
+import com.example.anna.Models.RouteModel;
 import com.example.anna.R;
-import com.example.anna.MenuPrincipal.Routes.Stations.CondisStation;
-import com.example.anna.MenuPrincipal.Routes.Stations.HomiliesStation;
-import com.example.anna.MenuPrincipal.Routes.Stations.NaturlandiaStation;
-import com.example.anna.MenuPrincipal.Routes.Stations.SantPereStation;
-import com.example.anna.MenuPrincipal.Routes.Stations.SantaMariaStation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class RoutesActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-    ImageView santPereImg, santaMariaImg, condisImg, homiliesImg, naturImg;
-    private Station currentStation;
+public class RoutesActivity extends AppCompatActivity{
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_route2);
+        setContentView(R.layout.routes_all);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        santPereImg = findViewById(R.id.imageViewsantpere);
-        santaMariaImg = findViewById(R.id.imageViewsantamaria);
-        condisImg = findViewById(R.id.imageViewcondis);
-        homiliesImg = findViewById(R.id.imageViewhomilies);
-        naturImg = findViewById(R.id.imageViewnaturlandia);
+        getSupportFragmentManager().beginTransaction().replace(R.id.wrapper,new RoutesFragment()).commit();
 
-        santPereImg.setOnClickListener(this);
-        santaMariaImg.setOnClickListener(this);
-        condisImg.setOnClickListener(this);
-        homiliesImg.setOnClickListener(this);
-        naturImg.setOnClickListener(this);
-
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageViewsantpere:
-                currentStation = new SantPereStation(this, Ubications.SANT_PERE_UBI.getValue());
-                break;
-            case R.id.imageViewsantamaria:
-                currentStation = new SantaMariaStation(this, Ubications.SANTA_MARIA_UBI.getValue());
-                break;
-            case R.id.imageViewcondis:
-                currentStation = new CondisStation(this, Ubications.CONDIS_UBI.getValue());
-                break;
-            case R.id.imageViewhomilies:
-                currentStation = new HomiliesStation(this, Ubications.HOMILIES_UBI.getValue());
-                break;
-            case R.id.imageViewnaturlandia:
-                currentStation = new NaturlandiaStation(this, Ubications.NATURLANDIA_UBI.getValue());
-                break;
-        }
-        currentStation.openStation();
     }
 
 }

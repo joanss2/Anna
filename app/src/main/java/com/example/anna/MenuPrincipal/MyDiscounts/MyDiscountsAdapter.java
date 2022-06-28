@@ -22,7 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDiscountsAdapter.ViewHolder> {
+public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDiscountsAdapter.DiscountHolder> {
 
     private final OnDiscountClickListener onDiscountClickListener;
     Context context;
@@ -37,13 +37,10 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
         System.out.println("AQUI ARRIBO");
-
-
     }
 
-
     @Override
-    protected void onBindViewHolder(@NonNull MyDiscountsAdapter.ViewHolder holder, int position, @NonNull Discount model) {
+    protected void onBindViewHolder(@NonNull DiscountHolder holder, int position, @NonNull Discount model) {
         holder.discountTitle.setText(model.getName());
         holder.discountDescription.setText(model.getDescription());
         holder.discountPercentage.setText(String.valueOf(model.getDiscountPercentage()));
@@ -52,12 +49,12 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
 
     @NonNull
     @Override
-    public MyDiscountsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DiscountHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.discount_cardview, parent, false);
-        return new ViewHolder(view, onDiscountClickListener);
+        return new DiscountHolder(view, onDiscountClickListener);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class DiscountHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
         ImageView discountImg;
@@ -66,7 +63,7 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
         OnDiscountClickListener onDiscountsListener;
         Discount currentDiscountInViewHolder;
 
-        public ViewHolder(@NonNull View itemView, OnDiscountClickListener onMyDiscountsListener) {
+        public DiscountHolder(@NonNull View itemView, OnDiscountClickListener onMyDiscountsListener) {
             super(itemView);
             this.onDiscountsListener = onMyDiscountsListener;
             discountImg = itemView.findViewById(R.id.mydiscountimage);
@@ -78,14 +75,13 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
         }
 
         public void bind(Discount discount) {
-
             currentDiscountInViewHolder = discount;
             StorageReference pictureReference = storageReference.child(discount.getImageRef());
             pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    ViewHolder.this.uri = uri;
-                    currentDiscountInViewHolder.setUriImg(ViewHolder.this.uri);
+                    DiscountHolder.this.uri = uri;
+                    currentDiscountInViewHolder.setUriImg(DiscountHolder.this.uri);
                     Glide.with(context)
                             .load(uri)
                             .error(R.drawable.ic_launcher_background)

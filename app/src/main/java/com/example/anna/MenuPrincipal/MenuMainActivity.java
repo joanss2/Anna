@@ -19,6 +19,7 @@ import com.example.anna.R;
 import com.example.anna.databinding.ActivityMenuMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,10 +61,7 @@ public class MenuMainActivity extends AppCompatActivity {
     private SharedPreferences.Editor userInfoEditor;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference reference = database.getReference("users");
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference;
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private TextView profileName;
 
     @Override
@@ -74,6 +73,7 @@ public class MenuMainActivity extends AppCompatActivity {
         Toast.makeText(this, userInfoPrefs.getString("userKey", null), Toast.LENGTH_LONG).show();
 
         userInfoEditor = userInfoPrefs.edit();
+
 
         com.example.anna.databinding.ActivityMenuMainBinding binding = ActivityMenuMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -102,7 +102,6 @@ public class MenuMainActivity extends AppCompatActivity {
 
         View header = navigationView.getHeaderView(0);
 
-        new UserNameFromFirebase().execute();
         profileName = (TextView) header.findViewById(R.id.nav_user_name);
         profileName.setText(userInfoPrefs.getString("username", null));
         TextView profileEmail = (TextView) header.findViewById(R.id.nav_user_email);
@@ -117,60 +116,16 @@ public class MenuMainActivity extends AppCompatActivity {
                 navController.navigate(R.id.nav_profile);
             }
         });
-        collectionReference = firebaseFirestore.collection("DiscountsUsed")
-                .document(userInfoPrefs.getString("userKey",null))
-                .collection("DiscountsReferenceList");
 
-        getUserUsedDiscounts();
 
     }
 
-    private class UserNameFromFirebase extends AsyncTask<String, String, String> {
-        private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-        private final DatabaseReference reference = database.getReference("users");
-        private String s = "";
 
-        @Override
-        protected String doInBackground(String... strings) {
-            Query query = reference.orderByChild("email").equalTo(MenuMainActivity.this.userInfoPrefs.getString("email", null));
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    lock.lock();
-                    if (snapshot.exists()) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            s = snapshot.child(Objects.requireNonNull(ds.getKey())).child("username").getValue(String.class);
-                            condition.signal();
-                        }
-                    }
-                    lock.unlock();
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-            try {
-                lock.lock();
-                condition.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                lock.unlock();
-            }
-
-            return s;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            MenuMainActivity.this.userInfoEditor.putString("username", s);
-            MenuMainActivity.this.userInfoEditor.commit();
-            MenuMainActivity.this.updateUsername();
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        userHasDiscounts(userInfoPrefs.getString("userKey",null));
     }
 
     @Override
@@ -215,26 +170,26 @@ public class MenuMainActivity extends AppCompatActivity {
         builder.show();
     }
 
-
-    public void getUserUsedDiscounts() {
-        Set<String> set = new HashSet<>();
-
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void userHasDiscounts(String key){
+        DocumentReference ref = FirebaseFirestore.getInstance().collection("DiscountsUsed").document(key);
+        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Map<String, Object> map = document.getData();
-                    set.add((String) map.get("key"));
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    if(task.getResult().exists()){
+                        userInfoEditor.putBoolean("hasDiscounts",true);
+                    }else{
+                        userInfoEditor.putBoolean("hasDiscounts",false);
+                    }
+                    userInfoEditor.commit();
                 }
-                userInfoEditor.putStringSet("setOfDiscounts",set);
-                userInfoEditor.commit();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                System.out.println("Failed");
             }
         });
-
     }
+
 }

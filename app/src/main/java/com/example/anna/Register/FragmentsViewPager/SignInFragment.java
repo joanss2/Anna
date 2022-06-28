@@ -196,7 +196,6 @@ public class SignInFragment extends Fragment {
                     String key = ref.push().getKey();
                     assert key != null;
                     User userTuple = new User(name, email, key);
-                    createMyDiscountsUserEntry(key);
                     uploadUserInfoPrefs(userTuple);
                     ref.child(key).setValue(userTuple);
                     startActivity(toMenu);
@@ -218,20 +217,6 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    private void createMyDiscountsUserEntry(String key) {
-        myDiscountsRef.document(key).collection("MyDiscounts").add(new Discount()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d("UserDiscount Entry", "Correctly made User Discounts Entry");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("UserDiscount Entry", e.getMessage());
-
-            }
-        });
-    }
 
     @Override
     public void onResume() {

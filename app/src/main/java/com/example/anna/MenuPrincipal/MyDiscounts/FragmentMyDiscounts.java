@@ -1,6 +1,7 @@
 package com.example.anna.MenuPrincipal.MyDiscounts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SymbolTable;
 import android.os.Bundle;
@@ -16,16 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.anna.MenuPrincipal.Home.Discounts.DiscountClickedDialog;
+import com.example.anna.MenuPrincipal.Home.Discounts.DiscountsActivity;
 import com.example.anna.MenuPrincipal.OnDiscountClickListener;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -48,7 +53,8 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
     private Set<String> setOfDiscounts;
     private FirebaseDatabase database;
     private FirebaseFirestore firebaseFirestore;
-    private CollectionReference discountsUsedDBRef;
+    private CollectionReference discountsDBRef,discountsUsed;
+    private boolean hasDiscounts;
 
 
     @Override
@@ -58,68 +64,79 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         usermail = userInfoPrefs.getString("email", null);
         firebaseFirestore = FirebaseFirestore.getInstance();
-
-        discountsUsedDBRef = firebaseFirestore.collection("Discounts");
-
-        if (userInfoPrefs.getStringSet("setOfDiscounts",null)!=null){
-            setOfDiscounts = userInfoPrefs.getStringSet("setOfDiscounts",null);
-            Iterator<String> iterator = setOfDiscounts.iterator();
-            while (iterator.hasNext()){
-                String current = iterator.next();
-            }
-
-        }else{
-            Toast.makeText(getContext(),"STILL NO DISCOUNTS USED",Toast.LENGTH_LONG).show();
-        }
-
-
+        discountsUsed = firebaseFirestore.collection("DiscountsUsed").document(userInfoPrefs.getString("userKey", null))
+        .collection("DiscountsReferenceList");
+        discountsDBRef = firebaseFirestore.collection("Discounts");
+        hasDiscounts = userInfoPrefs.getBoolean("hasDiscounts", false);
 
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-
 
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root;
 
-        View root = inflater.inflate(R.layout.activity_fragment_mydiscounts, container, false);
-        rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
+        if (hasDiscounts) {
 
-
-
-/*
-        FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
-                .setQuery(discountsUsedDBRef, Discount.class)
-                .build();
+            root = inflater.inflate(R.layout.activity_fragment_mydiscounts, container, false);
+            rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
 
 
+            FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
+                    .setQuery(discountsUsed, Discount.class)
+                    .build();
 
 
-        myDiscountsAdapter = new MyDiscountsAdapter(options, this, getContext());
-        rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvDiscounts.setAdapter(myDiscountsAdapter);
- */
-        discountsUsedDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(QueryDocumentSnapshot document: task.getResult()){
-                    Map<String,Object> map = document.getData();
-                    System.out.println((String) map.get("name"));
+            myDiscountsAdapter = new MyDiscountsAdapter(options, this, getContext());
+            rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvDiscounts.setAdapter(myDiscountsAdapter);
 
-            }}
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                System.out.println("hello failure");
-            }
-        });
+
+        } else {
+            root = inflater.inflate(R.layout.activity_fragment_mydiscounts_empty, container, false);
+        }
+
         return root;
     }
 
     @Override
     public void onDiscountClick(Discount discount) {
-        new DiscountClickedDialog(discount.getUriImg(),discount.getName(),getContext(),discount.getKey());
+        new DiscountClickedDialog(discount.getUriImg(), discount.getName(), getContext(), discount.getKey());
     }
 
+    @Override
+    public void onStart() {
+        if (hasDiscounts) {
+            myDiscountsAdapter.startListening();
+        }
+
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        if (hasDiscounts) {
+            myDiscountsAdapter.stopListening();
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (!hasDiscounts) {
+
+            Snackbar snackbar = Snackbar.make(view, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("GO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getContext(), DiscountsActivity.class));
+                }
+            });
+            snackbar.show();
+        }
+    }
 }

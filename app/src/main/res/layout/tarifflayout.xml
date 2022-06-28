@@ -2,60 +2,69 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tarifftemplate"
-    app:cardCornerRadius="15dp"
-    android:layout_height="150dp"
-    android:layout_width="match_parent">
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="#E6FF00"
+    app:cardCornerRadius="15dp">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/fondotarifa">
-
-        <TextView
-            android:id="@+id/tarifaPreu"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="15dp"
-            android:layout_weight="3"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textSize="42sp"
-            android:textStyle="bold|italic"/>
+        android:layout_margin="5dp"
+        app:cardCornerRadius="15dp">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:gravity="center_horizontal"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/fondotarifa">
 
             <TextView
-                android:id="@+id/tarifaCondicio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="textStart"
+                android:id="@+id/tarifaPreu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
                 android:textColor="@color/white"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tarifaCondicioDescripcio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="42sp"
+                android:textStyle="bold|italic" />
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp"
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tarifaCondicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tarifaCondicioDescripcio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
-
-    </LinearLayout>
-
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.cardview.widget.CardView>
