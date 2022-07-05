@@ -3,6 +3,7 @@
     <string name="error">Error</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="hi">Hallo</string>
     <string name="ok">OK</string>
     <string name="signup">Sign up</string>
     <string name="Register">Register</string>
@@ -14,10 +15,10 @@
     <string name="collaborator">Collaborator</string>
     <string name="haveAccount">Do you already have an account?</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="myroute">MY ROUTE</string>
-    <string name="discounts">DISCOUNTS</string>
-    <string name="faqs">FAQS</string>
-    <string name="ajustes">SETTINGS</string>
+    <string name="myroute">Routes</string>
+    <string name="discounts">Discounts</string>
+    <string name="faqs">Faqs</string>
+    <string name="ajustes">Settings</string>
     <string name="contactus"><u>Need some help? Contact us!</u></string>
     <string name="sendmailtitle">How can we help you?</string>
     <string name="hint_email">Your email address here</string>

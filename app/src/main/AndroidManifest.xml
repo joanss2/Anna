@@ -15,6 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:label="RuralSecrets"
         android:theme="@style/Theme.Anna.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
@@ -22,10 +23,6 @@
             android:exported="false"
             android:label="@string/title_activity_menu_main"
             android:theme="@style/Theme.Anna.NoActionBar" />
-        <activity
-            android:name=".MenuPrincipal.Faqs.FragmentFaqs"
-            android:exported="false"
-            tools:ignore="Instantiatable" />
         <activity
             android:name=".MenuPrincipal.Profile.FragmentProfile"
             android:exported="false"
@@ -39,12 +36,6 @@
         <activity
             android:name=".MenuPrincipal.Faqs.ContactUs"
             android:exported="false" />
-        <activity
-            android:name=".MenuPrincipal.Home.Discounts.DiscountsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MenuPrincipal.Routes.RoutesActivity"
-            android:exported="true" />
         <activity
             android:name=".Ajustes"
             android:exported="false" />

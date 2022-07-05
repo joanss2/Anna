@@ -3,12 +3,16 @@ package com.example.anna.MenuPrincipal.Home.Discounts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 
@@ -30,7 +34,63 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DiscountsActivity extends AppCompatActivity implements OnDiscountClickListener {
+public class FragmentDiscounts extends Fragment implements OnDiscountClickListener {
+
+    private RecyclerView rvDiscounts;
+    private SharedPreferences userInfoPrefs;
+    private String usermail;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private FirebaseFirestore firebaseFirestore;
+    private CollectionReference discountsDBRef;
+    private DiscountActivityAdapter discountActAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        usermail = userInfoPrefs.getString("email", null);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        discountsDBRef = firebaseFirestore.collection("Discounts");
+        database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+        reference = database.getReference("users");
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_discounts, container, false);
+
+        rvDiscounts = view.findViewById(R.id.recyclerDiscountsActivity);
+
+
+        FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
+                .setQuery(discountsDBRef,Discount.class).build();
+        discountActAdapter = new DiscountActivityAdapter(options,getContext(), this);
+        rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDiscounts.setAdapter(discountActAdapter);
+
+        return view;
+    }
+
+    @Override
+    public void onDiscountClick(Discount discount) {
+        new DiscountClickedDialog(discount.getUriImg(),discount.getName(),getContext(), discount.getKey());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        discountActAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        discountActAdapter.stopListening();
+    }
+
+    /*
 
     private RecyclerView rvDiscounts;
     private SharedPreferences userInfoPrefs;
@@ -82,4 +142,6 @@ public class DiscountsActivity extends AppCompatActivity implements OnDiscountCl
         super.onStop();
         discountActAdapter.stopListening();
     }
+
+     */
 }

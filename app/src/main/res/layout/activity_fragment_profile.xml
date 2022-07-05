@@ -4,104 +4,147 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="50dp"
+    android:layout_marginTop="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+
+    android:background="@drawable/wallpapaer"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="15dp"
-    android:paddingEnd="15dp"
     tools:context=".MenuPrincipal.Profile.FragmentProfile">
-
-    <!--
-       <ImageView
-           android:id="@+id/profileImageView"
-           android:layout_width="200dp"
-           android:layout_height="200dp"
-           android:layout_marginTop="10dp"
-           android:layout_marginBottom="10dp"
-           android:scaleType="fitXY"
-           android:background="@drawable/roundshape"
-           app:shapeAppearanceOverlay="@style"/>
-          android:background="@drawable/roundshape" -->
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"
-        android:scaleType="fitXY"
-        app:shapeAppearanceOverlay="@style/circleImageView" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Nom usuari"
-        android:textColor="#000000"
-        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/profile_username"
-            android:layout_width="0dp"
-            android:layout_weight="4"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="358dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginTop="20dp"
+            android:gravity="right"
+            android:orientation="horizontal">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/editnamebutton"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="7"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/menuProfile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@drawable/ic_menu" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:src="@drawable/ic_edit" />
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/circleImageView" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp">
+
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:textStyle="bold"
+                        android:text="Nº Discounts Used"/>
+
+                    <TextView
+                        android:id="@+id/profileNumberDiscounts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:textStyle="bold"
+                        android:text="Nº Routes Finished"/>
+
+                    <TextView
+                        android:id="@+id/profileNumberRoutes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/editProfileButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#4FBD5E"
+            android:text="Edit Profile" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/profileTablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#00FFFFFF"
+            app:tabIconTint="@color/white"
+            app:tabIndicatorColor="#FBF22B"
+            app:tabTextColor="#FFFFFF">
+
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpagerprofile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF" />
 
     </LinearLayout>
-
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Email"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/profile_useremail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Telefon"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/profile_usertelefono"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp" />
-
-    <TextView
-        android:id="@+id/profile_cambiarcontra"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:autoLink="none"
-        android:text="Cambiar contrasenya"
-        android:textColor="#A80606"
-        android:textStyle="italic" />
-
 
 </LinearLayout>

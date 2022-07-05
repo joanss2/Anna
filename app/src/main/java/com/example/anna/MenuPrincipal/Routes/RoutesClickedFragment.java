@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,6 +82,15 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_frame, new FragmentRoutes())
+                        .addToBackStack(null).commit();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Nullable
@@ -113,8 +123,6 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         fillRouteSpecs(query);
 
 
-
-
         FirestoreRecyclerOptions<Station> options = new FirestoreRecyclerOptions.Builder<Station>()
                 .setQuery(stationsRef, Station.class).build();
 
@@ -138,27 +146,27 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
                 gMap = googleMap;
-                fillMap(gMap,stationsRef);
+                fillMap(gMap, stationsRef);
             }
         });
 
     }
 
-    private void fillMap(GoogleMap googleMap, CollectionReference collectionReference){
+    private void fillMap(GoogleMap googleMap, CollectionReference collectionReference) {
         List<LatLng> points = new ArrayList<>();
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
 
                         String title = document.getData().get("name").toString();
                         GeoPoint geoPoint = document.getGeoPoint("geoLocation");
-                        LatLng position = new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude());
+                        LatLng position = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 
                         points.add(position);
                         googleMap.addMarker(new MarkerOptions().position(position).title(title)).setIcon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                                .defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                     }
 
                     setCentralStationInRoute(points, googleMap);
@@ -169,30 +177,30 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(),"It has not been able to draw the route on the map, sorry!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "It has not been able to draw the route on the map, sorry!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setCentralStationInRoute(List<LatLng> points, GoogleMap googleMap){
+    private void setCentralStationInRoute(List<LatLng> points, GoogleMap googleMap) {
 
         float lowest = 0, aux = 0;
-        int index =0;
+        int index = 0;
         Location location = new Location("");
         Location otherLocation = new Location("");
 
-        for(int i=0; i<points.size(); i++){
+        for (int i = 0; i < points.size(); i++) {
             location = createLocation(points.get(i));
-            for(int j=0; j<points.size(); j++){
-                if(j!=i){
+            for (int j = 0; j < points.size(); j++) {
+                if (j != i) {
                     aux += location.distanceTo(createLocation(points.get(j)));
                 }
             }
-            if(i==0) {
+            if (i == 0) {
                 lowest = aux;
                 index = i;
-            }else{
-                if(aux < lowest) {
+            } else {
+                if (aux < lowest) {
                     lowest = aux;
                     index = i;
                 }
@@ -202,16 +210,16 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(index)));
     }
 
-    private Location createLocation(LatLng latLng){
+    private Location createLocation(LatLng latLng) {
         Location location = new Location("");
         location.setLatitude(latLng.latitude);
         location.setLongitude(latLng.longitude);
         return location;
     }
 
-    private void drawRoute(GoogleMap googleMap, List<LatLng> points){
+    private void drawRoute(GoogleMap googleMap, List<LatLng> points) {
         PolylineOptions options = new PolylineOptions().geodesic(true).width(INITIAL_STROKE_WIDTH_PX).color(Color.RED);
-        for(LatLng latLng: points){
+        for (LatLng latLng : points) {
             options.add(latLng);
         }
         Polyline line = googleMap.addPolyline(options);
@@ -248,12 +256,13 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         routesClickedAdapter.stopListening();
     }
 
+
     @Override
     public void onStationClick(Station station) {
         Intent intent = new Intent(getContext(), StationDetail.class);
         Bundle bundle = new Bundle();
         bundle.putString("stationName", station.getName());
-        bundle.putString("routeID",documentID);
+        bundle.putString("routeID", documentID);
         intent.putExtras(bundle);
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();

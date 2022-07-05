@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-public class RoutesFragment extends Fragment implements RoutesAdapter.OnRoutesClick{
+public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesClick{
 
     private final CollectionReference routesReference = FirebaseFirestore.getInstance().collection("Routes");
     private List<RouteModel> routeModelList;
@@ -37,6 +38,15 @@ public class RoutesFragment extends Fragment implements RoutesAdapter.OnRoutesCl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_frame, new FragmentRoutes())
+                        .addToBackStack(null).commit();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Nullable
@@ -81,8 +91,7 @@ public class RoutesFragment extends Fragment implements RoutesAdapter.OnRoutesCl
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
                         activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.wrapper, new RoutesClickedFragment(routeModel.getName(),document.getId(),routeModel.getCategory()))
-                                .addToBackStack(null).commit();
+                                .replace(R.id.main_frame, new RoutesClickedFragment(routeModel.getName(),document.getId(),routeModel.getCategory())).commit();
                     }
                 }
             }

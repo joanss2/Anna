@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
+    android:background="@drawable/wallpapaer"
     android:layout_marginTop="15dp"
-    tools:context="com.example.anna.MenuPrincipal.Routes.RoutesFragment">
+    tools:context="com.example.anna.MenuPrincipal.Routes.FragmentRoutes">
 
     <LinearLayout
         android:layout_width="match_parent"
