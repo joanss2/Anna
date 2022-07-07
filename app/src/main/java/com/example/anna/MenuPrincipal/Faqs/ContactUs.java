@@ -16,7 +16,6 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
 
 
     private Intent emailIntent;
-    private Button sendButton;
     private EditText editTextsubject, editTextmessage;
     private TextView addressTo;
 
@@ -27,7 +26,7 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_contact_us);
 
         emailIntent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-        sendButton = (Button) findViewById(R.id.buttonsendmail);
+        Button sendButton = (Button) findViewById(R.id.buttonsendmail);
         addressTo = (TextView) findViewById(R.id.addressmail);
         editTextsubject = (EditText) findViewById(R.id.subjectmail);
         editTextmessage = (EditText) findViewById(R.id.messagemail);

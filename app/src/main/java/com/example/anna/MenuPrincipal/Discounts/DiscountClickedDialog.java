@@ -1,4 +1,4 @@
-package com.example.anna.MenuPrincipal.Home.Discounts;
+package com.example.anna.MenuPrincipal.Discounts;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,21 +8,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,14 +24,12 @@ import java.util.Objects;
 public class DiscountClickedDialog {
 
     private final BottomSheetDialog bottomSheetDialog;
-    private final String title;
     private final String key;
     private final Context context;
     private final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("DiscountsUsed");
     private final SharedPreferences sharedPreferences;
 
     public DiscountClickedDialog(Uri imageViewResource, String title, Context context, String key) {
-        this.title = title;
         this.context = context;
         this.key = key;
         this.bottomSheetDialog = new BottomSheetDialog(context);
@@ -58,6 +50,7 @@ public class DiscountClickedDialog {
         Button activateDiscount = bottomSheetDialog.findViewById(R.id.button_activar_discount);
         Button notActivateDiscount = bottomSheetDialog.findViewById(R.id.button_no_activar_discount);
 
+        assert activateDiscount != null;
         activateDiscount.setOnClickListener(view -> {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
             alertDialog.setTitle("Confirm Discount activation")
@@ -68,6 +61,7 @@ public class DiscountClickedDialog {
                     .show();
         });
 
+        assert notActivateDiscount != null;
         notActivateDiscount.setOnClickListener(view -> bottomSheetDialog.dismiss());
 
         bottomSheetDialog.show();
@@ -99,27 +93,9 @@ public class DiscountClickedDialog {
         Map<String,Object> fieldkey = new HashMap<>();
         fieldkey.put("key",sharedPreferences.getString("userKey", null));
         DocumentReference documentReference = collectionReference.document(sharedPreferences.getString("userKey", null));
-        documentReference.set(fieldkey).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                documentReference.collection("DiscountsReferenceList")
-                        .add(discount).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(context, "DISCOUNT ACTIVATED SUCCESSFULLY!", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "ERROR WHILE ACTIVATING DISCOUNT", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "ERROR WHILE ACTIVATING DISCOUNT", Toast.LENGTH_LONG).show();
-            }
-        });
+        documentReference.set(fieldkey).addOnSuccessListener(unused -> documentReference.collection("DiscountsReferenceList")
+                .add(discount).addOnSuccessListener(documentReference1 -> Toast.makeText(context, "DISCOUNT ACTIVATED SUCCESSFULLY!", Toast.LENGTH_LONG).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "ERROR WHILE ACTIVATING DISCOUNT", Toast.LENGTH_LONG).show()))
+                .addOnFailureListener(e -> Toast.makeText(context, "ERROR WHILE ACTIVATING DISCOUNT", Toast.LENGTH_LONG).show());
     }
 }

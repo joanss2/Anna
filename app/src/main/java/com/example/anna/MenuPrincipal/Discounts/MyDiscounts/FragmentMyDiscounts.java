@@ -1,43 +1,31 @@
-package com.example.anna.MenuPrincipal.MyDiscounts;
+package com.example.anna.MenuPrincipal.Discounts.MyDiscounts;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.anna.MenuPrincipal.Home.Discounts.DiscountClickedDialog;
-import com.example.anna.MenuPrincipal.Home.Discounts.FragmentDiscounts;
-import com.example.anna.MenuPrincipal.OnDiscountClickListener;
+import com.example.anna.MenuPrincipal.Discounts.FragmentDiscounts;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Set;
-
-public class FragmentMyDiscounts extends Fragment implements OnDiscountClickListener {
 
 
-    private RecyclerView rvDiscounts;
+public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.OnMyDiscountUsedClickListener {
+
+
     private MyDiscountsAdapter myDiscountsAdapter;
-    private SharedPreferences userInfoPrefs;
-    private String usermail;
-    private Set<String> setOfDiscounts;
-    private FirebaseDatabase database;
-    private FirebaseFirestore firebaseFirestore;
-    private CollectionReference discountsDBRef,discountsUsed;
+    private CollectionReference discountsUsed;
     private boolean hasDiscounts;
 
 
@@ -45,15 +33,11 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
-        usermail = userInfoPrefs.getString("email", null);
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        SharedPreferences userInfoPrefs = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         discountsUsed = firebaseFirestore.collection("DiscountsUsed").document(userInfoPrefs.getString("userKey", null))
         .collection("DiscountsReferenceList");
-        discountsDBRef = firebaseFirestore.collection("Discounts");
         hasDiscounts = userInfoPrefs.getBoolean("hasDiscounts", false);
-
-        database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
 
     }
 
@@ -65,7 +49,7 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         if (hasDiscounts) {
 
             root = inflater.inflate(R.layout.activity_fragment_mydiscounts, container, false);
-            rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
+            RecyclerView rvDiscounts = root.findViewById(R.id.recyclerDiscounts);
 
 
             FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
@@ -85,10 +69,6 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         return root;
     }
 
-    @Override
-    public void onDiscountClick(Discount discount) {
-        new DiscountClickedDialog(discount.getUriImg(), discount.getName(), getContext(), discount.getKey());
-    }
 
     @Override
     public void onStart() {
@@ -114,13 +94,13 @@ public class FragmentMyDiscounts extends Fragment implements OnDiscountClickList
         if (!hasDiscounts) {
 
             Snackbar snackbar = Snackbar.make(view, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("GO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //startActivity(new Intent(getContext(), FragmentDiscounts.class));
-                }
-            });
+            snackbar.setAction("GO", view1 -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentDiscounts()).addToBackStack(null).commit());
             snackbar.show();
         }
+    }
+
+    @Override
+    public void onMyDiscountUsedClick(Discount discount) {
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new DiscountUsedDetail(discount)).addToBackStack(null).commit();
     }
 }

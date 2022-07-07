@@ -2,23 +2,15 @@ package com.example.anna.Models;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 public class Discount {
 
     private String description;
     private String name, imageRef, key;
     private Uri uriImg;
     private int discountPercentage;
-/*
-    public Discount(String description, int discountPercentage, String imageRef, String name, String key) {
-        this.key = key;
-        this.description = description;
-        this.discountPercentage = discountPercentage;
-        this.imageRef = imageRef;
-        this.name = name;
-    }
 
-
- */
     public Discount() {
     }
 
@@ -71,6 +63,7 @@ public class Discount {
         this.discountPercentage = discountPercentage;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "\nThis is the discount " + this.name +

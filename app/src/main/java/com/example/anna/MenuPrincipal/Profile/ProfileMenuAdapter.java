@@ -13,7 +13,7 @@ import com.example.anna.R;
 
 import java.util.List;
 
-public class ProfileMenuAdapter extends RecyclerView.Adapter<ProfileMenuAdapter.Viewholder> {
+public class ProfileMenuAdapter extends RecyclerView.Adapter<ProfileMenuAdapter.MenuItemHolder> {
 
     private final Context context;
     private final List<String> settingsList;
@@ -23,18 +23,17 @@ public class ProfileMenuAdapter extends RecyclerView.Adapter<ProfileMenuAdapter.
         this.context = context;
         this.settingsList = settingsList;
         this.onSettingClickListener = onSettingClickListener;
-        System.out.println("Arribo al constructor");
     }
 
     @NonNull
     @Override
-    public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MenuItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.profile_menu_item, parent, false);
-        return new Viewholder(view);
+        return new MenuItemHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull MenuItemHolder holder, int position) {
         String current = settingsList.get(position);
         holder.bind(current);
     }
@@ -45,11 +44,11 @@ public class ProfileMenuAdapter extends RecyclerView.Adapter<ProfileMenuAdapter.
         return this.settingsList.size();
     }
 
-    public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MenuItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView textView;
+        private final TextView textView;
 
-        public Viewholder(@NonNull View itemView) {
+        public MenuItemHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.profileItemTextView);
             itemView.setOnClickListener(this);
@@ -66,6 +65,6 @@ public class ProfileMenuAdapter extends RecyclerView.Adapter<ProfileMenuAdapter.
     }
 
     public interface OnSettingClickListener{
-        public void onSettingClick(String currentSetting);
+        void onSettingClick(String currentSetting);
     }
 }

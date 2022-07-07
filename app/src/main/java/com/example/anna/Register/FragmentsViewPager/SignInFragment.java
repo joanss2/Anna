@@ -12,18 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import com.example.anna.Models.Alert;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
-import com.example.anna.Models.Discount;
 import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
@@ -32,12 +29,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
@@ -46,9 +39,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class SignInFragment extends Fragment {
 
@@ -63,7 +56,6 @@ public class SignInFragment extends Fragment {
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     DatabaseReference ref = database.getReference("users");
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    CollectionReference myDiscountsRef = firestore.collection("DiscountsUsed");
 
 
     @Override
@@ -85,47 +77,36 @@ public class SignInFragment extends Fragment {
         emailSignIn = view.findViewById(R.id.email);
         passwordSignIn = view.findViewById(R.id.password);
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
+        btnSignIn.setOnClickListener(v -> {
+            if (v.getId() == R.id.buttonsignin) {
+                if (TextUtils.isEmpty(emailSignIn.getText())) {
+                    showAlert(new EmptyEmailFieldAlert(getContext()));
+                } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    userInfoEditor.putString("email", emailSignIn.getText().toString()).commit();
+                                    downloadUserInfoAndSavePersistent();
+                                    startActivity(toMenu);
+                                    requireActivity().finish();
+                                } else {
+                                    showAlert(Objects.requireNonNull(task.getException()).getMessage());
+                                }
+                            });
 
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.buttonsignin:
-                        if (TextUtils.isEmpty(emailSignIn.getText())) {
-                            showAlert(new EmptyEmailFieldAlert(getContext()));
-                        } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
-                            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
-                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                userInfoEditor.putString("email", emailSignIn.getText().toString()).commit();
-                                                downloadUserInfoAndSavePersistent();
-                                                startActivity(toMenu);
-                                                getActivity().finish();
-                                            } else {
-                                                showAlert(task.getException().getMessage());
-                                            }
-                                        }
-                                    });
-
-                        } else {
-                            showAlert(new UnsuccessfulSignInAlert(getContext()));
-                        }
+                } else {
+                    showAlert(new UnsuccessfulSignInAlert(getContext()));
                 }
             }
         });
 
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        googleButton.setOnClickListener(v -> {
+            GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
 
-                GoogleSignInClient googleClient = GoogleSignIn.getClient(getActivity(), googleConf);
-                googleClient.signOut();
-                startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_IN);
-            }
+            GoogleSignInClient googleClient = GoogleSignIn.getClient(requireActivity(), googleConf);
+            googleClient.signOut();
+            startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_IN);
         });
 
         return view;
@@ -141,6 +122,7 @@ public class SignInFragment extends Fragment {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = ds.getValue(User.class);
                         userInfoEditor.putString("email", emailSignIn.getText().toString());
+                        assert user != null;
                         userInfoEditor.putString("userKey", user.getUserKey());
                         userInfoEditor.putString("username", user.getUsername());
                         userInfoEditor.commit();
@@ -164,18 +146,15 @@ public class SignInFragment extends Fragment {
                 if (account != null) {
 
                     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                userPic = account.getPhotoUrl();
-                                name = account.getDisplayName();
-                                email = account.getEmail();
-                                newUserCreatedIfNonExistent();
+                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            userPic = account.getPhotoUrl();
+                            name = account.getDisplayName();
+                            email = account.getEmail();
+                            newUserCreatedIfNonExistent();
 
-                            } else {
-                                showAlert(task.getException().getMessage());
-                            }
+                        } else {
+                            showAlert(Objects.requireNonNull(task1.getException()).getMessage());
                         }
                     });
 
@@ -204,6 +183,7 @@ public class SignInFragment extends Fragment {
                     for (DataSnapshot ds : snapshot.getChildren()) {
 
                         User user = ds.getValue(User.class);
+                        assert user != null;
                         uploadUserInfoPrefs(user);
                         startActivity(toMenu);
                         requireActivity().finish();

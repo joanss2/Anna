@@ -17,7 +17,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAdapter.RouteHolder> {
 
-    private OnRoutesClick onRoutesClick;
+    private final OnRoutesClick onRoutesClick;
 
     public RoutesAdapter(@NonNull FirestoreRecyclerOptions<RouteModel> options, OnRoutesClick onRoutesClick) {
         super(options);
@@ -52,8 +52,8 @@ public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAd
 
     class RouteHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView routeTitle;
-        private CardView cardview;
+        private final TextView routeTitle;
+        private final CardView cardview;
         private RouteModel routeModel;
 
         public RouteHolder(@NonNull View itemView) {
@@ -75,6 +75,6 @@ public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAd
     }
 
     public interface OnRoutesClick{
-        public void onRoutesClick(RouteModel routeModel);
+        void onRoutesClick(RouteModel routeModel);
     }
 }

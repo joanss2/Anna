@@ -6,23 +6,18 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
-
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    private SharedPreferences userInfoPrefs;
 
     TabItem tabSignUp, tabSignIn;
     PagerController pagerAdapter;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -30,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        userInfoPrefs = getSharedPreferences("USERINFO",MODE_PRIVATE);
+        SharedPreferences userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
 
         if(userInfoPrefs.getString("email",null)!=null){
             startActivity(new Intent(this, MenuMainActivity.class));

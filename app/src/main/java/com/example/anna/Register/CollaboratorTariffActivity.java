@@ -16,8 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CollaboratorTariffActivity extends AppCompatActivity implements ShopAdapter.OnTariffClick{
 
-    private CollectionReference shopReference = FirebaseFirestore.getInstance().collection("Shop");
-    private RecyclerView rvShop;
+    private final CollectionReference shopReference = FirebaseFirestore.getInstance().collection("Shop");
     private ShopAdapter shopAdapter;
 
     @Override
@@ -26,7 +25,7 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
         super.onCreate(savedInstanceState);
         setContentView(R.layout.collaborator_shop);
 
-        rvShop = findViewById(R.id.shopRecyclerView);
+        RecyclerView rvShop = findViewById(R.id.shopRecyclerView);
         rvShop.setLayoutManager(new LinearLayoutManager(this));
 
         FirestoreRecyclerOptions<Tariff> options = new FirestoreRecyclerOptions.Builder<Tariff>()

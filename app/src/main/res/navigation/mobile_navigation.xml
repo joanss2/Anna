@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/nav_mydiscounts"
-        android:name="com.example.anna.MenuPrincipal.MyDiscounts.FragmentMyDiscounts"
+        android:name="com.example.anna.MenuPrincipal.Discounts.MyDiscounts.FragmentMyDiscounts"
         android:label="MyDiscounts"
         tools:layout="@layout/activity_fragment_mydiscounts" />
 
