@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-
 import com.example.anna.Models.Alert;
 import com.example.anna.Alerts.BadPasswordAlert;
 import com.example.anna.Alerts.PasswordsNotEqualAlert;
@@ -25,33 +21,28 @@ import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.example.anna.Register.CollaboratorTariffActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class SignUpFragment extends Fragment {
 
 
     private EditText usernameSignUp, emailSignUp, passwordSignUp, confirmPassword;
     private SharedPreferences.Editor userInfoEditor;
-    private String email, usernName, key;
+    private String email, userName, key;
     private FirebaseDatabase database;
     private Intent registerAndStart;
     private User userTuple;
     private CheckBox checkBox;
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    CollectionReference myDiscountsRef = firestore.collection("DiscountsUsed");
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences userInfoPreferences = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        SharedPreferences userInfoPreferences = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         userInfoEditor = userInfoPreferences.edit();
         database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     }
@@ -69,21 +60,16 @@ public class SignUpFragment extends Fragment {
         confirmPassword = view.findViewById(R.id.passwordconfirm);
         checkBox = view.findViewById(R.id.checkboxsignup);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        btnSignUp.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
+                    passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())) {
 
-            @Override
-            public void onClick(View v) {
-                if (!TextUtils.isEmpty(passwordSignUp.getText()) && !TextUtils.isEmpty(confirmPassword.getText()) &&
-                        passwordSignUp.getText().toString().equals(confirmPassword.getText().toString())) {
-
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailSignUp.getText().toString(),
-                            passwordSignUp.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailSignUp.getText().toString(),
+                        passwordSignUp.getText().toString()).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 registerAndStart = new Intent(getActivity(), MenuMainActivity.class);
                                 email = emailSignUp.getText().toString();
-                                usernName = usernameSignUp.getText().toString();
+                                userName = usernameSignUp.getText().toString();
                                 DatabaseReference ref = database.getReference("users");
                                 DatabaseReference refAdmin = database.getReference("collaborators");
 
@@ -91,31 +77,28 @@ public class SignUpFragment extends Fragment {
                                 if(checkBox.isChecked()) {
                                     key = refAdmin.push().getKey();
                                     assert key!=null;
-                                    userTuple = new User(usernName, email, key);
+                                    userTuple = new User(userName, email, key);
                                     refAdmin.child(key).setValue(userTuple);
                                     uploadUserInfoPrefs(userTuple);
                                     startActivity(new Intent(getActivity(), CollaboratorTariffActivity.class));
-                                    requireActivity().finish();
                                 }else {
                                     key = ref.push().getKey();
                                     assert key!=null;
-                                    userTuple = new User(usernName, email, key);
+                                    userTuple = new User(userName, email, key);
                                     ref.child(key).setValue(userTuple);
                                     uploadUserInfoPrefs(userTuple);
                                     startActivity(registerAndStart);
-                                    requireActivity().finish();
                                 }
+                                requireActivity().finish();
 
                             } else {
-                                showAlert(task.getException().getMessage());
+                                showAlert(Objects.requireNonNull(task.getException()).getMessage());
                             }
-                        }
-                    });
-                } else if (TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())) {
-                    showAlert(new BadPasswordAlert(getContext()));
-                } else {
-                    showAlert(new PasswordsNotEqualAlert(getContext()));
-                }
+                        });
+            } else if (TextUtils.isEmpty(passwordSignUp.getText()) || TextUtils.isEmpty(confirmPassword.getText())) {
+                showAlert(new BadPasswordAlert(getContext()));
+            } else {
+                showAlert(new PasswordsNotEqualAlert(getContext()));
             }
         });
         return view;

@@ -15,23 +15,15 @@ import com.example.anna.databinding.ActivityFragmentFaqsBinding;
 
 public class FragmentFaqs extends Fragment {
 
-    private ActivityFragmentFaqsBinding binding;
-    private TextView contactlink;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = ActivityFragmentFaqsBinding.inflate(getLayoutInflater());
+        com.example.anna.databinding.ActivityFragmentFaqsBinding binding = ActivityFragmentFaqsBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
 
-        contactlink = binding.contactusFromFaqs;
-        contactlink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), Faqs.class));
-            }
-        });
+        TextView contactlink = binding.contactusFromFaqs;
+        contactlink.setOnClickListener(v -> startActivity(new Intent(getActivity(), Faqs.class)));
 
         return root;
     }

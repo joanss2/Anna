@@ -1,4 +1,4 @@
-package com.example.anna.MenuPrincipal.Home.Discounts;
+package com.example.anna.MenuPrincipal.Discounts;
 
 import android.content.Context;
 import android.net.Uri;

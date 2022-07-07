@@ -15,13 +15,13 @@ import com.example.anna.R;
 
 import java.util.List;
 
-public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAdapter.ViewHolder>{
+public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAdapter.ViewHolder> {
 
     Context context;
     List<RouteChoice> choices;
-    private OnChoiceClickListener onChoiceClickListener;
+    private final OnChoiceClickListener onChoiceClickListener;
 
-    public MyRoutesChoiceAdapter(Context context, List<RouteChoice> choices, OnChoiceClickListener onChoiceClickListener){
+    public MyRoutesChoiceAdapter(Context context, List<RouteChoice> choices, OnChoiceClickListener onChoiceClickListener) {
         this.context = context;
         this.choices = choices;
         this.onChoiceClickListener = onChoiceClickListener;
@@ -45,7 +45,7 @@ public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAd
         return choices.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView title;
         ImageView imageView;
@@ -57,7 +57,7 @@ public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAd
             itemView.setOnClickListener(this);
         }
 
-        public void bind(RouteChoice routeChoice){
+        public void bind(RouteChoice routeChoice) {
             title.setText(routeChoice.getTitle());
             imageView.setImageResource(routeChoice.getImageDrawable());
         }
@@ -68,7 +68,7 @@ public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAd
         }
     }
 
-    public interface OnChoiceClickListener{
-        public void onChoiceClick(String title);
+    public interface OnChoiceClickListener {
+        void onChoiceClick(String title);
     }
 }

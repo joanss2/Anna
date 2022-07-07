@@ -1,6 +1,5 @@
 package com.example.anna.MenuPrincipal.Routes;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,71 +10,50 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.anna.Models.RouteChoice;
-import com.example.anna.Models.RouteModel;
 import com.example.anna.Models.Station;
 import com.example.anna.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Objects;
 
 public class RoutesClickedFragment extends Fragment implements RoutesClickedAdapter.OnStationClickListener {
 
-    private RecyclerView listOfStationsrV;
     private final String nameOfRoute;
-    private String documentID, categorystring;
-    private MapView mapView;
-    private Query query;
+    private final String documentID;
+    private final String categoryString;
     private TextView numberOfStages, category;
     private GoogleMap gMap;
     private final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Routes");
-    private CollectionReference stationsRef;
+    private final CollectionReference stationsRef;
     private RoutesClickedAdapter routesClickedAdapter;
     private static final int INITIAL_STROKE_WIDTH_PX = 5;
 
 
-    public RoutesClickedFragment(String name, String id, String categorystring) {
+    public RoutesClickedFragment(String name, String id, String categoryString) {
         this.nameOfRoute = name;
         this.documentID = id;
-        this.categorystring = categorystring;
+        this.categoryString = categoryString;
         stationsRef = collectionReference.document(documentID).collection("Stations");
     }
 
@@ -85,7 +63,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                getActivity().getSupportFragmentManager().beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frame, new FragmentRoutes())
                         .addToBackStack(null).commit();
             }
@@ -99,12 +77,12 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         View view = inflater.inflate(R.layout.routes_clicked, container, false);
         mapAsync(view, savedInstanceState);
 
-        listOfStationsrV = view.findViewById(R.id.routesClickedStages);
+        RecyclerView listOfStationsRv = view.findViewById(R.id.routesClickedStages);
         numberOfStages = view.findViewById(R.id.routesClickedNumberStages);
         category = view.findViewById(R.id.routesClickedCategory);
         ImageView starCategory = view.findViewById(R.id.routesClickedStar);
 
-        switch (categorystring) {
+        switch (categoryString) {
             case "gold":
                 starCategory.setImageResource(R.drawable.ic_star_gold);
                 break;
@@ -119,7 +97,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         }
 
 
-        query = collectionReference.whereEqualTo("name", nameOfRoute);
+        Query query = collectionReference.whereEqualTo("name", nameOfRoute);
         fillRouteSpecs(query);
 
 
@@ -127,9 +105,9 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
                 .setQuery(stationsRef, Station.class).build();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-        listOfStationsrV.setLayoutManager(linearLayoutManager);
+        listOfStationsRv.setLayoutManager(linearLayoutManager);
         routesClickedAdapter = new RoutesClickedAdapter(options, getContext(), this);
-        listOfStationsrV.setAdapter(routesClickedAdapter);
+        listOfStationsRv.setAdapter(routesClickedAdapter);
 
 
         return view;
@@ -138,48 +116,38 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     private void mapAsync(View view, Bundle savedInstanceState) {
 
 
-        mapView = view.findViewById(R.id.routesClickedMap);
+        MapView mapView = view.findViewById(R.id.routesClickedMap);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) {
-                gMap = googleMap;
-                fillMap(gMap, stationsRef);
-            }
+        mapView.getMapAsync(googleMap -> {
+            gMap = googleMap;
+            fillMap(gMap, stationsRef);
         });
 
     }
 
     private void fillMap(GoogleMap googleMap, CollectionReference collectionReference) {
         List<LatLng> points = new ArrayList<>();
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+        collectionReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
 
-                        String title = document.getData().get("name").toString();
-                        GeoPoint geoPoint = document.getGeoPoint("geoLocation");
-                        LatLng position = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+                    String title = Objects.requireNonNull(document.getData().get("name")).toString();
+                    GeoPoint geoPoint = document.getGeoPoint("geoLocation");
+                    assert geoPoint != null;
+                    LatLng position = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 
-                        points.add(position);
-                        googleMap.addMarker(new MarkerOptions().position(position).title(title)).setIcon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                    }
-
-                    setCentralStationInRoute(points, googleMap);
-                    drawRoute(googleMap, points);
-
+                    points.add(position);
+                    Objects.requireNonNull(googleMap.addMarker(new MarkerOptions().position(position).title(title))).setIcon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                 }
+
+                setCentralStationInRoute(points, googleMap);
+                drawRoute(googleMap, points);
+
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "It has not been able to draw the route on the map, sorry!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(getContext(), "It has not been able to draw the route on the map, sorry!", Toast.LENGTH_SHORT).show());
     }
 
     private void setCentralStationInRoute(List<LatLng> points, GoogleMap googleMap) {
@@ -222,25 +190,19 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         for (LatLng latLng : points) {
             options.add(latLng);
         }
-        Polyline line = googleMap.addPolyline(options);
+        googleMap.addPolyline(options);
     }
 
     private void fillRouteSpecs(Query query) {
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        numberOfStages.setText(document.getData().get("stages").toString());
-                        category.setText(document.getData().get("category").toString());
-                    }
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    numberOfStages.setText(Objects.requireNonNull(document.getData().get("stages")).toString());
+                    category.setText(Objects.requireNonNull(document.getData().get("category")).toString());
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+        }).addOnFailureListener(e -> {
 
-            }
         });
     }
 
@@ -264,7 +226,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         bundle.putString("stationName", station.getName());
         bundle.putString("routeID", documentID);
         intent.putExtras(bundle);
-        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentManager manager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         startActivity(intent);
         transaction.remove(this);

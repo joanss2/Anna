@@ -20,14 +20,10 @@ public class PagerController extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-            case 0:
-                return new SignUpFragment();
-            case 1:
-                return new SignInFragment();
-            default:
-                return null;
+        if (position == 0) {
+            return new SignUpFragment();
         }
+        return new SignInFragment();
     }
 
     @Override

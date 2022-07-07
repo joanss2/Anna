@@ -7,36 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.anna.MenuPrincipal.OnDiscountClickListener;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDiscountsAdapter.DiscountHolder> {
 
-    private final OnDiscountClickListener onDiscountClickListener;
+    private final OnMyDiscountUsedClickListener onMyDiscountUsedClickListener;
     Context context;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
 
 
-    public MyDiscountsAdapter(@NonNull FirestoreRecyclerOptions<Discount> options, OnDiscountClickListener onDiscountClickListener, Context context) {
+    public MyDiscountsAdapter(@NonNull FirestoreRecyclerOptions<Discount> options, OnMyDiscountUsedClickListener onMyDiscountUsedClickListener, Context context) {
         super(options);
-        this.onDiscountClickListener = onDiscountClickListener;
+        this.onMyDiscountUsedClickListener = onMyDiscountUsedClickListener;
         this.context = context;
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
-        System.out.println("AQUI ARRIBO");
     }
 
     @Override
@@ -51,7 +45,7 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
     @Override
     public DiscountHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.discount_cardview, parent, false);
-        return new DiscountHolder(view, onDiscountClickListener);
+        return new DiscountHolder(view, onMyDiscountUsedClickListener);
     }
 
     class DiscountHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -60,12 +54,12 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
         ImageView discountImg;
         TextView discountTitle, discountDescription, discountPercentage;
         Uri uri;
-        OnDiscountClickListener onDiscountsListener;
+        OnMyDiscountUsedClickListener onMyDiscountUsedClickListener;
         Discount currentDiscountInViewHolder;
 
-        public DiscountHolder(@NonNull View itemView, OnDiscountClickListener onMyDiscountsListener) {
+        public DiscountHolder(@NonNull View itemView, OnMyDiscountUsedClickListener onMyDiscountUsedClickListener) {
             super(itemView);
-            this.onDiscountsListener = onMyDiscountsListener;
+            this.onMyDiscountUsedClickListener = onMyDiscountUsedClickListener;
             discountImg = itemView.findViewById(R.id.mydiscountimage);
             discountTitle = itemView.findViewById(R.id.mydiscounttitle);
             discountDescription = itemView.findViewById(R.id.mydiscountdescription);
@@ -77,27 +71,25 @@ public class MyDiscountsAdapter extends FirestoreRecyclerAdapter<Discount, MyDis
         public void bind(Discount discount) {
             currentDiscountInViewHolder = discount;
             StorageReference pictureReference = storageReference.child(discount.getImageRef());
-            pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    DiscountHolder.this.uri = uri;
-                    currentDiscountInViewHolder.setUriImg(DiscountHolder.this.uri);
-                    Glide.with(context)
-                            .load(uri)
-                            .error(R.drawable.ic_launcher_background)
-                            .into(discountImg);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+            pictureReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                DiscountHolder.this.uri = uri;
+                currentDiscountInViewHolder.setUriImg(DiscountHolder.this.uri);
+                Glide.with(context)
+                        .load(uri)
+                        .error(R.drawable.ic_launcher_background)
+                        .into(discountImg);
+            }).addOnFailureListener(e -> {
 
-                }
             });
         }
 
         @Override
         public void onClick(View view) {
-            onDiscountsListener.onDiscountClick(currentDiscountInViewHolder);
+            onMyDiscountUsedClickListener.onMyDiscountUsedClick(currentDiscountInViewHolder);
         }
+    }
+
+    public interface OnMyDiscountUsedClickListener{
+         void onMyDiscountUsedClick(Discount discount);
     }
 }

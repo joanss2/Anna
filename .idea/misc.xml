@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable-anydpi/ic_favourite.xml" value="0.2185" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable-v24/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.247" />
@@ -52,6 +53,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/content_menu_main.xml" value="0.1287568306010929" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/dialog_discount_clicked.xml" value="0.1253415300546448" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/discount_cardview.xml" value="0.1" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/discount_detail.xml" value="0.26328125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/edit_profile.xml" value="0.23515625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_gallery.xml" value="0.116015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/fragment_home.xml" value="0.125" />
