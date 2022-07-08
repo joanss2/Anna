@@ -41,6 +41,7 @@ public class DiscountCommentsFragment extends Fragment {
     public DiscountCommentsFragment(Discount discount, String authorKey){
         this.discount = discount;
         this.authorKey = authorKey;
+        System.out.println("authorkey in fragment received"+this.authorKey);
     }
 
     @Override
@@ -75,6 +76,7 @@ public class DiscountCommentsFragment extends Fragment {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentReference> task) {
                                                     System.out.println("comment created");
+                                                    body.getText().clear();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                         @Override
@@ -93,6 +95,7 @@ public class DiscountCommentsFragment extends Fragment {
                                                     .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                    body.getText().clear();
                                                     System.out.println("comment created");
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
@@ -132,7 +135,7 @@ public class DiscountCommentsFragment extends Fragment {
         FirestoreRecyclerOptions<Comment> options = new FirestoreRecyclerOptions.Builder<Comment>()
                 .setQuery(discountCommentsReference,Comment.class).build();
 
-        adapter = new CommentsAdapter(options, getContext());
+        adapter = new CommentsAdapter(options, getContext(), authorKey);
         commentsRv.setAdapter(adapter);
 
         return view;

@@ -56,6 +56,7 @@
         <activity android:name=".MenuPrincipal.MyRoutes.MyRoutesClickedActivity"
             android:exported="true"/>
         <activity android:name=".MenuPrincipal.Routes.StationDetail" />
+        <activity android:name=".MenuPrincipal.Profile.EditProfile" />
 
 
         <meta-data

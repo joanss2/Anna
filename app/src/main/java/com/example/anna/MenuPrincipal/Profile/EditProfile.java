@@ -1,22 +1,157 @@
 package com.example.anna.MenuPrincipal.Profile;
 
-public class EditProfile {
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-    /*
+import com.bumptech.glide.Glide;
+import com.example.anna.MenuPrincipal.Faqs.FragmentFaqs;
+import com.example.anna.MenuPrincipal.MenuMainActivity;
+import com.example.anna.R;
+import com.example.anna.Register.MainActivity;
+import com.example.anna.databinding.EditProfileBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-    private EditText userName, userMail, userTel;
+public class EditProfile extends AppCompatActivity {
+
+    private EditText userName;
+    private TextView changePassword, userEmail;
     private SharedPreferences userInfoPrefs;
-    private SharedPreferences.Editor userInfoEditor;
-    private ActivityFragmentProfileBinding binding;
-    private ImageView profileImageView;
-    private String urlPicture;
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private ImageView profileImageView, backArrow;
+    private EditProfileBinding binding;
     private FloatingActionButton editButton;
     private boolean clicked;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference reference = database.getReference("users");
+    private StorageReference storageReference;
+    private ActivityResultLauncher<String> selectImage;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
+        storageReference = FirebaseStorage.getInstance().getReference("users").child(userInfoPrefs.getString("userKey", null));
+
+        binding = EditProfileBinding.inflate(getLayoutInflater());
+        View root = binding.getRoot();
+        setContentView(root);
+
+        userName = binding.profileUsername;
+        userEmail = binding.editprofileUseremail;
+        profileImageView = binding.editProfileUserImage;
+        backArrow = binding.editProfileArrowBack;
+        changePassword = binding.editprofileCambiarcontra;
+        editButton = binding.editnamebutton;
+
+        initializeUserName();
+        initializeUserEmail();
+        initializeUserPicture(storageReference);
+
+        selectImage = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri result) {
+                Glide.with(getApplicationContext()).load(result).into(profileImageView);
+                storageReference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(getApplicationContext(),"Profile picture changed successfully!",Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Could not change profile picture. Try later. ",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePicture();
+            }
+        });
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MenuMainActivity.class).putExtra("fromEditProfile", "fromEditProfile"));
+                finish();
+            }
+        });
+
+
+    }
+
+
+    public void initializeUserName() {
+        userName.setText(userInfoPrefs.getString("username", null));
+    }
+
+    public void initializeUserEmail() {
+        userEmail.setText(userInfoPrefs.getString("email", null));
+    }
+
+    public void initializeUserPicture(StorageReference storageReference) {
+        storageReference.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(getApplicationContext()).load(uri).into(profileImageView);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        int errorCode = ((StorageException) exception).getErrorCode();
+                        if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                            profileImageView.setImageResource(R.drawable.user_icon);
+                        }
+
+                    }
+                });
+    }
+
+    public void changePicture() {
+        selectImage.launch("image/*");
+    }
+
+
+
+
+
+
+    /*
+
+        private String urlPicture;
+
+
 
 
     @Override

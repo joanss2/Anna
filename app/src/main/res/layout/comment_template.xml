@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="#00FFFFFF">
 
     <LinearLayout
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#CE7A7A7A" />
 
 
         <LinearLayout
@@ -26,25 +33,42 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/commentUserImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="34dp"
+                    android:layout_height="33dp"
                     android:scaleType="fitXY"
                     app:shapeAppearanceOverlay="@style/circleImageView" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/bodyComment"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:textSize="14sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/commentauthorname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Author de pruebas" />
+
+                <TextView
+                    android:id="@+id/bodyComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/commentDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
             android:textSize="10sp" />
     </LinearLayout>
 

@@ -42,7 +42,15 @@ public class MenuMainActivity extends AppCompatActivity {
         userInfoPrefs = getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         userInfoEditor = userInfoPrefs.edit();
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.id_bottom_navigation);
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentHome()).commit();
+
+        if(getIntent().getStringExtra("fromEditProfile")!=null){
+            selector=new FragmentProfile();
+            bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, selector).commit();
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentHome()).commit();
+        }
+
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -66,7 +74,6 @@ public class MenuMainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton signOutButton = binding.signoutbutton;
-
         signOutButton.setOnClickListener(v -> leaving_confirmation());
 
     }

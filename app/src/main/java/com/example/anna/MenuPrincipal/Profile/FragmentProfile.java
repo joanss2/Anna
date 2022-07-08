@@ -1,6 +1,7 @@
 package com.example.anna.MenuPrincipal.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,8 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FragmentProfile extends Fragment {
 
-    private TextView nOfDiscounts;
-    private TextView nOfRoutes;
+    private TextView nOfDiscounts, nOfRoutes;
     private ProfileMenu profileMenu;
     private SharedPreferences userInfoPrefs;
     private final int[] icons = {R.drawable.ic_discount, R.drawable.ic_myroutes};
@@ -53,7 +53,7 @@ public class FragmentProfile extends Fragment {
 
         ViewPager2 viewPager2 = binding.viewpagerprofile;
         ImageView profileImageView = binding.profileImageView;
-        Button button = binding.editProfileButton;
+        Button editProfileButton = binding.editProfileButton;
         nOfDiscounts = binding.profileNumberDiscounts;
         nOfRoutes = binding.profileNumberRoutes;
         TabLayout tabLayout = binding.profileTablayout;
@@ -73,7 +73,9 @@ public class FragmentProfile extends Fragment {
 
         String urlPicture = userInfoPrefs.getString("fotourl", null);
         Glide.with(requireContext()).load(urlPicture).into(profileImageView);
-        button.setOnClickListener(v -> {
+        editProfileButton.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(),EditProfile.class));
+            getActivity().finish();
         });
 
         menu.setOnClickListener(v -> {
