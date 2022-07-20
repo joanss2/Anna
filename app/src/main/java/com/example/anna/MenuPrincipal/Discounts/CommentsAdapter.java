@@ -1,6 +1,7 @@
 package com.example.anna.MenuPrincipal.Discounts;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.anna.Models.Comment;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
@@ -17,12 +19,15 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
+import com.google.protobuf.GeneratedMessageLite;
 
 public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsAdapter.CommentHolder> {
 
@@ -77,7 +82,20 @@ public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsA
 
                 }
             });
-            userImage.setImageResource(R.drawable.andorra);
+            storageReference.child(authorkey).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(context).load(uri).into(userImage);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    int errorCode = ((StorageException) e).getErrorCode();
+                    if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                        userImage.setImageResource(R.drawable.user_icon);
+                    }
+                }
+            });
 
         }
     }

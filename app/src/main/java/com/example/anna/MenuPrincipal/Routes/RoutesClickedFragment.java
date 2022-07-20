@@ -63,12 +63,16 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_frame, new FragmentRoutes())
-                        .addToBackStack(null).commit();
+                FragmentManager manager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.main_frame, new FragmentRoutes());
+                trans.remove(RoutesClickedFragment.this);
+                manager.popBackStack();
+                trans.commit();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     @Nullable
@@ -154,8 +158,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
         float lowest = 0, aux = 0;
         int index = 0;
-        Location location = new Location("");
-        Location otherLocation = new Location("");
+        Location location;
 
         for (int i = 0; i < points.size(); i++) {
             location = createLocation(points.get(i));

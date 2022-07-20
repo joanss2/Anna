@@ -2,10 +2,13 @@ package com.example.anna.MenuPrincipal.Routes;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,8 +30,9 @@ public class StationDetail extends AppCompatActivity {
 
         String stationName = getIntent().getStringExtra("stationName");
         String routeID = getIntent().getStringExtra("routeID");
+        TextView title = findViewById(R.id.stationdetailTitle);
 
-        Button button = findViewById(R.id.buttonCertificateVisit);
+        ImageButton button = findViewById(R.id.buttonCertificateVisit);
         button.setOnClickListener(v -> getSupportFragmentManager().beginTransaction().replace(R.id.wrapperScanner,new ScannerFragment()).commit());
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {

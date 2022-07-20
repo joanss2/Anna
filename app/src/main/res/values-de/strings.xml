@@ -16,7 +16,7 @@
     <string name="haveAccount">Do you already have an account?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="myroute">Routes</string>
-    <string name="discounts">Discounts</string>
+    <string name="discounts">Rabatte</string>
     <string name="faqs">Faqs</string>
     <string name="ajustes">Settings</string>
     <string name="contactus"><u>Need some help? Contact us!</u></string>
@@ -47,7 +47,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Haus</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_menu_main">MenuMain</string>
@@ -61,6 +61,13 @@
     <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
     <string name="userNotRegisteredFromSignIn"> This user is not registered. You should first sign up. </string>
     <string name="discount_activation">Discount Activation</string>
+
+    <string name="catalan">Catalan</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="italian">Italian</string>
+    <string name="french">French</string>
+    <string name="german">German</string>
 
 
 </resources>

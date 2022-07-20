@@ -3,15 +3,20 @@ package com.example.anna.MenuPrincipal.Discounts.MyDiscounts;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.anna.MenuPrincipal.Discounts.FragmentDiscounts;
+import com.example.anna.MenuPrincipal.MenuMainActivity;
+import com.example.anna.MenuPrincipal.Routes.RoutesClickedFragment;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -27,6 +32,14 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
     private MyDiscountsAdapter myDiscountsAdapter;
     private CollectionReference discountsUsed;
     private boolean hasDiscounts;
+    private View viewParent;
+    private Fragment fragmentParent;
+
+    public FragmentMyDiscounts(){}
+    public FragmentMyDiscounts(View view, Fragment fragment){
+        this.viewParent = view;
+        this.fragmentParent = fragment;
+    }
 
 
     @Override
@@ -58,7 +71,10 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
 
 
             myDiscountsAdapter = new MyDiscountsAdapter(options, this, getContext());
-            rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+            MyDiscountsWrapContentLinearLayoutManager layoutManager = new MyDiscountsWrapContentLinearLayoutManager(
+                    getContext(),LinearLayoutManager.VERTICAL,false
+            );
+            rvDiscounts.setLayoutManager(layoutManager);
             rvDiscounts.setAdapter(myDiscountsAdapter);
 
 
@@ -91,11 +107,35 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (!hasDiscounts) {
+        if (!hasDiscounts && this.viewParent!=null) {
+            Snackbar snackbar = Snackbar.make(viewParent, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
 
-            Snackbar snackbar = Snackbar.make(view, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("GO", view1 -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentDiscounts()).addToBackStack(null).commit());
+            snackbar.setAction("GO", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager manager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction trans = manager.beginTransaction();
+                    //trans.remove(fragmentParent);
+                    //manager.popBackStack();
+                    trans.replace(R.id.main_frame, new FragmentDiscounts()).addToBackStack(null);
+                    MenuMainActivity activity = (MenuMainActivity) getActivity();
+                    assert activity != null;
+                    activity.getBottomNavigationView().setSelectedItemId(R.id.bottom_discounts);
+                    trans.commit();
+
+                }
+            });
             snackbar.show();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    snackbar.dismiss();
+                }
+            }, 4000);
+
+        }else{
+
         }
     }
 

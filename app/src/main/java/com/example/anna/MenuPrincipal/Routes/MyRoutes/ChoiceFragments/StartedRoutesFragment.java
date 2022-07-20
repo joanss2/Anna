@@ -1,4 +1,4 @@
-package com.example.anna.MenuPrincipal.MyRoutes.ChoiceFragments;
+package com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/cornersrounded"
-        android:backgroundTint="#F3B0DF59"
+        android:backgroundTint="#F3283314"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -35,12 +35,33 @@
 
         </ImageView>
 
-        <TextView
-            android:id="@+id/titleDiscountActivateDialog"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleDiscountActivateDialog"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/infodiscount"
+                android:layout_width="74dp"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:padding="10dp"
+                android:src="@drawable/ic_info" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <Button

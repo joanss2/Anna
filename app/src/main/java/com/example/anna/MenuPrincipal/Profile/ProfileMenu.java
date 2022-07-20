@@ -1,5 +1,6 @@
 package com.example.anna.MenuPrincipal.Profile;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.anna.MenuPrincipal.Faqs.FragmentFaqs;
 import com.example.anna.MenuPrincipal.Discounts.MyDiscounts.FragmentMyDiscounts;
-import com.example.anna.MenuPrincipal.MyRoutes.FragmentMyRoutes;
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.FragmentMyRoutes;
 import com.example.anna.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.Arrays;
@@ -43,18 +44,24 @@ public class ProfileMenu extends BottomSheetDialogFragment implements ProfileMen
     public void onSettingClick(String currentSetting) {
         switch (currentSetting){
             case "Language":
+                LanguagesDialog languagesDialog = new LanguagesDialog();
+                languagesDialog.show(requireActivity().getSupportFragmentManager(),null);
             case "Privacy":
             case "Network Settings":
-                Toast.makeText(getContext(), "HOLE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                this.dismiss();
                 break;
             case "MyDiscounts":
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,new FragmentMyDiscounts()).addToBackStack(null).commit();
+                this.dismiss();
                 break;
             case "MyRoutes":
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentMyRoutes()).addToBackStack(null).commit();
+                this.dismiss();
                 break;
             case "Help/FAQS":
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentFaqs()).addToBackStack(null).commit();
+                this.dismiss();
                 break;
         }
     }

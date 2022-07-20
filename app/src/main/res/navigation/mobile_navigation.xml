@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/nav_myroutes"
-        android:name="com.example.anna.MenuPrincipal.MyRoutes.FragmentMyRoutes"
+        android:name="com.example.anna.MenuPrincipal.Routes.MyRoutes.FragmentMyRoutes"
         android:label="MyRoutes"
         tools:layout="@layout/activity_fragment_myroutes" />
 

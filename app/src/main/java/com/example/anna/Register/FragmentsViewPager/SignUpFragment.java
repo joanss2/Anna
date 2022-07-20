@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class SignUpFragment extends Fragment {
@@ -77,14 +78,14 @@ public class SignUpFragment extends Fragment {
                                 if(checkBox.isChecked()) {
                                     key = refAdmin.push().getKey();
                                     assert key!=null;
-                                    userTuple = new User(userName, email, key);
+                                    userTuple = new User(userName, email, key, Locale.getDefault().getLanguage());
                                     refAdmin.child(key).setValue(userTuple);
                                     uploadUserInfoPrefs(userTuple);
                                     startActivity(new Intent(getActivity(), CollaboratorTariffActivity.class));
                                 }else {
                                     key = ref.push().getKey();
                                     assert key!=null;
-                                    userTuple = new User(userName, email, key);
+                                    userTuple = new User(userName, email, key,Locale.getDefault().getLanguage());
                                     ref.child(key).setValue(userTuple);
                                     uploadUserInfoPrefs(userTuple);
                                     startActivity(registerAndStart);

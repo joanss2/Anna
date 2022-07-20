@@ -1,13 +1,13 @@
-package com.example.anna.MenuPrincipal.MyRoutes;
+package com.example.anna.MenuPrincipal.Routes.MyRoutes;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.anna.MenuPrincipal.MyRoutes.ChoiceFragments.CompletedRoutesFragment;
-import com.example.anna.MenuPrincipal.MyRoutes.ChoiceFragments.StartedRoutesFragment;
-import com.example.anna.MenuPrincipal.MyRoutes.ChoiceFragments.ToDiscoverFragment;
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.CompletedRoutesFragment;
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.StartedRoutesFragment;
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.ToDiscoverFragment;
 import com.example.anna.R;
 
 public class MyRoutesClickedActivity extends AppCompatActivity {

@@ -2,7 +2,7 @@ package com.example.anna.Models;
 
 public class User {
 
-    private String username, email, userKey;
+    private String username, email, userKey, language;
     /*
     private Roles role;
     public Roles getRole() {
@@ -14,10 +14,11 @@ public class User {
 
      */
 
-    public User(String username, String email, String userKey) {
+    public User(String username, String email, String userKey, String language) {
         this.username = username;
         this.email = email;
         this.userKey = userKey;
+        this.language = language;
     }
 
     public User() {
@@ -48,5 +49,11 @@ public class User {
         this.username = username;
     }
 
+    public String getLanguage() {
+        return language;
+    }
 
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 }

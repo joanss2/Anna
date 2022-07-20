@@ -45,6 +45,7 @@ public class EditProfile extends AppCompatActivity {
     private EditText userName;
     private TextView changePassword, userEmail;
     private SharedPreferences userInfoPrefs;
+    private SharedPreferences.Editor userInfoEditor;
     private ImageView profileImageView, backArrow;
     private EditProfileBinding binding;
     private FloatingActionButton editButton;
@@ -59,6 +60,7 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
         storageReference = FirebaseStorage.getInstance().getReference("users").child(userInfoPrefs.getString("userKey", null));
+        userInfoEditor = userInfoPrefs.edit();
 
         binding = EditProfileBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
@@ -106,11 +108,31 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clicked) {
+                    userName.setEnabled(false);
+                    clicked = false;
+                    editButton.setImageResource(R.drawable.ic_edit);
+                    changedUsername();
+                    Toast.makeText(getApplicationContext(), "Username edited!", Toast.LENGTH_LONG).show();
+                } else {
+                    userName.setEnabled(true);
+                    clicked = true;
+                    editButton.setImageResource(R.drawable.ic_tick);
+                }
+
+            }
+        });
+
+
 
     }
 
 
     public void initializeUserName() {
+        userName.setEnabled(false);
         userName.setText(userInfoPrefs.getString("username", null));
     }
 
@@ -142,7 +164,27 @@ public class EditProfile extends AppCompatActivity {
         selectImage.launch("image/*");
     }
 
+    public void changedUsername() {
+        userInfoEditor.remove("username");
+        userInfoEditor.putString("username", userName.getText().toString());
+        userInfoEditor.commit();
+        Query query = reference.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        DatabaseReference dr = database.getReference("users/" + ds.getKey());
+                        dr.child("username").setValue(userName.getText().toString());
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 
 
 

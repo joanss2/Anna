@@ -3,6 +3,7 @@ package com.example.anna.MenuPrincipal.Routes;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,8 @@ public class ScannerFragment extends Fragment {
         mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE);
         mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
         mCodeScanner.setAutoFocusEnabled(true);
-        mCodeScanner.setFlashEnabled(true);
+        mCodeScanner.setFlashEnabled(false);
+
 
         mCodeScanner.setDecodeCallback(result -> activity.runOnUiThread(() -> Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show()));
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());

@@ -62,5 +62,11 @@
     <string name="SignUpNotSuccessful"> It looks like signing up has not been successful. </string>
     <string name="userNotRegisteredFromSignIn"> This user is not registered. You should first sign up. </string>
 
+    <string name="catalan">Catalan</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="italian">Italian</string>
+    <string name="french">French</string>
+    <string name="german">German</string>
 
 </resources>

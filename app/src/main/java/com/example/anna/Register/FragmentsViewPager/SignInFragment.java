@@ -41,6 +41,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class SignInFragment extends Fragment {
@@ -174,7 +175,7 @@ public class SignInFragment extends Fragment {
                 if (!snapshot.exists()) {
                     String key = ref.push().getKey();
                     assert key != null;
-                    User userTuple = new User(name, email, key);
+                    User userTuple = new User(name, email, key, Locale.getDefault().getLanguage());
                     uploadUserInfoPrefs(userTuple);
                     ref.child(key).setValue(userTuple);
                     startActivity(toMenu);
