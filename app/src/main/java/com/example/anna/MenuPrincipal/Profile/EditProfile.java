@@ -103,7 +103,6 @@ public class EditProfile extends AppCompatActivity {
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MenuMainActivity.class).putExtra("fromEditProfile", "fromEditProfile"));
                 finish();
             }
         });

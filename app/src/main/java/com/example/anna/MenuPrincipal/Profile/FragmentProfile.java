@@ -96,7 +96,6 @@ public class FragmentProfile extends Fragment {
         loadPicture(storageReference, profileImageView);
         editProfileButton.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), EditProfile.class));
-            getActivity().finish();
         });
 
         menu.setOnClickListener(v -> {

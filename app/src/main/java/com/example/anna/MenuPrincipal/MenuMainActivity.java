@@ -70,14 +70,7 @@ public class MenuMainActivity extends AppCompat {
 
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.id_bottom_navigation);
-
-        if (getIntent().getStringExtra("fromEditProfile") != null) {
-            selector = new FragmentProfile();
-            bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, selector).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentHome()).commit();
-        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentHome()).commit();
 
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
