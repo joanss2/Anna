@@ -53,6 +53,7 @@
     <string name="title_activity_menu_main">MenuMain</string>
 
     <string name="discount_activation">Discount Activation</string>
+    <string name="forgetPassword"><u>Forgot your passowrd?</u></string>
 
     //ALERTS
     <string name="badPasswordAlert"> The introduced password is incorrect.</string>

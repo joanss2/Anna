@@ -58,6 +58,8 @@
             android:exported="true"/>
         <activity android:name=".MenuPrincipal.Routes.StationDetail" />
         <activity android:name=".MenuPrincipal.Profile.EditProfile" />
+        <activity android:name=".Register.ResetPassword" />
+        <activity android:name=".Register.VerificationActivity" />
 
 
         <meta-data

@@ -23,9 +23,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
+        //userInfoPrefs.edit().clear().commit();
+
 
         if(userInfoPrefs.getString("email",null)!=null){
             startActivity(new Intent(this, MenuMainActivity.class));

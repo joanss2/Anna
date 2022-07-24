@@ -91,8 +91,16 @@
             android:id="@+id/buttonsignup"
             android:layout_width="203dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/signup" />
+
+        <Button
+            android:id="@+id/buttonResendCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#BDB1B1"
+            android:text="Resend Code" />
     </LinearLayout>
 
 </FrameLayout>

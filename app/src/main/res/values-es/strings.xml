@@ -52,6 +52,8 @@
     <string name="menu_slideshow">Desplegable</string>
     <string name="title_activity_menu_main">MenuMain</string>
 
+    <string name="forgetPassword"><u>Olvidó su contraseña?</u></string>
+
 
     //ALERTS
     <string name="badPasswordAlert"> The introduced password is incorrect.</string>

@@ -33,6 +33,17 @@
             android:hint="@string/password"
             android:inputType="textPassword" />
 
+        <TextView
+            android:id="@+id/forgetPasswordButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/forgetPassword"
+            android:layout_marginBottom="20dp"
+            android:textColor="#E42020"
+            android:textStyle="italic" />
+
+
 
         <ImageButton
             android:id="@+id/googleIn"

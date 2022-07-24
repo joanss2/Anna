@@ -18,12 +18,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.example.anna.Models.Alert;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
 import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
+import com.example.anna.Register.ResetPassword;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +35,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,6 +78,7 @@ public class SignInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         ImageButton googleButton = view.findViewById(R.id.googleIn);
         Button btnSignIn = view.findViewById(R.id.buttonsignin);
+        TextView forgetPassword = view.findViewById(R.id.forgetPasswordButton);
         toMenu = new Intent(getContext(), MenuMainActivity.class);
         emailSignIn = view.findViewById(R.id.email);
         passwordSignIn = view.findViewById(R.id.password);
@@ -85,11 +90,12 @@ public class SignInFragment extends Fragment {
                 } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
                             .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    userInfoEditor.putString("email", emailSignIn.getText().toString()).commit();
+
+                                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                if(!firebaseUser.isEmailVerified())
+                                    showAlert("Email not verified yet, please verify it");
+                                else if (task.isSuccessful()) {
                                     downloadUserInfoAndSavePersistent();
-                                    startActivity(toMenu);
-                                    requireActivity().finish();
                                 } else {
                                     showAlert(Objects.requireNonNull(task.getException()).getMessage());
                                 }
@@ -110,8 +116,15 @@ public class SignInFragment extends Fragment {
             startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_IN);
         });
 
-        return view;
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ResetPassword.class));
+            }
+        });
 
+
+        return view;
     }
 
     private void downloadUserInfoAndSavePersistent() {
@@ -127,6 +140,8 @@ public class SignInFragment extends Fragment {
                         userInfoEditor.putString("userKey", user.getUserKey());
                         userInfoEditor.putString("username", user.getUsername());
                         userInfoEditor.commit();
+                        startActivity(toMenu);
+                        requireActivity().finish();
                     }
                 }
             }

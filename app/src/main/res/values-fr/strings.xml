@@ -68,5 +68,7 @@
     <string name="french">French</string>
     <string name="german">German</string>
 
+    <string name="forgetPassword"><u>Forgot your passowrd?</u></string>
+
 
 </resources>

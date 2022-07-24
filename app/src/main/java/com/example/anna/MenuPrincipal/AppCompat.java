@@ -27,6 +27,9 @@ public class AppCompat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = getSharedPreferences("USERINFO", MODE_PRIVATE);
+
+
+        System.out.println(sharedPreferences.getString("userKey", null));
         LanguageManager languageManager = new LanguageManager(this);
         //orderByChild("userKey").equalTo(sharedPreferences.getString("userKey",null))
         ref.child(sharedPreferences.getString("userKey", null)).addListenerForSingleValueEvent(
