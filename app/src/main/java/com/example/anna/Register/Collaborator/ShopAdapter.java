@@ -1,4 +1,4 @@
-package com.example.anna.Register;
+package com.example.anna.Register.Collaborator;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,15 +23,14 @@ public class ShopAdapter extends FirestoreRecyclerAdapter<Tariff, ShopAdapter.Ta
         super(options);
         this.context = context;
         this.onTariffClick = onTariffClick;
-        System.out.println("constructor Shop Adapter");
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ShopAdapter.TariffHolder holder, int position, @NonNull Tariff model) {
-        holder.price.setText(String.valueOf(model.getPrice())+"€");
+        String aux = model.getPrice()+"€";
+        holder.price.setText(aux);
         holder.condition.setText(model.getCondition());
         holder.description.setText(model.getDescription());
-        System.out.println("OnbindViewHolder");
         holder.bind(model);
     }
 
@@ -39,7 +38,6 @@ public class ShopAdapter extends FirestoreRecyclerAdapter<Tariff, ShopAdapter.Ta
     @Override
     public ShopAdapter.TariffHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarifflayout,parent,false);
-        System.out.println("VIsta ShopAdapter Tariff holder");
         return new TariffHolder(view);
     }
 
@@ -50,7 +48,6 @@ public class ShopAdapter extends FirestoreRecyclerAdapter<Tariff, ShopAdapter.Ta
 
         public TariffHolder(@NonNull View itemView) {
             super(itemView);
-            System.out.println("creacio Tariff holder");
             price = itemView.findViewById(R.id.tarifaPreu);
             condition = itemView.findViewById(R.id.tarifaCondicio);
             description = itemView.findViewById(R.id.tarifaCondicioDescripcio);
@@ -58,7 +55,6 @@ public class ShopAdapter extends FirestoreRecyclerAdapter<Tariff, ShopAdapter.Ta
         }
 
         public void bind (Tariff tariff){
-            System.out.println("bind");
             currentTariff = tariff;
         }
 

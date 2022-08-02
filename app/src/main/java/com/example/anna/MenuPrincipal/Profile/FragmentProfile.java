@@ -51,7 +51,6 @@ public class FragmentProfile extends Fragment {
     private final String[] tabsNames = {"My discounts", "My Routes"};
     private StorageReference storageReference;
     private String authorKey;
-    private View view2;
 
 
     @Override
@@ -102,8 +101,6 @@ public class FragmentProfile extends Fragment {
             profileMenu = new ProfileMenu();
             profileMenu.show(requireActivity().getSupportFragmentManager(), "bottomSheetSettings");
         });
-
-        view2 = root;
 
         return root;
     }

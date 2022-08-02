@@ -49,10 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register.CollaboratorTariffActivity"
+        <activity android:name=".Register.Collaborator.CollaboratorTariffActivity"
             android:exported="true"/>
         <activity
-            android:name=".Register.PaymentSelected"
+            android:name=".Register.Collaborator.PaymentSelected"
             android:exported="true" />
         <activity android:name=".MenuPrincipal.Routes.MyRoutes.MyRoutesClickedActivity"
             android:exported="true"/>
@@ -60,6 +60,7 @@
         <activity android:name=".MenuPrincipal.Profile.EditProfile" />
         <activity android:name=".Register.ResetPassword" />
         <activity android:name=".Register.VerificationActivity" />
+        <activity android:name=".MenuPrincipal.CollaboratorMenu" />
 
 
         <meta-data

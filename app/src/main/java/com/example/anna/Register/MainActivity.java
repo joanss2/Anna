@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
 
-        //userInfoPrefs.edit().clear().commit();
+        userInfoPrefs.edit().clear().apply();
 
 
         if(userInfoPrefs.getString("email",null)!=null){

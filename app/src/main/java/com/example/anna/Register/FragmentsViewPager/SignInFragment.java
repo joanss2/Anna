@@ -1,6 +1,5 @@
 package com.example.anna.Register.FragmentsViewPager;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -20,9 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.anna.Models.Alert;
+import com.example.anna.Alerts.AlertManager;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
+import com.example.anna.MenuPrincipal.CollaboratorMenu;
 import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
@@ -43,7 +44,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -56,11 +56,12 @@ public class SignInFragment extends Fragment {
     private SharedPreferences userInfoPreferences;
     private SharedPreferences.Editor userInfoEditor;
     private String name, email;
-    private Intent toMenu;
+    private Intent toMenu, toMenuCollaborator;
     private Uri userPic;
+    private AlertManager alertManagerSignIn;
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     DatabaseReference ref = database.getReference("users");
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    DatabaseReference refCollaborator = database.getReference("collaborators");
 
 
     @Override
@@ -68,6 +69,7 @@ public class SignInFragment extends Fragment {
         super.onCreate(savedInstanceState);
         userInfoPreferences = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         userInfoEditor = userInfoPreferences.edit();
+        alertManagerSignIn = new AlertManager((AppCompatActivity) requireActivity());
     }
 
     @Override
@@ -80,29 +82,30 @@ public class SignInFragment extends Fragment {
         Button btnSignIn = view.findViewById(R.id.buttonsignin);
         TextView forgetPassword = view.findViewById(R.id.forgetPasswordButton);
         toMenu = new Intent(getContext(), MenuMainActivity.class);
+        toMenuCollaborator = new Intent(getContext(), CollaboratorMenu.class);
         emailSignIn = view.findViewById(R.id.email);
         passwordSignIn = view.findViewById(R.id.password);
 
         btnSignIn.setOnClickListener(v -> {
             if (v.getId() == R.id.buttonsignin) {
                 if (TextUtils.isEmpty(emailSignIn.getText())) {
-                    showAlert(new EmptyEmailFieldAlert(getContext()));
+                    alertManagerSignIn.showAlert(new EmptyEmailFieldAlert(getContext()));
                 } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
                             .addOnCompleteListener(task -> {
 
                                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                if(!firebaseUser.isEmailVerified())
-                                    showAlert("Email not verified yet, please verify it");
+                                if(!Objects.requireNonNull(firebaseUser).isEmailVerified())
+                                    alertManagerSignIn.showAlert("Email not verified yet, please verify it");
                                 else if (task.isSuccessful()) {
                                     downloadUserInfoAndSavePersistent();
                                 } else {
-                                    showAlert(Objects.requireNonNull(task.getException()).getMessage());
+                                    alertManagerSignIn.showAlert(Objects.requireNonNull(task.getException()).getMessage());
                                 }
                             });
 
                 } else {
-                    showAlert(new UnsuccessfulSignInAlert(getContext()));
+                    alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
                 }
             }
         });
@@ -116,12 +119,7 @@ public class SignInFragment extends Fragment {
             startActivityForResult(googleClient.getSignInIntent(), GOOGLE_SIGN_IN);
         });
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), ResetPassword.class));
-            }
-        });
+        forgetPassword.setOnClickListener(v -> startActivity(new Intent(getContext(), ResetPassword.class)));
 
 
         return view;
@@ -139,10 +137,37 @@ public class SignInFragment extends Fragment {
                         assert user != null;
                         userInfoEditor.putString("userKey", user.getUserKey());
                         userInfoEditor.putString("username", user.getUsername());
+                        userInfoEditor.putString("usertype", "client");
                         userInfoEditor.commit();
                         startActivity(toMenu);
                         requireActivity().finish();
                     }
+                }else{
+
+                    Query query = refCollaborator.orderByChild("email").equalTo(emailSignIn.getText().toString());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    User user = ds.getValue(User.class);
+                                    userInfoEditor.putString("email", emailSignIn.getText().toString());
+                                    assert user != null;
+                                    userInfoEditor.putString("userKey", user.getUserKey());
+                                    userInfoEditor.putString("username", user.getUsername());
+                                    userInfoEditor.putString("usertype", "collaborator");
+                                    userInfoEditor.commit();
+                                    startActivity(toMenuCollaborator);
+                                    requireActivity().finish();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+
                 }
             }
 
@@ -170,13 +195,13 @@ public class SignInFragment extends Fragment {
                             newUserCreatedIfNonExistent();
 
                         } else {
-                            showAlert(Objects.requireNonNull(task1.getException()).getMessage());
+                            alertManagerSignIn.showAlert(Objects.requireNonNull(task1.getException()).getMessage());
                         }
                     });
 
                 }
             } catch (ApiException e) {
-                showAlert(new UnsuccessfulSignInAlert(getContext()));
+                alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
             }
         }
     }
@@ -221,25 +246,7 @@ public class SignInFragment extends Fragment {
             emailSignIn.setText(userInfoPreferences.getString("email", null));
         }
     }
-
-    private void showAlert(Alert alert) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.error));
-        builder.setMessage(alert.getAlertMessage());
-        builder.setPositiveButton(getString(R.string.ok), null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void showAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.error));
-        builder.setMessage(message);
-        builder.setPositiveButton(getString(R.string.ok), null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
+    
     public void uploadUserInfoPrefs(User userTuple) {
         userInfoEditor.putString("username", userTuple.getUsername());
         userInfoEditor.putString("email", userTuple.getEmail());
@@ -247,4 +254,9 @@ public class SignInFragment extends Fragment {
         userInfoEditor.putString("fotourl", userPic.toString());
         userInfoEditor.apply();
     }
+
+
+
+
+
 }

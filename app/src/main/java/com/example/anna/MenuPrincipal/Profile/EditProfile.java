@@ -52,6 +52,7 @@ public class EditProfile extends AppCompatActivity {
     private boolean clicked;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference reference = database.getReference("users");
+    private final DatabaseReference referenceAdmin = database.getReference("collaborators");
     private StorageReference storageReference;
     private ActivityResultLauncher<String> selectImage;
 
@@ -167,22 +168,45 @@ public class EditProfile extends AppCompatActivity {
         userInfoEditor.remove("username");
         userInfoEditor.putString("username", userName.getText().toString());
         userInfoEditor.commit();
-        Query query = reference.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        DatabaseReference dr = database.getReference("users/" + ds.getKey());
-                        dr.child("username").setValue(userName.getText().toString());
+
+        if(userInfoPrefs.getString("usertype",null).equals("client")){
+            Query query = reference.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            DatabaseReference dr = database.getReference("users/" + ds.getKey());
+                            dr.child("username").setValue(userName.getText().toString());
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+        if(userInfoPrefs.getString("usertype",null).equals("collaborator")){
+            Query query = referenceAdmin.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            DatabaseReference dr = database.getReference("collaborators/" + ds.getKey());
+                            dr.child("username").setValue(userName.getText().toString());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+
+
     }
 
 

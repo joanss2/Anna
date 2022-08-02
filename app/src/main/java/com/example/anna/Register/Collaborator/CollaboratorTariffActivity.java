@@ -1,5 +1,7 @@
-package com.example.anna.Register;
+package com.example.anna.Register.Collaborator;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,10 +16,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class CollaboratorTariffActivity extends AppCompatActivity implements ShopAdapter.OnTariffClick{
+public class CollaboratorTariffActivity extends AppCompatActivity implements ShopAdapter.OnTariffClick {
 
     private final CollectionReference shopReference = FirebaseFirestore.getInstance().collection("Shop");
     private ShopAdapter shopAdapter;
+    private boolean prefsDeletable = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +42,11 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
     @Override
     public void onTariffClick(Tariff tariff) {
         Toast.makeText(this,"You have clicked the "+tariff.getCondition()+" tariff. Enjoy!",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, PaymentSelected.class);
+        intent.putExtra("price",tariff.getPrice());
+        prefsDeletable = false;
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -51,5 +59,15 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
     public void onStop() {
         shopAdapter.stopListening();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(prefsDeletable){
+            SharedPreferences sharedPreferences = getSharedPreferences("USERINFO",MODE_PRIVATE);
+            sharedPreferences.edit().clear().apply();
+        }
+
     }
 }
