@@ -61,6 +61,7 @@
         <activity android:name=".Register.ResetPassword" />
         <activity android:name=".Register.VerificationActivity" />
         <activity android:name=".MenuPrincipal.CollaboratorMenu" />
+        <activity android:name=".MenuPrincipal.Home.AdCreation" />
 
 
         <meta-data

@@ -50,6 +50,7 @@ public class FragmentHome extends Fragment {
         hiUser.setText(userInfoPrefs.getString("username",null));
 
 
+
         return root;
     }
 

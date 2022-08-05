@@ -16,7 +16,20 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.anna.MenuPrincipal.CollaboratorMenu;
+import com.example.anna.Models.Status;
+import com.example.anna.Models.Subscription;
+import com.example.anna.Models.Tariff;
+import com.example.anna.Models.User;
 import com.example.anna.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
@@ -24,7 +37,11 @@ import com.stripe.android.paymentsheet.PaymentSheetResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -34,11 +51,15 @@ public class PaymentSelected extends AppCompatActivity {
 
     private PaymentSheet paymentSheet;
 
+    private SharedPreferences userInfoPrefs;
+
+
     private String customerID;
     private String ephericalKey;
     private String clientSecret;
 
     private float price;
+    private Tariff tariff;
     private boolean prefsDeletable;
 
     @Override
@@ -46,8 +67,11 @@ public class PaymentSelected extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paynow);
 
+        userInfoPrefs = getSharedPreferences("USERINFO",MODE_PRIVATE);
+
         Button payButton = findViewById(R.id.pay_button);
         price = getIntent().getFloatExtra("price",4.98f);
+        tariff = getIntent().getParcelableExtra("tariff");
 
         String PUBLISH_KEY = "pk_test_51LQx1NCNWRocLIPcGVHVMKjlE2pvJIMQTv62kOjzcuF9KA0tk74chSMPwNpFPNk1hj1aycunBC0r6nRhMBAoclGV00Bnlb0jLZ";
         PaymentConfiguration.init(this, PUBLISH_KEY);
@@ -86,9 +110,12 @@ public class PaymentSelected extends AppCompatActivity {
     private void onPaymentResult(PaymentSheetResult paymentSheetResult) {
         if(paymentSheetResult instanceof PaymentSheetResult.Completed){
             Toast.makeText(this,"Payment success!",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, CollaboratorMenu.class));
             prefsDeletable = false;
-            finish();
+
+            createSubscription();
+
+            startActivity(new Intent(this, CollaboratorMenu.class));
+            finishAffinity();
         }
     }
 
@@ -181,8 +208,57 @@ public class PaymentSelected extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if(prefsDeletable){
-            SharedPreferences sharedPreferences = getSharedPreferences("USERINFO",MODE_PRIVATE);
-            sharedPreferences.edit().clear().apply();
+            userInfoPrefs.edit().clear().apply();
         }
+    }
+
+    private void createSubscription(){
+        Date currentDate = new Date();
+        Date dateEnd = addMonth(currentDate,1);
+        User user = new User();
+        user.setEmail(userInfoPrefs.getString("email",null));
+        user.setUsername(userInfoPrefs.getString("username",null));
+        user.setUserKey(userInfoPrefs.getString("userKey",null));
+        user.setLanguage(Locale.getDefault().getLanguage());
+        Subscription subscription = new Subscription(tariff,currentDate,dateEnd,user, Status.ACTIVE.toString());
+
+        Map<String,Object> fieldkey = new HashMap<>();
+        fieldkey.put("key",userInfoPrefs.getString("userKey", null));
+        DocumentReference subsReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPrefs.getString("userKey",null));
+        subsReference.set(fieldkey)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        subsReference.collection("SubsOfUser").add(subscription).addOnCompleteListener(
+                                new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(getApplicationContext(),"Subscription created correctly",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                        ).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+    public Date addMonth(Date inputDate, int monthToAddNumber){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(inputDate);
+        // Add 'monthToAddNumber' months to inputDate
+        calendar.add(Calendar.MONTH, monthToAddNumber);
+        return calendar.getTime();
     }
 }

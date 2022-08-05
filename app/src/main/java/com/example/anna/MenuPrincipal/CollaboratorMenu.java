@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.anna.MenuPrincipal.Home.CollaboratorFragmentHome;
 import com.example.anna.MenuPrincipal.Home.FragmentHome;
 import com.example.anna.MenuPrincipal.Profile.CollaboratorFragmentProfile;
 import com.example.anna.R;
@@ -22,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CollaboratorMenu extends AppCompatActivity {
+public class CollaboratorMenu extends AppCompat {
 
     private SharedPreferences.Editor userInfoEditor;
     private Fragment selector;
@@ -40,12 +41,12 @@ public class CollaboratorMenu extends AppCompatActivity {
         userInfoEditor = userInfoPrefs.edit();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.id_collaborator_bottom_navigation);
-        getSupportFragmentManager().beginTransaction().replace(R.id.collaborator_main_frame, new FragmentHome()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.collaborator_main_frame, new CollaboratorFragmentHome()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.collaborator_bottom_home:
-                    selector = new FragmentHome();
+                    selector = new CollaboratorFragmentHome();
                     break;
                 case R.id.collaborator_bottom_profile:
                     selector = new CollaboratorFragmentProfile();

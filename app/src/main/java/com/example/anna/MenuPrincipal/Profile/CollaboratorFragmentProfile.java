@@ -17,14 +17,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.bumptech.glide.Glide;
+import com.example.anna.Models.Subscription;
+import com.example.anna.Models.User;
 import com.example.anna.R;
 import com.example.anna.databinding.CollaboratorProfileFragmentBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 public class CollaboratorFragmentProfile extends Fragment {
     private ProfileMenu profileMenu;
@@ -50,10 +64,11 @@ public class CollaboratorFragmentProfile extends Fragment {
         View root = binding.getRoot();
 ////////////////
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        System.out.println("back stack in proflefragment: "+fragmentManager.getBackStackEntryCount());
+        System.out.println("back stack in proflefragment: " + fragmentManager.getBackStackEntryCount());
 ///////////////
         ImageView profileImageView = binding.collaboratorprofileImageView;
         Button editProfileButton = binding.collaboratoreditProfileButton;
+        Button subButton = binding.subactivebutton;
 
         TextView profileName = binding.collaboratorprofileName;
         ImageButton menu = binding.collaboratormenuProfile;
@@ -71,8 +86,53 @@ public class CollaboratorFragmentProfile extends Fragment {
             profileMenu.show(requireActivity().getSupportFragmentManager(), "bottomSheetSettings");
         });
 
+        subButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CollectionReference subReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPrefs.getString("userKey", null))
+                        .collection("SubsOfUser");
+                subReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String,Object> map = document.getData();
+
+                                Subscription subscription = new Subscription(map);
+                                System.out.println(subscription.getStatus());
+
+                                Date dateStart = ((Timestamp) map.get("dateStart")).toDate();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                                assert dateStart != null;
+                                System.out.println("DATE START "+dateStart);
+                                String hola = sdf.format(dateStart);
+
+                                Date dateEnd = ((Timestamp) map.get("dateEnd")).toDate();
+                                System.out.println("DATE END "+dateEnd);
+                                assert dateStart != null;
+                                String ho = sdf.format(dateEnd);
+                                System.out.println("Subscription from: "+hola +" to "+ho);
+
+                                System.out.println("IS SUBSCRIPTION ACTIVE? "+dateEnd.after(new Date()));
+
+/*
+                                System.out.println(map.get("dateStart"));
+                                System.out.println(map.get("dateEnd"));
+                                System.out.println(map.get("tariff"));
+
+ */
+
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
         return root;
     }
+
+
 
     private void loadPicture(StorageReference storageReference, ImageView userPicture) {
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

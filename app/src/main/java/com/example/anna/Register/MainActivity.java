@@ -6,6 +6,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import com.example.anna.MenuPrincipal.CollaboratorMenu;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
 import com.google.android.material.tabs.TabItem;
@@ -26,11 +28,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
 
-        userInfoPrefs.edit().clear().apply();
+        //userInfoPrefs.edit().clear().apply();
 
 
         if(userInfoPrefs.getString("email",null)!=null){
-            startActivity(new Intent(this, MenuMainActivity.class));
+            if(userInfoPrefs.getString("usertype",null).equals("client")){
+                startActivity(new Intent(this, MenuMainActivity.class));
+
+            }else{
+                startActivity(new Intent(this, CollaboratorMenu.class));
+
+            }
             finish();
         }
 

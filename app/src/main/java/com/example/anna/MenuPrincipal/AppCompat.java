@@ -20,6 +20,7 @@ public class AppCompat extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     DatabaseReference ref = database.getReference("users");
+    DatabaseReference refAdmin = database.getReference("collaborators");
     SharedPreferences sharedPreferences;
 
     @Override
@@ -31,27 +32,52 @@ public class AppCompat extends AppCompatActivity {
 
         System.out.println(sharedPreferences.getString("userKey", null));
         LanguageManager languageManager = new LanguageManager(this);
-        //orderByChild("userKey").equalTo(sharedPreferences.getString("userKey",null))
-        ref.child(sharedPreferences.getString("userKey", null)).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
-                        System.out.println(user.getLanguage());
-                        if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
-                            System.out.println("ENTRO");
-                            languageManager.updateResource(user.getLanguage());
-                            recreate();
+
+
+
+        if(sharedPreferences.getString("usertype",null).equals("client")){
+            ref.child(sharedPreferences.getString("userKey", null)).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User user = snapshot.getValue(User.class);
+                            System.out.println(user.getLanguage());
+                            if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
+                                System.out.println("ENTRO");
+                                languageManager.updateResource(user.getLanguage());
+                                recreate();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                        }
                     }
-                }
-        );
+            );
+        }else{
+            refAdmin.child(sharedPreferences.getString("userKey", null)).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User user = snapshot.getValue(User.class);
+                            System.out.println(user.getLanguage());
+                            if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
+                                languageManager.updateResource(user.getLanguage());
+                                //recreate();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    }
+            );
+        }
+
 
     }
 }

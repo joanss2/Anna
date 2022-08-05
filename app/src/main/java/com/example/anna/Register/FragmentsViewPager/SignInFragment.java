@@ -24,16 +24,20 @@ import com.example.anna.Alerts.AlertManager;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
 import com.example.anna.Alerts.UnsuccessfulSignInAlert;
 import com.example.anna.MenuPrincipal.CollaboratorMenu;
+import com.example.anna.Models.Subscription;
 import com.example.anna.Models.User;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.R;
+import com.example.anna.Register.Collaborator.CollaboratorTariffActivity;
 import com.example.anna.Register.ResetPassword;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,8 +48,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class SignInFragment extends Fragment {
@@ -95,7 +106,7 @@ public class SignInFragment extends Fragment {
                             .addOnCompleteListener(task -> {
 
                                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                if(!Objects.requireNonNull(firebaseUser).isEmailVerified())
+                                if (!Objects.requireNonNull(firebaseUser).isEmailVerified())
                                     alertManagerSignIn.showAlert("Email not verified yet, please verify it");
                                 else if (task.isSuccessful()) {
                                     downloadUserInfoAndSavePersistent();
@@ -133,16 +144,19 @@ public class SignInFragment extends Fragment {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = ds.getValue(User.class);
-                        userInfoEditor.putString("email", emailSignIn.getText().toString());
                         assert user != null;
+                        /*userInfoEditor.putString("email", emailSignIn.getText().toString());
                         userInfoEditor.putString("userKey", user.getUserKey());
                         userInfoEditor.putString("username", user.getUsername());
                         userInfoEditor.putString("usertype", "client");
                         userInfoEditor.commit();
+
+                         */
+                        uploadUserInfoPrefs(user, "client");
                         startActivity(toMenu);
                         requireActivity().finish();
                     }
-                }else{
+                } else {
 
                     Query query = refCollaborator.orderByChild("email").equalTo(emailSignIn.getText().toString());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,14 +165,17 @@ public class SignInFragment extends Fragment {
                             if (snapshot.exists()) {
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     User user = ds.getValue(User.class);
-                                    userInfoEditor.putString("email", emailSignIn.getText().toString());
                                     assert user != null;
+                                    /*userInfoEditor.putString("email", emailSignIn.getText().toString());
                                     userInfoEditor.putString("userKey", user.getUserKey());
                                     userInfoEditor.putString("username", user.getUsername());
                                     userInfoEditor.putString("usertype", "collaborator");
                                     userInfoEditor.commit();
-                                    startActivity(toMenuCollaborator);
-                                    requireActivity().finish();
+
+                                     */
+                                    uploadUserInfoPrefs(user, "collaborator");
+                                    checkCollaboratorSubscription();
+
                                 }
                             }
                         }
@@ -216,7 +233,7 @@ public class SignInFragment extends Fragment {
                     String key = ref.push().getKey();
                     assert key != null;
                     User userTuple = new User(name, email, key, Locale.getDefault().getLanguage());
-                    uploadUserInfoPrefs(userTuple);
+                    uploadUserInfoPrefs(userTuple, "client");
                     ref.child(key).setValue(userTuple);
                     startActivity(toMenu);
                     requireActivity().finish();
@@ -225,7 +242,7 @@ public class SignInFragment extends Fragment {
 
                         User user = ds.getValue(User.class);
                         assert user != null;
-                        uploadUserInfoPrefs(user);
+                        uploadUserInfoPrefs(user, "client");
                         startActivity(toMenu);
                         requireActivity().finish();
                     }
@@ -246,17 +263,40 @@ public class SignInFragment extends Fragment {
             emailSignIn.setText(userInfoPreferences.getString("email", null));
         }
     }
-    
-    public void uploadUserInfoPrefs(User userTuple) {
+
+    public void uploadUserInfoPrefs(User userTuple, String usertype) {
         userInfoEditor.putString("username", userTuple.getUsername());
         userInfoEditor.putString("email", userTuple.getEmail());
         userInfoEditor.putString("userKey", userTuple.getUserKey());
-        userInfoEditor.putString("fotourl", userPic.toString());
+        userInfoEditor.putString("usertype", usertype);
         userInfoEditor.apply();
     }
 
+    public void checkCollaboratorSubscription() {
+        CollectionReference subReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPreferences.getString("userKey", null))
+                .collection("SubsOfUser");
+        subReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, Object> map = document.getData();
 
-
+                        Subscription subscription = new Subscription(map);
+                        if (subscription.getDateEnd().after(new Date())) {
+                            startActivity(toMenuCollaborator);
+                            requireActivity().finish();
+                        } else {
+                            startActivity(new Intent(getContext(), CollaboratorTariffActivity.class).putExtra(
+                                    "ended",true
+                            ));
+                            requireActivity().finish();
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 
 }

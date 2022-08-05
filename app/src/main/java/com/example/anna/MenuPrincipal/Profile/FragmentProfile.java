@@ -106,6 +106,7 @@ public class FragmentProfile extends Fragment {
     }
 
 
+
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
 
         Fragment fragment;
@@ -150,10 +151,11 @@ public class FragmentProfile extends Fragment {
         });
     }
     private void loadPicture(StorageReference storageReference, ImageView userPicture) {
+
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getContext()).load(uri).into(userPicture);
+                Glide.with(requireContext()).load(uri).into(userPicture);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
