@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.anna.Models.Station;
 import com.example.anna.R;
@@ -18,7 +20,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, RoutesClickedAdapter.StationsImageHolder>{
+public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, RoutesClickedAdapter.StationsImageHolder> {
 
 
     private final Context context;
@@ -39,11 +41,11 @@ public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, Rout
     @NonNull
     @Override
     public StationsImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.routes_clicked_stations,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.routes_clicked_stations, parent, false);
         return new StationsImageHolder(view);
     }
 
-    class StationsImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class StationsImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imageView;
         TextView stationNameView;
@@ -57,15 +59,9 @@ public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, Rout
             stationNameView.setOnClickListener(this);
         }
 
-        public void bind(Station station){
+        public void bind(Station station) {
             currentStation = station;
             stationNameView.setText(station.getName());
-
-            System.out.println(station.getName());
-            System.out.println(station.getDescription());
-            System.out.println(station.getGeoLocation().toString());
-            System.out.println(station.getImageRefs().size());
-
 
             List<String> stationsImg = station.getImageRefs();
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(stationsImg.get(0));
@@ -73,9 +69,6 @@ public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, Rout
             storageReference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(uri).into(imageView)).addOnFailureListener(e -> {
 
             });
-
-
-
 
 
         }
@@ -86,7 +79,7 @@ public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, Rout
         }
     }
 
-    public interface OnStationClickListener{
+    public interface OnStationClickListener {
         void onStationClick(Station station);
     }
 }

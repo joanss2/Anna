@@ -105,8 +105,9 @@ public class AdCreation extends AppCompatActivity {
             exception.printStackTrace();
         }
         hotNews.setDescription(description.getText().toString());
-
         String key = userInfoPrefs.getString("userKey",null);
+
+        hotNews.setAuthor(key);
         Map<String,Object> map = new HashMap<>();
         map.put("key",key);
 
@@ -124,6 +125,12 @@ public class AdCreation extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+                FirebaseFirestore.getInstance().collection("AllAds").add(hotNews).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
 
                     }
                 });

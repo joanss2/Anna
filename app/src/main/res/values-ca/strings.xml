@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Anna</string>
+    <string name="error">Error</string>
+    <string name="no">No</string>
+    <string name="yes">Sí</string>
+    <string name="hi">Hola</string>
+    <string name="ok">OK</string>
+    <string name="signup">Registra\'t</string>
+    <string name="Register">Registrar-se</string>
+    <string name="signin">Inicia sessió</string>
+    <string name="email">Email</string>
+    <string name="password">Contrasenya</string>
+    <string name="confirmpassword">Confirma Contrasenya</string>
+    <string name="username">Nom usuari</string>
+    <string name="collaborator">Col·laborador</string>
+    <string name="haveAccount">Ja tens un compte?</string>
+    <string name="myroute">Rutes</string>
+    <string name="discounts">Descomptes</string>
+    <string name="faqs">Faqs</string>
+    <string name="ajustes">Eines</string>
+    <string name="contactus"><u>Necessites ajuda? Contacta\'ns!</u></string>
+    <string name="sendmailtitle">Com et podem ajudar?</string>
+    <string name="hint_email">El teu email aquí</string>
+    <string name="buttonsend">Envia mail</string>
+    <string name="emailto">a</string>
+    <string name="hint_subject">Assumpte</string>
+    <string name="hint_message">Missatge</string>
+    <string name="supportemail">annaApp.support@gmail.com</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Inici</string>
+    <string name="menu_gallery">Galeria</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_menu_main">MenuMain</string>
+
+    <string name="forgetPassword"><u>Ha oblidat la contrasenya?</u></string>
+
+
+    //ALERTS
+    <string name="badPasswordAlert"> La contrasenya és incorrecta.</string>
+    <string name="passwordsNotEqual"> Les contrasenyes no coincideixen.</string>
+    <string name="emailFieldCannotBeEmpty"> El camp email no pot ser buit.</string>
+    <string name="SignInNotSuccessful"> Sessió iniciada correctament. </string>
+    <string name="SignUpNotSuccessful"> Registre realitzat correctament </string>
+    <string name="userNotRegisteredFromSignIn"> Aquest usuari no està registrat, registri\'s si us plau,</string>
+    <string name="discount_activation">Activació del descompte</string>
+
+    <string name="catalan">Català</string>
+    <string name="english">Anglès</string>
+    <string name="spanish">Espanyol</string>
+    <string name="italian">Italià</string>
+    <string name="french">Francès</string>
+    <string name="german">Alemany</string>
+
+</resources>

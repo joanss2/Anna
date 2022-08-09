@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.anna.Models.Station;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.CollectionReference;
@@ -42,7 +45,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     private final String nameOfRoute;
     private final String documentID;
     private final String categoryString;
-    private TextView numberOfStages, category;
+    private TextView title, numberOfStages, category;
     private GoogleMap gMap;
     private final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Routes");
     private final CollectionReference stationsRef;
@@ -85,6 +88,8 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         numberOfStages = view.findViewById(R.id.routesClickedNumberStages);
         category = view.findViewById(R.id.routesClickedCategory);
         ImageView starCategory = view.findViewById(R.id.routesClickedStar);
+        title = view.findViewById(R.id.routesClickedName);
+        title.setText(nameOfRoute);
 
         switch (categoryString) {
             case "gold":
@@ -132,6 +137,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     }
 
     private void fillMap(GoogleMap googleMap, CollectionReference collectionReference) {
+        List<Marker> myMarkers = new ArrayList<>();
         List<LatLng> points = new ArrayList<>();
         collectionReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -142,19 +148,21 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
                     assert geoPoint != null;
                     LatLng position = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
 
+                    Marker marker = googleMap.addMarker(new MarkerOptions().position(position)
+                            .title(title));
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    myMarkers.add(marker);
+
                     points.add(position);
-                    Objects.requireNonNull(googleMap.addMarker(new MarkerOptions().position(position).title(title))).setIcon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                 }
 
-                setCentralStationInRoute(points, googleMap);
-                drawRoute(googleMap, points);
+                setCentralStationInRoute(points, googleMap, myMarkers);
 
             }
         }).addOnFailureListener(e -> Toast.makeText(getContext(), "It has not been able to draw the route on the map, sorry!", Toast.LENGTH_SHORT).show());
     }
 
-    private void setCentralStationInRoute(List<LatLng> points, GoogleMap googleMap) {
+    private void setCentralStationInRoute(List<LatLng> points, GoogleMap googleMap, List<Marker> markers) {
 
         float lowest = 0, aux = 0;
         int index = 0;
@@ -164,9 +172,11 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
             location = createLocation(points.get(i));
             for (int j = 0; j < points.size(); j++) {
                 if (j != i) {
+                    System.out.println("Distancia entre "+markers.get(i).getTitle() + " i "+markers.get(j).getTitle()+" is "+location.distanceTo(createLocation(points.get(j))));
                     aux += location.distanceTo(createLocation(points.get(j)));
                 }
             }
+            System.out.println("\nMarker "+markers.get(i).getTitle()+" -- "+aux+"\n");
             if (i == 0) {
                 lowest = aux;
                 index = i;
@@ -176,9 +186,20 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
                     index = i;
                 }
             }
+            aux = 0;
         }
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(index)));
+        markers.get(index).setIcon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+
+        Marker [] array = markers.toArray(new Marker[markers.size()]);
+        swap(array,0,index);
+
+        if(array.length>1)
+            orderMarkers(array, markers.indexOf(markers.get(index)),googleMap);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(points.get(index),15));
     }
 
     private Location createLocation(LatLng latLng) {
@@ -188,11 +209,52 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         return location;
     }
 
-    private void drawRoute(GoogleMap googleMap, List<LatLng> points) {
-        PolylineOptions options = new PolylineOptions().geodesic(true).width(INITIAL_STROKE_WIDTH_PX).color(Color.RED);
-        for (LatLng latLng : points) {
-            options.add(latLng);
+    private void orderMarkers(Marker[] markers, int offset, GoogleMap googleMap){
+        float lowest = 0, aux = 0;
+        int index = 0;
+        Location location;
+
+        for (int i = offset; i < markers.length-2; i++) {
+            location = createLocation(markers[i].getPosition());
+            for (int j = offset+1; j < markers.length; j++) {
+                aux = location.distanceTo(createLocation(markers[j].getPosition()));
+                if(lowest==0)
+                    lowest = aux;
+
+                if(aux<lowest)
+                        lowest = aux;
+
+            }
+            lowest = 0;
+            swap(markers,i,index);
         }
+
+        drawRoute( googleMap ,markers);
+    }
+
+
+    private void swap(Object [] objects, int index1, int index2){
+        Object aux = objects[index1];
+        objects [index1] = objects[index2];
+        objects [index2] = aux;
+        System.out.println(((Marker)objects[index1]).getTitle()+ " swapped "+((Marker)objects[index2]).getTitle());
+    }
+
+
+
+    private void drawRoute(GoogleMap googleMap, Marker[] points) {
+        PolylineOptions options = new PolylineOptions().geodesic(true).width(INITIAL_STROKE_WIDTH_PX).color(Color.RED);
+        System.out.println(".");
+
+        for(int i=0; i<points.length; i++){
+            System.out.println(points[i].getTitle());
+        }
+        System.out.println(".");
+
+        for(int i=0; i<points.length; i++){
+            options.add(points[i].getPosition());
+        }
+
         googleMap.addPolyline(options);
     }
 
@@ -215,11 +277,13 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         routesClickedAdapter.startListening();
     }
 
+
     @Override
     public void onStop() {
-        super.onStop();
-        routesClickedAdapter.stopListening();
+        routesClickedAdapter.stopListening();        super.onStop();
+
     }
+
 
 
     @Override

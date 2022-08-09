@@ -45,7 +45,7 @@ public class AppCompat extends AppCompatActivity {
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
                                 System.out.println("ENTRO");
                                 languageManager.updateResource(user.getLanguage());
-                                recreate();
+                                //recreate();
                             }
 
                         }

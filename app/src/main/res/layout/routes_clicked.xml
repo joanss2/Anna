@@ -14,7 +14,6 @@
         android:fontFamily="casual"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="TextView"
         android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
@@ -22,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="20dp"
+        android:background="#796A5B5B"
         android:layout_marginBottom="30dp"
         android:orientation="horizontal">
 
@@ -92,7 +92,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/routesClickedStages"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:background="#796A5B5B"
         android:padding="5dp" />

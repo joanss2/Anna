@@ -44,7 +44,7 @@ public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesCl
 
         ////////////////
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        System.out.println("back stack in Routesfragment: "+fragmentManager.getBackStackEntryCount());
+        //System.out.println("back stack in Routesfragment: "+fragmentManager.getBackStackEntryCount());
         ///////////////
 
         RecyclerView routesRv = view.findViewById(R.id.routesAllRv);
@@ -77,7 +77,6 @@ public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesCl
 
     @Override
     public void onRoutesClick(RouteModel routeModel) {
-        Toast.makeText(getContext(), "I HAVE BEEN CLICKED", Toast.LENGTH_LONG).show();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
 
         routesReference.whereEqualTo("name",routeModel.getName()).get().addOnCompleteListener(task -> {

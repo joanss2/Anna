@@ -2,6 +2,7 @@ package com.example.anna.MenuPrincipal.Routes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,8 +33,17 @@ public class StationDetail extends AppCompatActivity {
         String routeID = getIntent().getStringExtra("routeID");
         TextView title = findViewById(R.id.stationdetailTitle);
 
+
+        ImageButton backButton = findViewById(R.id.stationdetailBackButton);
         ImageButton button = findViewById(R.id.buttonCertificateVisit);
         button.setOnClickListener(v -> getSupportFragmentManager().beginTransaction().replace(R.id.wrapperScanner,new ScannerFragment()).commit());
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),MenuMainActivity.class));
+                finishAffinity();            }
+        });
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override

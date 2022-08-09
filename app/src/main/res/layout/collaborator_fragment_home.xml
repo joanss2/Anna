@@ -10,30 +10,30 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="331dp"
-        android:layout_height="115dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#EAE2E2"
-        android:orientation="vertical"
         android:padding="5dp"
         android:translationZ="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.082">
+        app:layout_constraintVertical_bias="0.075">
 
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/sniglet"
             android:text="@string/hi"
             android:textColor="@color/black"
+            android:layout_marginRight="20dp"
             android:textSize="48sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/hiCollaboratorUser"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/sniglet"
             android:textColor="@color/black"
@@ -42,10 +42,25 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:text="Be the first one to benefit from our offers and experiences."
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeCollaboratorRecyclerView"
-        android:layout_width="329dp"
-        android:layout_height="412dp"
+        android:layout_width="344dp"
+        android:layout_height="454dp"
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"

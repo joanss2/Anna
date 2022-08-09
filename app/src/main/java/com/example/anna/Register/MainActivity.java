@@ -1,5 +1,6 @@
 package com.example.anna.Register;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -9,9 +10,21 @@ import android.os.Bundle;
 
 import com.example.anna.MenuPrincipal.CollaboratorMenu;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
+import com.example.anna.Models.Subscription;
 import com.example.anna.R;
+import com.example.anna.Register.Collaborator.CollaboratorTariffActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Date;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +49,40 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuMainActivity.class));
 
             }else{
+                CollectionReference subReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPrefs.getString("userKey", null))
+                        .collection("SubsOfUser");
+                subReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if(task.getResult().isEmpty()){
+                                startActivity(new Intent(MainActivity.this, CollaboratorTariffActivity.class));
+                                finish();
+                            }else{
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Map<String, Object> map = document.getData();
+
+                                    Subscription subscription = new Subscription(map);
+                                    if (subscription.getDateEnd().after(new Date())) {
+                                        startActivity(new Intent(MainActivity.this, CollaboratorMenu.class));
+                                    } else {
+                                        startActivity(new Intent(MainActivity.this, CollaboratorTariffActivity.class).putExtra(
+                                                "ended",true
+                                        ));
+                                    }
+                                    finish();
+                                }
+                            }
+
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("FAILURE");
+                    }
+                });
                 startActivity(new Intent(this, CollaboratorMenu.class));
 
             }

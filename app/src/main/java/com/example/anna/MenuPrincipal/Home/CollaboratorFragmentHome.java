@@ -18,9 +18,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.anna.Models.HotNews;
 import com.example.anna.R;
 import com.example.anna.databinding.ActivityFragmentHomeBinding;
 import com.example.anna.databinding.CollaboratorFragmentHomeBinding;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +36,7 @@ public class CollaboratorFragmentHome extends Fragment {
     private SharedPreferences userInfoPrefs;
     private RecyclerView recyclerView;
     private View root;
+    private HomeFragmentAdapter adapter;
 
 
     @Override
@@ -51,7 +54,14 @@ public class CollaboratorFragmentHome extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     if(task.getResult().isEmpty()){
-                        Toast.makeText(getContext(),"NO ADS YET. BE THE FIRST ONE AND POST YOURS",Toast.LENGTH_LONG).show();
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }finally {
+                            Toast.makeText(getContext(),"NO ADS YET. BE THE FIRST ONE AND POST YOURS",Toast.LENGTH_LONG).show();
+
+                        }
                     }
                 }
             }
@@ -60,7 +70,6 @@ public class CollaboratorFragmentHome extends Fragment {
             public void onFailure(@NonNull Exception e) {
             }
         });
-
 
 
         binding = CollaboratorFragmentHomeBinding.inflate(getLayoutInflater());
@@ -72,8 +81,14 @@ public class CollaboratorFragmentHome extends Fragment {
         ////////////
 
         recyclerView = binding.homeCollaboratorRecyclerView;
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
+        WrapContentLayoutManagerHome managerHome = new WrapContentLayoutManagerHome(getContext(),2);
+        recyclerView.setLayoutManager(managerHome);
+
+        CollectionReference adReference = FirebaseFirestore.getInstance().collection("Advertisements").document(userInfoPrefs.getString("userKey",null)).collection("AdsOfUser");
+        FirestoreRecyclerOptions<HotNews> options = new FirestoreRecyclerOptions.Builder<HotNews>().setQuery(adReference,HotNews.class).build();
+
+        adapter = new HomeFragmentAdapter(options, getContext());
+        recyclerView.setAdapter(adapter);
 
         TextView hiUser = binding.hiCollaboratorUser;
         hiUser.setText(userInfoPrefs.getString("username",null));
@@ -92,6 +107,17 @@ public class CollaboratorFragmentHome extends Fragment {
         return root;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 
     @Override
     public void onDestroyView() {

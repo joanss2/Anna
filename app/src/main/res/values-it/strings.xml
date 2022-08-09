@@ -26,18 +26,6 @@
     <string name="hint_subject">Subject</string>
     <string name="hint_message">Message</string>
     <string name="supportemail">annaApp.support@gmail.com</string>
-    <string name="santperedeponts"><b>Sant Pere de Ponts</b></string>
-    <string name="santamaria"><b>Santa Maria de Ponts</b></string>
-    <string name="condis"><b>Supermercat Condis</b></string>
-    <string name="homilies"><b>Homilies Organya</b></string>
-    <string name="naturlandia"><b>Naturlandia Andorra</b></string>
-    <string name="links_info">Link Informatiu: </string>
-    <string name="linkSantPeredePonts"><u>https://www.ponts.cat/coneix-ponts/llocs-dinteres-1/sant-perte-de-ponts</u></string>
-    <string name="linkCondis"><u>https://en-gb.facebook.com/login/?next=https%3A%2F%2Fen-gb.facebook.com%2Fcondis.es%2Fposts%2F2970701349921804</u> </string>
-    <string name="linkSantaMaria"><u>https://www.ponts.cat/coneix-ponts/llocs-dinteres-1/santa-maria-de-ponts</u></string>
-    <string name="linkNaturlandia"><u>https://www.naturlandia.ad/es/inicio/?gclid=Cj0KCQjw6s2IBhCnARIsAP8RfAiarNqCVktH7U3dASDShmgS9kS2rlq8owCSysK7IBHDR7sNuj7jjikaAlcPEALw_wcB</u></string>
-    <string name="linkHomilies"><u>https://en.wikipedia.org/wiki/Homilies_d%27Organy%C3%A0</u></string>
-    <string name="sharedpreferencesfile">FILE_CREDENTIALS</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

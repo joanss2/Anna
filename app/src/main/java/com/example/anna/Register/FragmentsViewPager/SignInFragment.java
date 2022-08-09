@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.anna.Alerts.AlertManager;
 import com.example.anna.Alerts.EmptyEmailFieldAlert;
@@ -36,9 +37,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -97,6 +100,42 @@ public class SignInFragment extends Fragment {
         emailSignIn = view.findViewById(R.id.email);
         passwordSignIn = view.findViewById(R.id.password);
 
+
+
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (TextUtils.isEmpty(emailSignIn.getText())) {
+                    alertManagerSignIn.showAlert(new EmptyEmailFieldAlert(getContext()));
+                } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString()).addOnCompleteListener(
+                            new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        if (!Objects.requireNonNull(firebaseUser).isEmailVerified())
+                                            alertManagerSignIn.showAlert("Email not verified yet, please verify it");
+                                        else
+                                            downloadUserInfoAndSavePersistent();
+                                    }else{
+                                        System.out.println(task.getException().getMessage());
+                                        Toast.makeText(getActivity(), "Authentication failed: "+task.getException().getMessage(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                    );
+                }else{
+                    alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
+                }
+
+            }
+        });
+
+        /*
         btnSignIn.setOnClickListener(v -> {
             if (v.getId() == R.id.buttonsignin) {
                 if (TextUtils.isEmpty(emailSignIn.getText())) {
@@ -113,7 +152,12 @@ public class SignInFragment extends Fragment {
                                 } else {
                                     alertManagerSignIn.showAlert(Objects.requireNonNull(task.getException()).getMessage());
                                 }
-                            });
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    })
 
                 } else {
                     alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
@@ -121,6 +165,10 @@ public class SignInFragment extends Fragment {
             }
         });
 
+         */
+
+
+        ////////////////////////////////////////////////////////////////////
         googleButton.setOnClickListener(v -> {
             GoogleSignInOptions googleConf = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -279,21 +327,32 @@ public class SignInFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Map<String, Object> map = document.getData();
+                    if(task.getResult().isEmpty()){
+                        startActivity(new Intent(getContext(),CollaboratorTariffActivity.class));
+                        requireActivity().finish();
+                    }else{
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> map = document.getData();
 
-                        Subscription subscription = new Subscription(map);
-                        if (subscription.getDateEnd().after(new Date())) {
-                            startActivity(toMenuCollaborator);
-                            requireActivity().finish();
-                        } else {
-                            startActivity(new Intent(getContext(), CollaboratorTariffActivity.class).putExtra(
-                                    "ended",true
-                            ));
+                            Subscription subscription = new Subscription(map);
+                            if (subscription.getDateEnd().after(new Date())) {
+                                startActivity(toMenuCollaborator);
+                            } else {
+                                startActivity(new Intent(getContext(), CollaboratorTariffActivity.class).putExtra(
+                                        "ended",true
+                                ));
+                            }
                             requireActivity().finish();
                         }
                     }
+
+
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("FAILURE");
             }
         });
     }

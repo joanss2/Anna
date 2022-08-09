@@ -14,8 +14,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.anna.Models.HotNews;
 import com.example.anna.databinding.ActivityFragmentHomeBinding;
-
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class FragmentHome extends Fragment {
@@ -23,6 +26,7 @@ public class FragmentHome extends Fragment {
     private ActivityFragmentHomeBinding binding;
     private SharedPreferences userInfoPrefs;
     private RecyclerView recyclerView;
+    private HomeFragmentAdapter adapter;
 
 
     @Override
@@ -43,12 +47,18 @@ public class FragmentHome extends Fragment {
         ////////////
 
         recyclerView = binding.homeRecyclerView;
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
+        WrapContentLayoutManagerHome managerHome = new WrapContentLayoutManagerHome(getContext(), 2);
+        recyclerView.setLayoutManager(managerHome);
+
+
+        CollectionReference allAdReference = FirebaseFirestore.getInstance().collection("AllAds");
+        FirestoreRecyclerOptions<HotNews> options = new FirestoreRecyclerOptions.Builder<HotNews>().setQuery(allAdReference,HotNews.class).build();
+        adapter = new HomeFragmentAdapter(options,getContext());
+
+        recyclerView.setAdapter(adapter);
 
         TextView hiUser = binding.hiUser;
         hiUser.setText(userInfoPrefs.getString("username",null));
-
 
 
         return root;
@@ -59,6 +69,18 @@ public class FragmentHome extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
 
