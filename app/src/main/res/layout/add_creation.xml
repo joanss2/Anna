@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ADVERT CREATION"
+        android:fontFamily="@font/magra"
         android:textAlignment="center"
         android:textSize="30sp"
         android:layout_marginRight="20dp"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Title"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/magra_bold"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"/>
 
@@ -35,14 +36,15 @@
         android:hint="Title"
         android:paddingLeft="5dp"
         android:maxLength="50"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:fontFamily="@font/magra"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Description"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/magra_bold"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"/>
 
@@ -58,14 +60,15 @@
         android:hint="Detailed Information about the advertisement"
         android:maxLines="3"
         android:textColor="#000000"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:fontFamily="@font/magra"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="End Date"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/magra_bold"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"/>
 
@@ -81,7 +84,8 @@
         android:paddingLeft="5dp"
         android:hint="End Date"
         android:maxLength="50"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:fontFamily="@font/magra"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,7 +103,8 @@
                 android:id="@+id/AdbuttonAddPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ADD PICTURE"/>
+                android:text="ADD PICTURE"
+                android:fontFamily="@font/magra"/>
 
         </RelativeLayout>
 
@@ -119,6 +124,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
         android:backgroundTint="#9710C838"
-        android:text="POST ADVERTISEMENT" />
+        android:text="POST ADVERTISEMENT"
+        android:fontFamily="@font/magra"/>
 
 </LinearLayout>

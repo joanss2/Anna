@@ -1,9 +1,13 @@
 package com.example.anna.MenuPrincipal.Routes;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +25,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.CompletedRoutesFragment;
+import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.StartedRoutesFragment;
 import com.example.anna.Models.Station;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -31,11 +38,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +72,14 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     private static final int INITIAL_STROKE_WIDTH_PX = 5;
 
 
+    ////////
+    private ArrayList<String> uriStrings;
+    private Intent intent;
+    private Bundle bundle, received;
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
+
+
     public RoutesClickedFragment(String name, String id, String categoryString) {
         this.nameOfRoute = name;
         this.documentID = id;
@@ -63,12 +90,29 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        received = getArguments();
+
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 FragmentManager manager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
-                trans.replace(R.id.main_frame, new FragmentRoutes());
+
+                if (received != null) {
+                    if (received.getString("from").equals("fromCompleted")) {
+                        System.out.println("FROM COMPLETED PA");
+                        trans.replace(R.id.main_frame, new CompletedRoutesFragment());
+                    } else if (received.getString("from").equals("fromStarted")) {
+                        trans.replace(R.id.main_frame, new StartedRoutesFragment());
+                        System.out.println("FROM STARTED PA");
+                    }
+                } else {
+                    trans.replace(R.id.main_frame, new FragmentRoutes());
+                    System.out.println("ELSE");
+                }
+
                 trans.remove(RoutesClickedFragment.this);
                 manager.popBackStack();
                 trans.commit();
@@ -83,6 +127,12 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.routes_clicked, container, false);
         mapAsync(view, savedInstanceState);
+
+        intent = new Intent(getContext(), StationDetail.class);
+        bundle = new Bundle();
+        uriStrings = new ArrayList<>();
+        manager = requireActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
 
         RecyclerView listOfStationsRv = view.findViewById(R.id.routesClickedStages);
         numberOfStages = view.findViewById(R.id.routesClickedNumberStages);
@@ -113,7 +163,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         FirestoreRecyclerOptions<Station> options = new FirestoreRecyclerOptions.Builder<Station>()
                 .setQuery(stationsRef, Station.class).build();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager = new RoutesWrapContentLinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         listOfStationsRv.setLayoutManager(linearLayoutManager);
         routesClickedAdapter = new RoutesClickedAdapter(options, getContext(), this);
         listOfStationsRv.setAdapter(routesClickedAdapter);
@@ -172,11 +222,9 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
             location = createLocation(points.get(i));
             for (int j = 0; j < points.size(); j++) {
                 if (j != i) {
-                    System.out.println("Distancia entre "+markers.get(i).getTitle() + " i "+markers.get(j).getTitle()+" is "+location.distanceTo(createLocation(points.get(j))));
                     aux += location.distanceTo(createLocation(points.get(j)));
                 }
             }
-            System.out.println("\nMarker "+markers.get(i).getTitle()+" -- "+aux+"\n");
             if (i == 0) {
                 lowest = aux;
                 index = i;
@@ -190,16 +238,16 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         }
 
         markers.get(index).setIcon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
 
-        Marker [] array = markers.toArray(new Marker[markers.size()]);
-        swap(array,0,index);
+        Marker[] array = markers.toArray(new Marker[markers.size()]);
+        swap(array, 0, index);
 
-        if(array.length>1)
-            orderMarkers(array, markers.indexOf(markers.get(index)),googleMap);
+        if (array.length > 1)
+            orderMarkers(array, markers.indexOf(markers.get(index)), googleMap);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(points.get(index),15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(points.get(index), 15));
     }
 
     private Location createLocation(LatLng latLng) {
@@ -209,49 +257,39 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         return location;
     }
 
-    private void orderMarkers(Marker[] markers, int offset, GoogleMap googleMap){
+    private void orderMarkers(Marker[] markers, int offset, GoogleMap googleMap) {
         float lowest = 0, aux = 0;
         int index = 0;
         Location location;
 
-        for (int i = offset; i < markers.length-2; i++) {
+        for (int i = offset; i < markers.length - 2; i++) {
             location = createLocation(markers[i].getPosition());
-            for (int j = offset+1; j < markers.length; j++) {
+            for (int j = offset + 1; j < markers.length; j++) {
                 aux = location.distanceTo(createLocation(markers[j].getPosition()));
-                if(lowest==0)
+                if (lowest == 0)
                     lowest = aux;
 
-                if(aux<lowest)
-                        lowest = aux;
+                if (aux < lowest)
+                    lowest = aux;
 
             }
             lowest = 0;
-            swap(markers,i,index);
+            swap(markers, i, index);
         }
 
-        drawRoute( googleMap ,markers);
+        drawRoute(googleMap, markers);
     }
 
-
-    private void swap(Object [] objects, int index1, int index2){
+    private void swap(Object[] objects, int index1, int index2) {
         Object aux = objects[index1];
-        objects [index1] = objects[index2];
-        objects [index2] = aux;
-        System.out.println(((Marker)objects[index1]).getTitle()+ " swapped "+((Marker)objects[index2]).getTitle());
+        objects[index1] = objects[index2];
+        objects[index2] = aux;
     }
-
-
 
     private void drawRoute(GoogleMap googleMap, Marker[] points) {
         PolylineOptions options = new PolylineOptions().geodesic(true).width(INITIAL_STROKE_WIDTH_PX).color(Color.RED);
-        System.out.println(".");
 
-        for(int i=0; i<points.length; i++){
-            System.out.println(points[i].getTitle());
-        }
-        System.out.println(".");
-
-        for(int i=0; i<points.length; i++){
+        for (int i = 0; i < points.length; i++) {
             options.add(points[i].getPosition());
         }
 
@@ -262,7 +300,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    numberOfStages.setText(Objects.requireNonNull(document.getData().get("stages")).toString());
+                    numberOfStages.setText(Objects.requireNonNull(document.getData().get("numberOfStages")).toString());
                     category.setText(Objects.requireNonNull(document.getData().get("category")).toString());
                 }
             }
@@ -280,24 +318,57 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
     @Override
     public void onStop() {
-        routesClickedAdapter.stopListening();        super.onStop();
-
+        routesClickedAdapter.stopListening();
+        super.onStop();
     }
-
 
 
     @Override
     public void onStationClick(Station station) {
-        Intent intent = new Intent(getContext(), StationDetail.class);
-        Bundle bundle = new Bundle();
+
         bundle.putString("stationName", station.getName());
         bundle.putString("routeID", documentID);
-        intent.putExtras(bundle);
-        FragmentManager manager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        startActivity(intent);
-        transaction.remove(this);
-        transaction.commit();
-        manager.popBackStack();
+        bundle.putString("stationKey", station.getKey());
+        bundle.putString("stationDescription", station.getDescription());
+
+
+        downloadPictures(station.getName());
     }
+
+    private void downloadPictures(String name) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(name);
+        storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                for (StorageReference picture : listResult.getItems()) {
+                    Task<Uri> downloadUrlTask = picture.getDownloadUrl();
+                    downloadUrlTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            uriStrings.add(uri.toString());
+                            System.out.println(uri);
+                            try {
+                                Thread.sleep(200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (listResult.getItems().indexOf(picture) == listResult.getItems().size() - 1) {
+                                    bundle.putStringArrayList("uriStrings", uriStrings);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    transaction.remove(RoutesClickedFragment.this);
+                                    transaction.commit();
+                                    manager.popBackStack();
+                                }
+                            }
+
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+
 }

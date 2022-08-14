@@ -5,12 +5,12 @@ import java.util.List;
 public class RouteModel {
 
     private List<Station> stations;
-    private String name;
-    private String category;
+    private String key, name, category;
     private int numberOfStages;
 
-    public RouteModel(List<Station> stations, String name, int numberOfStages, String category) {
+    public RouteModel(List<Station> stations, String key, String name, int numberOfStages, String category) {
         this.stations = stations;
+        this.key = key;
         this.name = name;
         this.numberOfStages = numberOfStages;
         setCategory(category);
@@ -25,6 +25,14 @@ public class RouteModel {
 
     public void setStations(List<Station> stations) {
         this.stations = stations;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {

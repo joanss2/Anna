@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/collaborator_bottom_appbar"
+        android:fontFamily="@font/magra"
         android:layout_alignParentBottom="true">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,6 +36,7 @@
             android:background="#533030"
             app:itemIconTint="@color/white"
             app:itemTextColor="#FFFFFF"
+            android:fontFamily="@font/magra"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/collaborator_bottom_main">
 

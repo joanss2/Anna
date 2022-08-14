@@ -11,7 +11,7 @@
         android:id="@+id/routesClickedName"
         android:layout_width="match_parent"
         android:layout_height="67dp"
-        android:fontFamily="casual"
+        android:fontFamily="@font/magra"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:textColor="#FFFFFF"
@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="CATEGORY"
+                android:fontFamily="@font/magra"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -45,6 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
+                android:fontFamily="@font/magra"
                 android:gravity="center"
                 android:textSize="18sp" />
 
@@ -69,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Nº STAGES"
+                android:fontFamily="@font/magra"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -78,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:fontFamily="@font/magra"/>
 
         </LinearLayout>
 

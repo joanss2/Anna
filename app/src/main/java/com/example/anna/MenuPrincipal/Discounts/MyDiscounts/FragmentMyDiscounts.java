@@ -14,9 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.anna.MenuPrincipal.Discounts.DiscountsWrapContentLinearLayoutManager;
 import com.example.anna.MenuPrincipal.Discounts.FragmentDiscounts;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
-import com.example.anna.MenuPrincipal.Routes.RoutesClickedFragment;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -71,7 +72,7 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
 
 
             myDiscountsAdapter = new MyDiscountsAdapter(options, this, getContext());
-            MyDiscountsWrapContentLinearLayoutManager layoutManager = new MyDiscountsWrapContentLinearLayoutManager(
+            DiscountsWrapContentLinearLayoutManager layoutManager = new DiscountsWrapContentLinearLayoutManager(
                     getContext(),LinearLayoutManager.VERTICAL,false
             );
             rvDiscounts.setLayoutManager(layoutManager);

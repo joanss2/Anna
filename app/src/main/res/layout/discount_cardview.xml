@@ -30,6 +30,7 @@
                 android:id="@+id/mydiscountPercentage"
                 android:gravity="center"
                 android:textSize="40sp"
+                android:fontFamily="@font/magra"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -45,13 +46,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:fontFamily="@font/magra"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/mydiscountdescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:fontFamily="@font/magra"/>
         </LinearLayout>
 
     </LinearLayout>

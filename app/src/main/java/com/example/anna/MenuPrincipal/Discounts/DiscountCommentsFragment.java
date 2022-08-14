@@ -128,7 +128,7 @@ public class DiscountCommentsFragment extends Fragment {
 
 
         RecyclerView commentsRv = view.findViewById(R.id.commentRecyclerView);
-        commentsRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentsRv.setLayoutManager(new DiscountsWrapContentLinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
         CollectionReference discountCommentsReference = FirebaseFirestore.getInstance().collection("Comments").document(discount.getKey())
                 .collection("discountComments");

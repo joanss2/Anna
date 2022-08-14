@@ -26,7 +26,8 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/signoutbutton.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/font/anton.xml" value="0.212109375" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_contact_us.xml" value="0.15198087431693988" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_ajustes.xml" value="0.246484375" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_contact_us.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_discounts.xml" value="0.275" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_faqs.xml" value="0.13671875" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_discounts.xml" value="0.26024590163934425" />
@@ -36,7 +37,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_mydiscounts_empty.xml" value="0.26328125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_myroutes.xml" value="0.26024590163934425" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_fragment_profile.xml" value="0.22" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_main.xml" value="0.130859375" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_main_menu.xml" value="0.130859375" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_menu_main.xml" value="0.117578125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_my_route2.xml" value="0.1" />
@@ -98,8 +99,10 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/routes_to_discover.xml" value="0.189453125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santamariadepontscard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/santperedepontscard.xml" value="0.153125" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/singleframe.xml" value="0.271875" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/started_routes.xml" value="0.189453125" />
-        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/station_detail.xml" value="0.21" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/station_detail.xml" value="0.25" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/station_verified_dialog.xml" value="0.17734375" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/tarifflayout.xml" value="0.275" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/verification_activity.xml" value="0.12734375" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/menu/activity_main_drawer.xml" value="0.18" />

@@ -22,9 +22,8 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:background="#00FFFFFF"
-        android:fontFamily="casual"
         android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:fontFamily="@font/magra_bold"/>
 
 
 </LinearLayout>

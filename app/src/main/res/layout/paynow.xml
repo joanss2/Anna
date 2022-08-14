@@ -11,6 +11,7 @@
         android:layout_width="277dp"
         android:layout_height="55dp"
         android:text="Pay now"
+        android:fontFamily="@font/magra"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -11,6 +11,7 @@
         android:layout_height="195dp"
         android:gravity="center"
         android:text="YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING"
+        android:fontFamily="@font/magra"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,11 +17,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAdapter.RouteHolder> {
 
-    private final OnRoutesClick onRoutesClick;
+    private final OnRoutesClickListener onRoutesClick;
 
-    public RoutesAdapter(@NonNull FirestoreRecyclerOptions<RouteModel> options, OnRoutesClick onRoutesClick) {
+    public RoutesAdapter(@NonNull FirestoreRecyclerOptions<RouteModel> options, OnRoutesClickListener onRoutesClick) {
         super(options);
         this.onRoutesClick = onRoutesClick;
+
     }
 
     @Override
@@ -74,7 +75,7 @@ public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAd
         }
     }
 
-    public interface OnRoutesClick{
+    public interface OnRoutesClickListener{
         void onRoutesClick(RouteModel routeModel);
     }
 }

@@ -29,8 +29,6 @@ public class AppCompat extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("USERINFO", MODE_PRIVATE);
 
-
-        System.out.println(sharedPreferences.getString("userKey", null));
         LanguageManager languageManager = new LanguageManager(this);
 
 
@@ -41,9 +39,7 @@ public class AppCompat extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
-                            System.out.println(user.getLanguage());
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
-                                System.out.println("ENTRO");
                                 languageManager.updateResource(user.getLanguage());
                                 //recreate();
                             }
@@ -62,7 +58,6 @@ public class AppCompat extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
-                            System.out.println(user.getLanguage());
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
                                 languageManager.updateResource(user.getLanguage());
                                 //recreate();

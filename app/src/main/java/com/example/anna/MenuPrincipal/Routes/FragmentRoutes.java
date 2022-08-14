@@ -1,12 +1,10 @@
 package com.example.anna.MenuPrincipal.Routes;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import androidx.activity.OnBackPressedCallback;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.anna.MenuPrincipal.Home.FragmentHome;
-import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.Models.RouteModel;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -25,16 +21,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 
-public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesClick{
+public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesClickListener{
 
     private final CollectionReference routesReference = FirebaseFirestore.getInstance().collection("Routes");
     private RoutesAdapter routesAdapter;
-    private FragmentRoutes fragmentRoutes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentRoutes = this;
+
     }
 
     @Nullable
@@ -42,10 +37,6 @@ public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.routes_all_fragment,container,false);
 
-        ////////////////
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        //System.out.println("back stack in Routesfragment: "+fragmentManager.getBackStackEntryCount());
-        ///////////////
 
         RecyclerView routesRv = view.findViewById(R.id.routesAllRv);
         RoutesWrapContentLinearLayoutManager layoutManager = new RoutesWrapContentLinearLayoutManager(getContext(),

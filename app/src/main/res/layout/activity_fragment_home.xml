@@ -25,20 +25,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
-            android:fontFamily="@font/sniglet"
             android:text="@string/hi"
             android:textColor="@color/black"
             android:textSize="38sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/magra_bold"/>
 
         <TextView
             android:id="@+id/hiUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/sniglet"
             android:textColor="@color/black"
             android:textSize="26sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/magra_bold" />
 
     </LinearLayout>
 
@@ -51,6 +49,7 @@
         android:text="Be the first one to benefit from our offers and experiences."
         android:textAlignment="center"
         android:textSize="16sp"
+        android:fontFamily="@font/magra"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -60,8 +59,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeRecyclerView"
-        android:layout_width="344dp"
+        android:layout_width="wrap_content"
         android:layout_height="429dp"
+        android:paddingTop="10dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

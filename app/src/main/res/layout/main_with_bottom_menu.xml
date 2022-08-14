@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_bottom_navigation"
             android:background="?android:attr/windowBackground"
+            android:fontFamily="@font/magra"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_main">
 

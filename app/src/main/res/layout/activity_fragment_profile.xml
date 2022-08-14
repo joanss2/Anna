@@ -34,7 +34,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="7"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/magra_bold" />
 
             <ImageButton
                 android:id="@+id/menuProfile"
@@ -80,13 +80,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="5dp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/magra_bold"
                         android:text="Nº Discounts Used"/>
 
                     <TextView
                         android:id="@+id/profileNumberDiscounts"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/magra"
                         android:gravity="center_horizontal"/>
 
                 </LinearLayout>
@@ -102,13 +103,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="5dp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/magra_bold"
                         android:text="Nº Routes Finished"/>
 
                     <TextView
                         android:id="@+id/profileNumberRoutes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/magra"
                         android:gravity="center_horizontal"/>
 
                 </LinearLayout>
@@ -125,7 +127,8 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="#4FBD5E"
-            android:text="Edit Profile" />
+            android:text="Edit Profile"
+            android:fontFamily="@font/magra"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/profileTablayout"
@@ -135,7 +138,8 @@
             android:background="#00FFFFFF"
             app:tabIconTint="@color/white"
             app:tabIndicatorColor="#FBF22B"
-            app:tabTextColor="#FFFFFF">
+            app:tabTextColor="#FFFFFF"
+            android:fontFamily="@font/magra">
 
 
         </com.google.android.material.tabs.TabLayout>
@@ -144,7 +148,8 @@
             android:id="@+id/viewpagerprofile"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:background="#00FFFFFF" />
+            android:background="#00FFFFFF"
+            android:fontFamily="@font/magra"/>
 
     </LinearLayout>
 

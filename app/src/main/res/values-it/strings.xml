@@ -58,4 +58,7 @@
     <string name="french">Francese</string>
     <string name="german">Tedesco</string>
 
+    <string name="stationVerified">The station has been verified successfully</string>
+    <string name="stationRejected">The station has not been recognized</string>
+
 </resources>

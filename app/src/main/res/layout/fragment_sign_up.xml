@@ -20,6 +20,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/username"
+            android:fontFamily="@font/magra"
             android:inputType="text" />
 
         <EditText
@@ -30,6 +31,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/email"
+            android:fontFamily="@font/magra"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -40,6 +42,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/password"
+            android:fontFamily="@font/magra"
             android:inputType="textPassword" />
 
         <EditText
@@ -50,6 +53,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/confirmpassword"
+            android:fontFamily="@font/magra"
             android:inputType="textPassword" />
 
         <LinearLayout
@@ -72,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Create collaborator account"
+                android:fontFamily="@font/magra"
                 android:textAlignment="textStart"
                 android:textColor="#26B505"
                 android:textSize="16sp" />
@@ -93,14 +98,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/signup" />
+            android:text="@string/signup"
+            android:fontFamily="@font/magra"/>
 
         <Button
             android:id="@+id/buttonResendCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#BDB1B1"
-            android:text="Resend Code" />
+            android:text="Resend Code"
+            android:fontFamily="@font/magra"/>
     </LinearLayout>
 
 </FrameLayout>

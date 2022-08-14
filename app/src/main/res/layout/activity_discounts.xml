@@ -12,6 +12,7 @@
         android:layout_width="309dp"
         android:layout_height="105dp"
         android:gravity="center"
+        android:fontFamily="@font/magra"
         android:text="DISCOUNTS" />
 
     <androidx.recyclerview.widget.RecyclerView

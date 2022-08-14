@@ -42,6 +42,7 @@
         android:layout_height="40dp"
         android:paddingLeft="10dp"
         android:text="THIS IS THE TITLE OF THE DISCOUNT"
+        android:fontFamily="@font/magra"
         android:textSize="20sp"/>
 
     <TextView
@@ -53,6 +54,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:text="THIS IS THE description OF THE DISCOUNT"
+        android:fontFamily="@font/magra"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -67,6 +69,7 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:textSize="18sp"
+            android:fontFamily="@font/magra"
             android:text="Discount Percentage:"/>
 
         <TextView
@@ -76,6 +79,7 @@
             android:paddingLeft="10dp"
             android:gravity="center_horizontal"
             android:textSize="18sp"
+            android:fontFamily="@font/magra"
             android:text="10%"/>
     </LinearLayout>
 
@@ -91,7 +95,8 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:textSize="18sp"
-            android:text="Date:"/>
+            android:text="Date:"
+            android:fontFamily="@font/magra"/>
 
         <TextView
             android:layout_width="0dp"
@@ -100,7 +105,8 @@
             android:paddingLeft="10dp"
             android:gravity="center_horizontal"
             android:textSize="18sp"
-            android:text="24 - 9 - 2000"/>
+            android:text="24 - 9 - 2000"
+            android:fontFamily="@font/magra"/>
     </LinearLayout>
 
 </LinearLayout>

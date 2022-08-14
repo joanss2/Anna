@@ -30,18 +30,21 @@
                             app:tabBackground="@color/purple_500"
                             app:tabIndicatorColor="@color/black"
                             app:tabSelectedTextColor="@android:color/white"
-                            app:tabTextColor="@android:color/white">
+                            app:tabTextColor="@android:color/white"
+                            android:fontFamily="@font/magra">
 
                                 <com.google.android.material.tabs.TabItem
                                     android:id="@+id/tabsignup"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="@string/signup" />
+                                    android:text="@string/signup"
+                                    android:fontFamily="@font/magra"/>
                                 <com.google.android.material.tabs.TabItem
                                     android:id="@+id/tabsignin"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:text="@string/signin" />
+                                    android:text="@string/signin"
+                                    android:fontFamily="@font/magra"/>
 
 
                         </com.google.android.material.tabs.TabLayout>
@@ -50,7 +53,8 @@
                             android:id="@+id/viewpagermain"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#C9FFBCFC" />
+                            android:background="#C9FFBCFC"
+                            android:fontFamily="@font/magra"/>
 
                 </LinearLayout>
 

@@ -21,6 +21,7 @@
             android:layout_weight="5"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:fontFamily="@font/magra"
             android:textColor="@color/black"/>
 
         <RelativeLayout

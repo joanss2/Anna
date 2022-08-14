@@ -16,7 +16,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.anna.MenuPrincipal.CollaboratorMenu;
-import com.example.anna.Models.Status;
 import com.example.anna.Models.Subscription;
 import com.example.anna.Models.Tariff;
 import com.example.anna.Models.User;
@@ -25,11 +24,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
@@ -37,7 +33,6 @@ import com.stripe.android.paymentsheet.PaymentSheetResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -220,7 +215,7 @@ public class PaymentSelected extends AppCompatActivity {
         user.setUsername(userInfoPrefs.getString("username",null));
         user.setUserKey(userInfoPrefs.getString("userKey",null));
         user.setLanguage(Locale.getDefault().getLanguage());
-        Subscription subscription = new Subscription(tariff,currentDate,dateEnd,user, Status.ACTIVE.toString());
+        Subscription subscription = new Subscription(tariff,currentDate,dateEnd,user);
 
         Map<String,Object> fieldkey = new HashMap<>();
         fieldkey.put("key",userInfoPrefs.getString("userKey", null));

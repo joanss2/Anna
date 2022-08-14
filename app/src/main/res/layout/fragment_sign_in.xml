@@ -21,6 +21,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/email"
+            android:fontFamily="@font/magra"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -31,6 +32,7 @@
             android:background="@drawable/mainactivityfragmentshape"
             android:ems="10"
             android:hint="@string/password"
+            android:fontFamily="@font/magra"
             android:inputType="textPassword" />
 
         <TextView
@@ -39,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/forgetPassword"
+            android:fontFamily="@font/magra"
             android:layout_marginBottom="20dp"
             android:textColor="#E42020"
             android:textStyle="italic" />
@@ -59,6 +62,7 @@
             android:id="@+id/buttonsignin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signin" />
+            android:text="@string/signin"
+            android:fontFamily="@font/magra"/>
     </LinearLayout>
 </FrameLayout>

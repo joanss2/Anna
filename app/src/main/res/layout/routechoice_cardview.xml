@@ -15,9 +15,8 @@
             android:id="@+id/routechoiceTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/magra_bold"
+            android:textSize="30sp"/>
 
 
         <ImageView

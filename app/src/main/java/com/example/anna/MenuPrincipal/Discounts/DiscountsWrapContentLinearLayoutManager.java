@@ -1,4 +1,4 @@
-package com.example.anna.MenuPrincipal.Discounts.MyDiscounts;
+package com.example.anna.MenuPrincipal.Discounts;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,8 +6,8 @@ import android.util.Log;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyDiscountsWrapContentLinearLayoutManager extends LinearLayoutManager {
-    public MyDiscountsWrapContentLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+public class DiscountsWrapContentLinearLayoutManager extends LinearLayoutManager {
+    public DiscountsWrapContentLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
     }
     @Override

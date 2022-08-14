@@ -69,10 +69,7 @@ public class FragmentProfile extends Fragment {
 
         com.example.anna.databinding.ActivityFragmentProfileBinding binding = ActivityFragmentProfileBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
-////////////////
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        System.out.println("back stack in proflefragment: "+fragmentManager.getBackStackEntryCount());
-///////////////
+
         ViewPager2 viewPager2 = binding.viewpagerprofile;
         ImageView profileImageView = binding.profileImageView;
         Button editProfileButton = binding.editProfileButton;
@@ -168,6 +165,5 @@ public class FragmentProfile extends Fragment {
         });
 
     }
-
 
 }

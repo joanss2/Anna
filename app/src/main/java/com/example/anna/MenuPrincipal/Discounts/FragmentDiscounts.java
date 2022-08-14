@@ -49,17 +49,14 @@ public class FragmentDiscounts extends Fragment implements OnDiscountClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_discounts, container, false);
-        /////////////////
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        System.out.println("back stack in discountsfragment: "+fragmentManager.getBackStackEntryCount());
-        /////////////////
+
         RecyclerView rvDiscounts = view.findViewById(R.id.recyclerDiscountsActivity);
 
 
         FirestoreRecyclerOptions<Discount> options = new FirestoreRecyclerOptions.Builder<Discount>()
                 .setQuery(discountsDBRef,Discount.class).build();
         discountActAdapter = new DiscountActivityAdapter(options,getContext(), this);
-        rvDiscounts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDiscounts.setLayoutManager(new DiscountsWrapContentLinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         rvDiscounts.setAdapter(discountActAdapter);
 
         return view;

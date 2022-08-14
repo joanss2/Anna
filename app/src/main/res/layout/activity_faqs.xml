@@ -16,6 +16,7 @@
         android:layout_height="64dp"
         android:gravity="center"
         android:text="@string/sendmailtitle"
+        android:fontFamily="@font/magra"
         android:textSize="18sp" />
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/emailto"
+        android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
 
@@ -38,6 +40,7 @@
         android:inputType="textEmailAddress"
         android:longClickable="false"
         android:text="@string/supportemail"
+        android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
 
@@ -46,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/hint_subject"
+        android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
 
@@ -56,13 +60,15 @@
         android:layout_marginBottom="20dp"
         android:hint="@string/hint_subject"
         android:inputType="textEmailAddress"
-        android:textSize="16sp"></EditText>
+        android:fontFamily="@font/magra"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/messagetitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/hint_message"
+        android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
 
@@ -73,16 +79,18 @@
         android:layout_marginBottom="20dp"
         android:gravity="top"
         android:hint="@string/hint_message"
+        android:fontFamily="@font/magra"
         android:ellipsize="end"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollHorizontally="false"
-        android:textSize="16sp"></EditText>
+        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/buttonsendmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/buttonsend" />
+        android:text="@string/buttonsend"
+        android:fontFamily="@font/magra" />
 
 
 </LinearLayout>

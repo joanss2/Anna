@@ -51,13 +51,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Author de pruebas" />
+                    android:text="Author de pruebas"
+                    android:fontFamily="@font/magra"/>
 
                 <TextView
                     android:id="@+id/bodyComment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:fontFamily="@font/magra"/>
 
             </LinearLayout>
 
@@ -69,7 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:fontFamily="@font/magra"/>
     </LinearLayout>
 
 </FrameLayout>

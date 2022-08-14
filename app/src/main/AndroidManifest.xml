@@ -38,9 +38,7 @@
         <activity
             android:name=".MenuPrincipal.Faqs.ContactUs"
             android:exported="false" />
-        <activity
-            android:name=".Ajustes"
-            android:exported="false" />
+
         <activity
             android:name=".Register.MainActivity"
             android:exported="true">
