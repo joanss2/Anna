@@ -12,6 +12,8 @@
         android:gravity="center"
         android:text="YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING"
         android:fontFamily="@font/magra"
+        android:textSize="16sp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

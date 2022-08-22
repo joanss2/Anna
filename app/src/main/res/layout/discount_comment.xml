@@ -20,8 +20,8 @@
 
             <ImageButton
                 android:id="@+id/backfromcomments"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="#00FFFFFF"
                 android:padding="7dp"
@@ -35,8 +35,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:gravity="center_vertical"
-                android:text="Comments"
-                android:textSize="34sp"
+                android:text="@string/comments"
+                android:textSize="30sp"
+                android:textColor="@color/black"
                 android:fontFamily="@font/magra_bold"/>
 
         </LinearLayout>
@@ -67,24 +68,25 @@
 
             <TextView
                 android:id="@+id/postComment"
-                android:layout_width="50dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/magra_bold"
                 android:gravity="start"
                 android:paddingLeft="10dp"
                 android:text="Post"
-                android:fontFamily="@font/magra"
                 android:textColor="#008EFF"
-                android:textSize="14sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/addcommentBody"
                 android:layout_width="match_parent"
                 android:layout_height="61dp"
                 android:background="@drawable/cornersrounded"
-                android:hint="Add a comment"
+                android:hint="@string/CommentHint"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
+                android:textColor="@color/black"
                 android:paddingBottom="10dp"
                 android:textSize="14sp"
                 android:fontFamily="@font/magra"/>

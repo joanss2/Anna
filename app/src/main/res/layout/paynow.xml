@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,26 +9,15 @@
         android:id="@+id/pay_button"
         android:layout_width="277dp"
         android:layout_height="55dp"
-        android:text="Pay now"
         android:fontFamily="@font/magra"
+        android:text="@string/pay"
+        app:cornerRadius="15dp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!--
-    <com.paypal.checkout.paymentbutton.PayPalButton
-        android:id="@+id/buttonpay"
-        android:layout_width="326dp"
-        android:layout_height="70dp"
-        android:text="PAY NOW WITH PAYPAL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-        -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

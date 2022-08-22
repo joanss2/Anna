@@ -31,6 +31,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="7"
                 android:textSize="20sp"
+                android:textColor="@color/black"
                 android:fontFamily="@font/magra_bold"/>
 
             <ImageButton
@@ -58,7 +59,6 @@
                 android:scaleType="fitXY"
                 app:shapeAppearanceOverlay="@style/circleImageView" />
 
-
         </LinearLayout>
 
         <Button
@@ -67,18 +67,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="55dp"
-            android:backgroundTint="#4FBD5E"
-            android:text="Edit Profile"
+            android:backgroundTint="#04BF17"
+            android:text="@string/editProfile"
+            android:textSize="18sp"
             android:fontFamily="@font/magra"/>
 
-
-        <Button
-            android:id="@+id/subactivebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IS SUBSCRIPTION ACTIVE?"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/magra"/>
 
 
     </LinearLayout>

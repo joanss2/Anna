@@ -10,11 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fontFamily="@font/magra"
+        android:fontFamily="@font/magra_bold"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Completed"/>
+        android:textColor="@color/black"
+        android:text="@string/completedRoutes"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/completedRoutesRv"

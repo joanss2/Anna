@@ -3,6 +3,7 @@ package com.example.anna.Register.FragmentsViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.anna.Alerts.AlertManager;
@@ -23,7 +25,7 @@ import com.example.anna.Alerts.BadPasswordAlert;
 import com.example.anna.Alerts.PasswordsNotEqualAlert;
 import com.example.anna.Models.User;
 import com.example.anna.R;
-import com.example.anna.Register.Collaborator.CollaboratorTariffActivity;
+import com.example.anna.Register.Collaborator.CollaboratorInfoDialog;
 import com.example.anna.Register.VerificationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +45,7 @@ public class SignUpFragment extends Fragment {
     private User userTuple;
     private CheckBox checkBox;
     private AlertManager alertManagerSignUp;
+    private ImageView infoCollaborator;
 
 
     @Override
@@ -67,8 +70,7 @@ public class SignUpFragment extends Fragment {
         passwordSignUp = view.findViewById(R.id.passwordsignup);
         confirmPassword = view.findViewById(R.id.passwordconfirm);
         checkBox = view.findViewById(R.id.checkboxsignup);
-        Button resendCode = view.findViewById(R.id.buttonResendCode);
-        resendCode.setEnabled(false);
+        infoCollaborator = view.findViewById(R.id.info_collaborator);
 
 
         btnSignUp.setOnClickListener(v -> {
@@ -128,6 +130,13 @@ public class SignUpFragment extends Fragment {
                 alertManagerSignUp.showAlert(new BadPasswordAlert(getContext()));
             } else {
                 alertManagerSignUp.showAlert(new PasswordsNotEqualAlert(getContext()));
+            }
+        });
+        infoCollaborator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CollaboratorInfoDialog dialogInfo = new CollaboratorInfoDialog();
+                dialogInfo.show(requireActivity().getSupportFragmentManager(),"INFO DIALOG");
             }
         });
         return view;

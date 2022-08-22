@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Started Routes"/>
+        android:text="@string/startedRoutes"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/startedRoutesRv"

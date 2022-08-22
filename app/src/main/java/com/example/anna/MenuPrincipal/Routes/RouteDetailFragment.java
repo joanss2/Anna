@@ -1,17 +1,13 @@
 package com.example.anna.MenuPrincipal.Routes;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,37 +34,30 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class RoutesClickedFragment extends Fragment implements RoutesClickedAdapter.OnStationClickListener {
+public class RouteDetailFragment extends Fragment implements RouteDetailAdapter.OnStationClickListener {
 
     private final String nameOfRoute;
     private final String documentID;
     private final String categoryString;
-    private TextView title, numberOfStages, category;
+    private TextView numberOfStages;
+    private TextView category;
     private GoogleMap gMap;
     private final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Routes");
     private final CollectionReference stationsRef;
-    private RoutesClickedAdapter routesClickedAdapter;
+    private RouteDetailAdapter routeDetailAdapter;
     private static final int INITIAL_STROKE_WIDTH_PX = 5;
 
 
@@ -80,7 +69,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     private FragmentTransaction transaction;
 
 
-    public RoutesClickedFragment(String name, String id, String categoryString) {
+    public RouteDetailFragment(String name, String id, String categoryString) {
         this.nameOfRoute = name;
         this.documentID = id;
         this.categoryString = categoryString;
@@ -93,7 +82,6 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
         received = getArguments();
 
-
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -102,18 +90,16 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
                 if (received != null) {
                     if (received.getString("from").equals("fromCompleted")) {
-                        System.out.println("FROM COMPLETED PA");
-                        trans.replace(R.id.main_frame, new CompletedRoutesFragment());
+                        //trans.add(R.id.main_frame, new CompletedRoutesFragment());
+                        trans.replace(R.id.myroutes_choice_clicked_container_view,new CompletedRoutesFragment()).addToBackStack(null);
                     } else if (received.getString("from").equals("fromStarted")) {
-                        trans.replace(R.id.main_frame, new StartedRoutesFragment());
-                        System.out.println("FROM STARTED PA");
+                        //trans.add(R.id.main_frame, new StartedRoutesFragment());
+                        trans.replace(R.id.myroutes_choice_clicked_container_view,new StartedRoutesFragment()).addToBackStack(null);
                     }
-                } else {
-                    trans.replace(R.id.main_frame, new FragmentRoutes());
-                    System.out.println("ELSE");
                 }
+                System.out.println(requireActivity().getSupportFragmentManager().getBackStackEntryCount()+ " AL TORNAR DE ROUTE DETAIL");
 
-                trans.remove(RoutesClickedFragment.this);
+                trans.remove(RouteDetailFragment.this);
                 manager.popBackStack();
                 trans.commit();
             }
@@ -138,7 +124,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
         numberOfStages = view.findViewById(R.id.routesClickedNumberStages);
         category = view.findViewById(R.id.routesClickedCategory);
         ImageView starCategory = view.findViewById(R.id.routesClickedStar);
-        title = view.findViewById(R.id.routesClickedName);
+        TextView title = view.findViewById(R.id.routesClickedName);
         title.setText(nameOfRoute);
 
         switch (categoryString) {
@@ -165,12 +151,13 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
         LinearLayoutManager linearLayoutManager = new RoutesWrapContentLinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         listOfStationsRv.setLayoutManager(linearLayoutManager);
-        routesClickedAdapter = new RoutesClickedAdapter(options, getContext(), this);
-        listOfStationsRv.setAdapter(routesClickedAdapter);
+        routeDetailAdapter = new RouteDetailAdapter(options, getContext(), this);
+        listOfStationsRv.setAdapter(routeDetailAdapter);
 
 
         return view;
     }
+
 
     private void mapAsync(View view, Bundle savedInstanceState) {
 
@@ -200,6 +187,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
                     Marker marker = googleMap.addMarker(new MarkerOptions().position(position)
                             .title(title));
+                    assert marker != null;
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                     myMarkers.add(marker);
 
@@ -241,7 +229,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
 
-        Marker[] array = markers.toArray(new Marker[markers.size()]);
+        Marker[] array = markers.toArray(new Marker[0]);
         swap(array, 0, index);
 
         if (array.length > 1)
@@ -258,7 +246,7 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     }
 
     private void orderMarkers(Marker[] markers, int offset, GoogleMap googleMap) {
-        float lowest = 0, aux = 0;
+        float lowest = 0, aux;
         int index = 0;
         Location location;
 
@@ -289,8 +277,8 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     private void drawRoute(GoogleMap googleMap, Marker[] points) {
         PolylineOptions options = new PolylineOptions().geodesic(true).width(INITIAL_STROKE_WIDTH_PX).color(Color.RED);
 
-        for (int i = 0; i < points.length; i++) {
-            options.add(points[i].getPosition());
+        for (Marker point : points) {
+            options.add(point.getPosition());
         }
 
         googleMap.addPolyline(options);
@@ -312,13 +300,13 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
     @Override
     public void onStart() {
         super.onStart();
-        routesClickedAdapter.startListening();
+        routeDetailAdapter.startListening();
     }
 
 
     @Override
     public void onStop() {
-        routesClickedAdapter.stopListening();
+        routeDetailAdapter.stopListening();
         super.onStop();
     }
 
@@ -337,34 +325,29 @@ public class RoutesClickedFragment extends Fragment implements RoutesClickedAdap
 
     private void downloadPictures(String name) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(name);
-        storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
-            @Override
-            public void onSuccess(ListResult listResult) {
-                for (StorageReference picture : listResult.getItems()) {
-                    Task<Uri> downloadUrlTask = picture.getDownloadUrl();
-                    downloadUrlTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            uriStrings.add(uri.toString());
-                            System.out.println(uri);
-                            try {
-                                Thread.sleep(200);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } finally {
-                                if (listResult.getItems().indexOf(picture) == listResult.getItems().size() - 1) {
-                                    bundle.putStringArrayList("uriStrings", uriStrings);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                    transaction.remove(RoutesClickedFragment.this);
-                                    transaction.commit();
-                                    manager.popBackStack();
-                                }
-                            }
-
+        storageReference.listAll().addOnSuccessListener(listResult -> {
+            uriStrings.clear();
+            for (StorageReference picture : listResult.getItems()) {
+                Task<Uri> downloadUrlTask = picture.getDownloadUrl();
+                downloadUrlTask.addOnSuccessListener(uri -> {
+                    uriStrings.add(uri.toString());
+                    System.out.println(uri);
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (listResult.getItems().indexOf(picture) == listResult.getItems().size() - 1) {
+                            bundle.putStringArrayList("uriStrings", uriStrings);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            //transaction.remove(RouteDetailFragment.this);
+                            //transaction.commit();
+                            //manager.popBackStack();
                         }
-                    });
-                }
+                    }
+
+                });
             }
         });
 

@@ -1,4 +1,6 @@
 <resources>
+    <string name="welcome">WELCOME To RURAL SECRETS</string>
+
     <string name="app_name">Anna</string>
     <string name="error">Error</string>
     <string name="no">No</string>
@@ -7,26 +9,73 @@
     <string name="ok">OK</string>
     <string name="signup">Registrarse</string>
     <string name="Register">Registrarse</string>
-    <string name="signin">Iniciar sesión</string>
+    <string name="signIn">Iniciar sesión</string>
     <string name="collaborator">Collaborator</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
-    <string name="confirmpassword">Confirmar contraseña</string>
+    <string name="confirmPassword">Confirmar contraseña</string>
     <string name="username">Username</string>
     <string name="haveAccount">Ya tienes una cuenta?</string>
+    <string name="profile">Profile</string>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="myroute">MI RUTA</string>
+    <string name="myRoute">MI RUTA</string>
+    <string name="routeListTitle">AVAILABLE ROUTES LIST</string>
+    <string name="category">Category</string>
+    <string name="numberStages">Nº STAGES</string>
     <string name="discounts">DESCUENTOS</string>
+    <string name="discountsUpperCase">DISCOUNTS</string>
+    <string name="myDiscountsUpperCase">MY DISCOUNTS</string>
+    <string name="noDiscountsUsedMessage">YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING</string>
+    <string name="activar">Activar</string>
+    <string name="notNow">Not now</string>
+    <string name="CommentHint">Add a comment</string>
+    <string name="comments">Comments</string>
+    <string name="discountPercentageUsedDetail">Discount Percentage:</string>
+    <string name="dateUsedDetail">Date:</string>
+
+    <string name="editProfile">Edit Profile</string>
+
+    <string name="endedSubMessage">Your subscription has ended. Please renew it to keep active as a collaborator.</string>
+    <string name="collaboratorAccountCreation">Create collaborator account</string>
+    <string name="pay">Pay now</string>
+
+    <string name="resetPasswordMessage">Please, introduce your email you registered with. Then you will receive automatically an email with following instructions to make the corresponding changes. Thank you.</string>
+
+
     <string name="faqs">FAQS</string>
     <string name="ajustes">AJUSTES</string>
     <string name="contactus"><u>Necesita ayuda? Contacta con nosotros!</u></string>
-    <string name="sendmailtitle">Cómo podemos ayudar?</string>
+    <string name="sendMailTitle">Cómo podemos ayudar?</string>
     <string name="hint_email">Tu dirección de email aquí</string>
-    <string name="buttonsend">Enviar mail</string>
-    <string name="emailto">Para</string>
+    <string name="buttonSend">Enviar mail</string>
+    <string name="emailTo">Para</string>
     <string name="hint_subject">Sujeto</string>
     <string name="hint_message">Mensage</string>
-    <string name="supportemail">annaApp.support@gmail.com</string>
+    <string name="supportEmail">annaApp.support@gmail.com</string>
+
+    <string name="advertCreationTitle">ADVERT CREATION</string>
+    <string name="advertEditionTitle">ADVERT EDITION</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="descriptionExplanation">Detailed Information about the advertisement</string>
+    <string name="endDate">End Date</string>
+    <string name="postAd">POST ADVERTISEMENT</string>
+    <string name="addPicture">ADD PICTURE</string>
+    <string name="updateAd">UPDATE ADVERTISEMENT</string>
+    <string name="postAdMessage">Post your new offers and ads now !</string>
+    <string name="addAdvert">Add advertisement</string>
+
+    <string name="completedRoutes">Completed Routes</string>
+    <string name="startedRoutes">Started Routes</string>
+
+    <string name="verifyAccount">Verify</string>
+    <string name="resendCode">Resend Code</string>
+
+    <string name="changePassword">CHANGE PASSWORD</string>
+
+    <string name="validateStation">Validate your visit</string>
+    <string name="howGeTtoStation">How can we get there?</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -59,6 +108,8 @@
     <string name="italian">Italiano</string>
     <string name="french">Francés</string>
     <string name="german">Alemán</string>
+
+    <string name="clientHomeMessage">Be the first one to benefit from our offers and experiences.</string>
 
     <string name="stationVerified">The station has been verified successfully</string>
     <string name="stationRejected">The station has not been recognized</string>

@@ -3,7 +3,6 @@ package com.example.anna.Register.FragmentsViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -36,12 +35,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -54,9 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -71,7 +64,6 @@ public class SignInFragment extends Fragment {
     private SharedPreferences.Editor userInfoEditor;
     private String name, email;
     private Intent toMenu, toMenuCollaborator;
-    private Uri userPic;
     private AlertManager alertManagerSignIn;
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     DatabaseReference ref = database.getReference("users");
@@ -103,69 +95,31 @@ public class SignInFragment extends Fragment {
 
 
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnSignIn.setOnClickListener(view1 -> {
 
-                if (TextUtils.isEmpty(emailSignIn.getText())) {
-                    alertManagerSignIn.showAlert(new EmptyEmailFieldAlert(getContext()));
-                } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString()).addOnCompleteListener(
-                            new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
-                                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                        if (!Objects.requireNonNull(firebaseUser).isEmailVerified())
-                                            alertManagerSignIn.showAlert("Email not verified yet, please verify it");
-                                        else
-                                            downloadUserInfoAndSavePersistent();
-                                    }else{
-                                        System.out.println(task.getException().getMessage());
-                                        Toast.makeText(getActivity(), "Authentication failed: "+task.getException().getMessage(),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                    );
-                }else{
-                    alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
-                }
-
-            }
-        });
-
-        /*
-        btnSignIn.setOnClickListener(v -> {
-            if (v.getId() == R.id.buttonsignin) {
-                if (TextUtils.isEmpty(emailSignIn.getText())) {
-                    alertManagerSignIn.showAlert(new EmptyEmailFieldAlert(getContext()));
-                } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
-                            .addOnCompleteListener(task -> {
-
+            if (TextUtils.isEmpty(emailSignIn.getText())) {
+                alertManagerSignIn.showAlert(new EmptyEmailFieldAlert(getContext()));
+            } else if (!TextUtils.isEmpty(emailSignIn.getText()) && !TextUtils.isEmpty(passwordSignIn.getText())) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString()).addOnCompleteListener(
+                        task -> {
+                            if(task.isSuccessful()){
                                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                                 if (!Objects.requireNonNull(firebaseUser).isEmailVerified())
                                     alertManagerSignIn.showAlert("Email not verified yet, please verify it");
-                                else if (task.isSuccessful()) {
+                                else
                                     downloadUserInfoAndSavePersistent();
-                                } else {
-                                    alertManagerSignIn.showAlert(Objects.requireNonNull(task.getException()).getMessage());
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
+                            }else{
+                                System.out.println(Objects.requireNonNull(task.getException()).getMessage());
+                                Toast.makeText(getActivity(), "Authentication failed: "+task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    })
-
-                } else {
-                    alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
-                }
+                );
+            }else{
+                alertManagerSignIn.showAlert(new UnsuccessfulSignInAlert(getContext()));
             }
-        });
 
-         */
+        });
 
 
         ////////////////////////////////////////////////////////////////////
@@ -193,13 +147,7 @@ public class SignInFragment extends Fragment {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = ds.getValue(User.class);
                         assert user != null;
-                        /*userInfoEditor.putString("email", emailSignIn.getText().toString());
-                        userInfoEditor.putString("userKey", user.getUserKey());
-                        userInfoEditor.putString("username", user.getUsername());
-                        userInfoEditor.putString("usertype", "client");
-                        userInfoEditor.commit();
 
-                         */
                         uploadUserInfoPrefs(user, "client");
                         startActivity(toMenu);
                         requireActivity().finish();
@@ -214,13 +162,7 @@ public class SignInFragment extends Fragment {
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     User user = ds.getValue(User.class);
                                     assert user != null;
-                                    /*userInfoEditor.putString("email", emailSignIn.getText().toString());
-                                    userInfoEditor.putString("userKey", user.getUserKey());
-                                    userInfoEditor.putString("username", user.getUsername());
-                                    userInfoEditor.putString("usertype", "collaborator");
-                                    userInfoEditor.commit();
 
-                                     */
                                     uploadUserInfoPrefs(user, "collaborator");
                                     checkCollaboratorSubscription();
 
@@ -254,7 +196,6 @@ public class SignInFragment extends Fragment {
                     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            userPic = account.getPhotoUrl();
                             name = account.getDisplayName();
                             email = account.getEmail();
                             newUserCreatedIfNonExistent();
@@ -323,38 +264,29 @@ public class SignInFragment extends Fragment {
     public void checkCollaboratorSubscription() {
         CollectionReference subReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPreferences.getString("userKey", null))
                 .collection("SubsOfUser");
-        subReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if(task.getResult().isEmpty()){
-                        startActivity(new Intent(getContext(),CollaboratorTariffActivity.class));
-                        requireActivity().finish();
-                    }else{
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Object> map = document.getData();
+        subReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if(task.getResult().isEmpty()){
+                    startActivity(new Intent(getContext(),CollaboratorTariffActivity.class));
+                    requireActivity().finish();
+                }else{
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, Object> map = document.getData();
 
-                            Subscription subscription = new Subscription(map);
-                            if (subscription.getDateEnd().after(new Date())) {
-                                startActivity(toMenuCollaborator);
-                            } else {
-                                startActivity(new Intent(getContext(), CollaboratorTariffActivity.class).putExtra(
-                                        "ended",true
-                                ));
-                            }
-                            requireActivity().finish();
+                        Subscription subscription = new Subscription(map);
+                        if (subscription.getDateEnd().after(new Date())) {
+                            startActivity(toMenuCollaborator);
+                        } else {
+                            startActivity(new Intent(getContext(), CollaboratorTariffActivity.class).putExtra(
+                                    "ended",true
+                            ));
                         }
+                        requireActivity().finish();
                     }
-
-
                 }
+
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                System.out.println("FAILURE");
-            }
-        });
+        }).addOnFailureListener(e -> System.out.println("FAILURE"));
     }
 
 

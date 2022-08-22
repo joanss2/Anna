@@ -1,11 +1,10 @@
 package com.example.anna.MenuPrincipal.Routes.MyRoutes;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.CompletedRoutesFragment;
 import com.example.anna.MenuPrincipal.Routes.MyRoutes.ChoiceFragments.StartedRoutesFragment;
@@ -17,16 +16,9 @@ public class MyRoutesClickedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toast.makeText(this, "NEW ACTIVITY", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.my_routes_clicked_choice_activity);
         String choiceType = getIntent().getStringExtra("choice");
-
-        if(this.isTaskRoot()){
-            System.out.println("HOLA NO ME IMPORTA");
-        }else{
-            System.out.println("IN MY ROUTES CLICKED ACTIVITY THERE ARE MORE THAN 1 ACT IN BACK STACK");
-        }
-
-
 
         switch (choiceType) {
             case "STARTED ROUTES":
@@ -45,6 +37,13 @@ public class MyRoutesClickedActivity extends AppCompatActivity {
                         .commit();
                 break;
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "BYE BYE ACTIVITY", Toast.LENGTH_SHORT).show();
 
     }
 }

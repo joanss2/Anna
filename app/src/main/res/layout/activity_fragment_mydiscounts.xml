@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        android:layout_width="309dp"
+        android:layout_height="105dp"
+        android:gravity="center"
+        android:fontFamily="@font/magra_bold"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="@string/myDiscountsUpperCase" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerDiscounts"
         android:layout_width="match_parent"

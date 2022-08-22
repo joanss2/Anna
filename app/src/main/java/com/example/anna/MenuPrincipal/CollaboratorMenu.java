@@ -9,12 +9,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 
 import com.example.anna.MenuPrincipal.Home.CollaboratorFragmentHome;
-import com.example.anna.MenuPrincipal.Home.FragmentHome;
 import com.example.anna.MenuPrincipal.Profile.CollaboratorFragmentProfile;
 import com.example.anna.R;
 import com.example.anna.Register.MainActivity;

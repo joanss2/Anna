@@ -6,15 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.telecom.Call;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,9 +20,7 @@ import com.example.anna.MenuPrincipal.CollaboratorMenu;
 import com.example.anna.MenuPrincipal.LanguageManager;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.Models.LanguageItem;
-import com.example.anna.Models.User;
 import com.example.anna.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,15 +29,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 public class LanguagesDialog extends DialogFragment implements LanguagesAdapter.LanguageSelectionListener {
 
     private String[] names;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-    private DatabaseReference ref = database.getReference("users");
-    private DatabaseReference refAdmin = database.getReference("collaborators");
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
+    private final DatabaseReference ref = database.getReference("users");
+    private final DatabaseReference refAdmin = database.getReference("collaborators");
     private SharedPreferences sharedPreferences;
     private final int[] icons = {R.drawable.uk, R.drawable.germany, R.drawable.spain, R.drawable.catalunya, R.drawable.france, R.drawable.italia};
     private String currentLanguage;
@@ -62,7 +50,7 @@ public class LanguagesDialog extends DialogFragment implements LanguagesAdapter.
         names[3] = getResources().getString(R.string.catalan);
         names[4] = getResources().getString(R.string.french);
         names[5] = getResources().getString(R.string.italian);
-        sharedPreferences = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -123,20 +111,16 @@ public class LanguagesDialog extends DialogFragment implements LanguagesAdapter.
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists())
                             snapshot.getRef().child(sharedPreferences.getString("userKey",null)).child("language").setValue(currentLanguage)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            LanguageManager languageManager = new LanguageManager(getContext());
-                                            languageManager.updateResource(currentLanguage);
-                                            //requireActivity().recreate();
-                                            getActivity().finish();
-                                            //getActivity().recreate();
-                                            if(option==1)
-                                                startActivity(new Intent(getContext(),MenuMainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-                                            else
-                                                startActivity(new Intent(getContext(), CollaboratorMenu.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    .addOnSuccessListener(unused -> {
+                                        LanguageManager languageManager = new LanguageManager(getContext());
+                                        languageManager.updateResource(currentLanguage);
+                                        //requireActivity().recreate();
+                                        requireActivity().finish();
+                                        if(option==1)
+                                            startActivity(new Intent(getContext(),MenuMainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                        else
+                                            startActivity(new Intent(getContext(), CollaboratorMenu.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
 
-                                        }
                                     });
                     }
 

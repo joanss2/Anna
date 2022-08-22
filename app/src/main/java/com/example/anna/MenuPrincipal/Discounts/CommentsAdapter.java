@@ -1,7 +1,7 @@
 package com.example.anna.MenuPrincipal.Discounts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.anna.Models.Comment;
-import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.protobuf.GeneratedMessageLite;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsAdapter.CommentHolder> {
 
-    private Context context;
-    private String authorkey;
+    private final Context context;
+    private final String authorkey;
 
     public CommentsAdapter(@NonNull FirestoreRecyclerOptions<Comment> options, Context context, String authorkey) {
         super(options);
@@ -56,8 +52,10 @@ public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsA
 
         private final DatabaseReference realtimeref = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
         private final StorageReference storageReference = FirebaseStorage.getInstance().getReference("users");
-        private TextView body, date, username;
-        private ImageView userImage;
+        private final TextView body;
+        private final TextView date;
+        private final TextView username;
+        private final ImageView userImage;
 
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,31 +67,16 @@ public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsA
 
         public void bind(Comment comment){
             body.setText(comment.getBody());
-            date.setText(comment.getTimestamp().toString());
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            date.setText(format.format(comment.getTimestamp().toDate()));
             System.out.println(authorkey);
-            realtimeref.child(authorkey).child("username").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    username.setText(String.valueOf(task.getResult().getValue()));
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+            realtimeref.child(authorkey).child("username").get().addOnCompleteListener(task -> username.setText(String.valueOf(task.getResult().getValue()))).addOnFailureListener(e -> {
 
-                }
             });
-            storageReference.child(authorkey).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Glide.with(context).load(uri).into(userImage);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    int errorCode = ((StorageException) e).getErrorCode();
-                    if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                        userImage.setImageResource(R.drawable.user_icon);
-                    }
+            storageReference.child(authorkey).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(uri).into(userImage)).addOnFailureListener(e -> {
+                int errorCode = ((StorageException) e).getErrorCode();
+                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    userImage.setImageResource(R.drawable.user_icon);
                 }
             });
 

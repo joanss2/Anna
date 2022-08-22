@@ -60,6 +60,7 @@
         <activity android:name=".Register.VerificationActivity" />
         <activity android:name=".MenuPrincipal.CollaboratorMenu" />
         <activity android:name=".MenuPrincipal.Home.AdCreation" />
+        <activity android:name=".MenuPrincipal.Home.AdEdition" />
 
 
         <meta-data

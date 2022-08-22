@@ -20,10 +20,6 @@ import com.example.anna.Models.Subscription;
 import com.example.anna.Models.Tariff;
 import com.example.anna.Models.User;
 import com.example.anna.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.stripe.android.PaymentConfiguration;
@@ -219,33 +215,17 @@ public class PaymentSelected extends AppCompatActivity {
 
         Map<String,Object> fieldkey = new HashMap<>();
         fieldkey.put("key",userInfoPrefs.getString("userKey", null));
+        fieldkey.put("username",userInfoPrefs.getString("username", null));
+
         DocumentReference subsReference = FirebaseFirestore.getInstance().collection("Subscriptions").document(userInfoPrefs.getString("userKey",null));
         subsReference.set(fieldkey)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        subsReference.collection("SubsOfUser").add(subscription).addOnCompleteListener(
-                                new OnCompleteListener<DocumentReference>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        if(task.isSuccessful()){
-                                            Toast.makeText(getApplicationContext(),"Subscription created correctly",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                        ).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
+                .addOnSuccessListener(unused -> subsReference.collection("SubsOfUser").add(subscription).addOnCompleteListener(
+                        task -> {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getApplicationContext(),"Subscription created correctly",Toast.LENGTH_SHORT).show();
                             }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
+                        }
+                ));
 
     }
 

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -15,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.anna.MenuPrincipal.Routes.RoutesClickedFragment;
+import com.example.anna.MenuPrincipal.Routes.RouteDetailFragment;
 import com.example.anna.MenuPrincipal.Routes.RoutesWrapContentLinearLayoutManager;
 import com.example.anna.Models.RouteChoice;
 import com.example.anna.R;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.OnChoiceClickListener {
 
@@ -33,13 +36,25 @@ public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.
     private final String[] titles = {"STARTED ROUTES", "COMPLETED ROUTES"};
     private final int[] imageIDs = {R.drawable.routestarted, R.drawable.routecompleted};
     private final CollectionReference routesReference = FirebaseFirestore.getInstance().collection("Routes");
+    private FragmentManager manager;
+    private FragmentTransaction trans;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        manager = requireActivity().getSupportFragmentManager();
+        trans = manager.beginTransaction();
+    }
+
+    /*
 
     ActivityResultLauncher<Intent> typeOfRouteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
         if(result.getResultCode()==18){
-            requireActivity().finish();
+            System.out.println("CODE 18");
+
         }
+
         if(result.getResultCode()==11){
 
             //TO ROUTES CLICKED FRAGMENT
@@ -49,16 +64,17 @@ public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.
             routesReference.whereEqualTo("name",name).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
-                        FragmentManager manager = requireActivity().getSupportFragmentManager();
-                        FragmentTransaction trans = manager.beginTransaction();
+
                         Bundle bundle = new Bundle();
                         bundle.putString("from","fromCompleted");
-                        RoutesClickedFragment routesClickedFragment = new RoutesClickedFragment(name,document.getId(),category);
-                        routesClickedFragment.setArguments(bundle);
-                        trans.replace(R.id.main_frame, routesClickedFragment);
-                        assert getParentFragment() != null;
-                        trans.remove(getParentFragment());
-                        manager.popBackStack();
+                        RouteDetailFragment routeDetailFragment = new RouteDetailFragment(name,document.getId(),category);
+                        routeDetailFragment.setArguments(bundle);
+
+                        //trans.add(R.id.main_frame, routeDetailFragment);
+                        //trans.replace(R.id.main_frame, routeDetailFragment);
+                        //assert getParentFragment() != null;
+                        //trans.remove(getParentFragment());
+                        //manager.popBackStack();
                         trans.commit();
 
                     }
@@ -73,16 +89,16 @@ public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.
             routesReference.whereEqualTo("name",name).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
-                        FragmentManager manager = requireActivity().getSupportFragmentManager();
-                        FragmentTransaction trans = manager.beginTransaction();
+
                         Bundle bundle = new Bundle();
                         bundle.putString("from","fromStarted");
-                        RoutesClickedFragment routesClickedFragment = new RoutesClickedFragment(name,document.getId(),category);
-                        routesClickedFragment.setArguments(bundle);
-                        trans.replace(R.id.main_frame, routesClickedFragment);
-                        assert getParentFragment() != null;
-                        trans.remove(getParentFragment());
-                        manager.popBackStack();
+                        RouteDetailFragment routeDetailFragment = new RouteDetailFragment(name,document.getId(),category);
+                        routeDetailFragment.setArguments(bundle);
+                        trans.add(R.id.main_frame, routeDetailFragment);System.out.println(name+" "+document.getId()+" "+category);
+                        //trans.replace(R.id.main_frame, routeDetailFragment);
+                        //assert getParentFragment() != null;
+                        //trans.remove(getParentFragment());
+                        //manager.popBackStack();
                         trans.commit();
 
                     }
@@ -93,11 +109,14 @@ public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.
         }
     });
 
+     */
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.routechoice, container, false);
+
 
         RecyclerView recyclerView = view.findViewById(R.id.routechoiceRecyclerView);
         List<RouteChoice> choiceList = initializeList(titles, imageIDs);
@@ -124,7 +143,8 @@ public class FragmentMyRoutes extends Fragment implements MyRoutesChoiceAdapter.
         Bundle bundle = new Bundle();
         bundle.putString("choice",title);
         intent.putExtras(bundle);
-        typeOfRouteLauncher.launch(intent);
+        startActivity(intent);
+        //typeOfRouteLauncher.launch(intent);
 
     }
 }

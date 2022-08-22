@@ -5,10 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,33 +13,16 @@ import com.example.anna.MenuPrincipal.Discounts.FragmentDiscounts;
 import com.example.anna.MenuPrincipal.Home.FragmentHome;
 import com.example.anna.MenuPrincipal.Profile.FragmentProfile;
 import com.example.anna.MenuPrincipal.Routes.FragmentRoutes;
-import com.example.anna.Models.User;
 import com.example.anna.Register.MainActivity;
 import com.example.anna.R;
 import com.example.anna.databinding.MainWithBottomMenuBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.lang.ref.Reference;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import androidx.fragment.app.FragmentManager;
 
 
 public class MenuMainActivity extends AppCompat {
@@ -51,8 +31,6 @@ public class MenuMainActivity extends AppCompat {
     private SharedPreferences.Editor userInfoEditor;
     private Fragment selector;
     private BottomNavigationView bottomNavigationView;
-    FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference ref = database.getReference("users");
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -135,5 +113,6 @@ public class MenuMainActivity extends AppCompat {
     public BottomNavigationView getBottomNavigationView() {
         return this.bottomNavigationView;
     }
+
 
 }

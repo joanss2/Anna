@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:gravity="center_horizontal">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/magra_bold"
+        android:text="ACCOUNT AS A COLLABORATOR"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/magra"
+        android:text="A collaborator account is a premium service that will allow
+the user to post, edit and delete own-created ads within the period of time established
+in the subscription details. These advertisements will be published in the home page of the app
+and non-collaborator users will be notified of each premium post made. \nPlease bear in mind that
+ads will not appear in order so the last posted are on the top."
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/infoCollaboratorOkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#04BF17"
+        android:fontFamily="@font/magra"
+        android:text="@string/ok"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:cornerRadius="15dp" />
+
+</LinearLayout>

@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 
 import com.google.firebase.Timestamp;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 public class Subscription{
 
@@ -35,6 +32,7 @@ public class Subscription{
         Subscription sub = new Subscription();
 
         Map<String,Object> collaborator = (Map<String, Object>) map.get("collaborator");
+        assert collaborator != null;
         String userKey = (String)collaborator.get("userKey");
         String username = (String)collaborator.get("username");
         String email = (String)collaborator.get("email");
@@ -43,8 +41,8 @@ public class Subscription{
 
         User user = new User(username,email,userKey,language);
 
-        Date date1 = ((Timestamp)map.get("dateStart")).toDate();
-        Date date2 = ((Timestamp)map.get("dateEnd")).toDate();
+        Date date1 = ((Timestamp) Objects.requireNonNull(map.get("dateStart"))).toDate();
+        Date date2 = ((Timestamp) Objects.requireNonNull(map.get("dateEnd"))).toDate();
 
         this.collaborator = user;
         this.dateStart = date1;

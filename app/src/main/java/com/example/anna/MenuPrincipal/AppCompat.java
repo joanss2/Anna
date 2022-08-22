@@ -39,6 +39,7 @@ public class AppCompat extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
+                            assert user != null;
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
                                 languageManager.updateResource(user.getLanguage());
                                 //recreate();
@@ -58,6 +59,7 @@ public class AppCompat extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
+                            assert user != null;
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
                                 languageManager.updateResource(user.getLanguage());
                                 //recreate();

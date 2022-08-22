@@ -19,9 +19,10 @@
             android:layout_height="59dp"
             android:fontFamily="@font/magra"
             android:gravity="center"
-            android:text="AVAILABLE ROUTES LIST"
+            android:textColor="@color/black"
+            android:text="@string/routeListTitle"
             android:textAlignment="center"
-            android:textSize="28sp" />
+            android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/routesAllRv"

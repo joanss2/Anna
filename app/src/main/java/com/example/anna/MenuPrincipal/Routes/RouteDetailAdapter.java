@@ -20,14 +20,14 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-public class RoutesClickedAdapter extends FirestoreRecyclerAdapter<Station, RoutesClickedAdapter.StationsImageHolder> {
+public class RouteDetailAdapter extends FirestoreRecyclerAdapter<Station, RouteDetailAdapter.StationsImageHolder> {
 
 
     private final Context context;
     private final OnStationClickListener onStationClickListener;
 
 
-    public RoutesClickedAdapter(@NonNull FirestoreRecyclerOptions<Station> options, Context context, OnStationClickListener onStationClickListener) {
+    public RouteDetailAdapter(@NonNull FirestoreRecyclerOptions<Station> options, Context context, OnStationClickListener onStationClickListener) {
         super(options);
         this.context = context;
         this.onStationClickListener = onStationClickListener;

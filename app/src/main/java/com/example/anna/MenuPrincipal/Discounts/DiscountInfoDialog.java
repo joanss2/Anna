@@ -3,10 +3,6 @@ package com.example.anna.MenuPrincipal.Discounts;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +18,10 @@ import com.bumptech.glide.Glide;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 
-import java.util.Objects;
 
 public class DiscountInfoDialog extends DialogFragment {
 
-    private Discount discount;
+    private final Discount discount;
 
     public DiscountInfoDialog(Discount discount) {
         this.discount = discount;
@@ -51,7 +46,7 @@ public class DiscountInfoDialog extends DialogFragment {
         TextView description = view.findViewById(R.id.discount_info_description);
         TextView discount_percentage = view.findViewById(R.id.discount_info_percentage);
 
-        Glide.with(getContext()).load(discount.getUriImg()).into(imageView);
+        Glide.with(requireContext()).load(discount.getUriImg()).into(imageView);
         title.setText(discount.getName());
         description.setText(discount.getDescription());
         discount_percentage.setText(String.valueOf(discount.getDiscountPercentage()));

@@ -8,13 +8,6 @@ public class RouteModel {
     private String key, name, category;
     private int numberOfStages;
 
-    public RouteModel(List<Station> stations, String key, String name, int numberOfStages, String category) {
-        this.stations = stations;
-        this.key = key;
-        this.name = name;
-        this.numberOfStages = numberOfStages;
-        setCategory(category);
-    }
 
     public RouteModel() {
     }

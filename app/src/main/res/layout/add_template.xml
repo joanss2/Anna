@@ -16,21 +16,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/adTemplateTitle"
+        <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="2"
-            android:background="#FFFFFF"
-            android:textSize="20sp"
-            android:fontFamily="@font/magra_bold" />
+            android:padding="5dp"
+            android:layout_weight="3"
+            android:background="#FFFFFF">
+
+            <TextView
+                android:id="@+id/adTemplateTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:paddingRight="5dp"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                android:fontFamily="@font/magra_bold" />
+
+            <ImageView
+                android:id="@+id/adMoreOptions"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_more" />
+
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/adTemplatePicture"
             android:layout_width="match_parent"
+            android:scaleType="fitCenter"
             android:layout_height="0dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/adTemplateDescription"
@@ -38,6 +58,8 @@
             android:layout_height="0dp"
             android:layout_margin="5dp"
             android:layout_weight="4"
+            android:padding="5dp"
+            android:textAlignment="textStart"
             android:textSize="16sp"
             android:fontFamily="@font/magra"/>
 
@@ -45,11 +67,13 @@
             android:id="@+id/adTemplateDeadline"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:textAlignment="textEnd"
+            android:padding="5dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="#FFFFFF"
             android:inputType="date"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:fontFamily="@font/magra"/>
 
 

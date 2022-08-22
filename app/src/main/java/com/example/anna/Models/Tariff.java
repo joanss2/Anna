@@ -3,18 +3,11 @@ package com.example.anna.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.math.BigDecimal;
-
 public class Tariff implements Parcelable {
 
     private float price;
     private String condition, description;
 
-    public Tariff(Float price, String condition, String description) {
-        this.price = price;
-        this.condition = condition;
-        this.description = description;
-    }
     public Tariff(){}
 
     protected Tariff(Parcel in) {

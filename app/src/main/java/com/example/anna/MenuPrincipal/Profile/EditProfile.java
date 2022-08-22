@@ -1,33 +1,22 @@
 package com.example.anna.MenuPrincipal.Profile;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.anna.MenuPrincipal.Faqs.FragmentFaqs;
-import com.example.anna.MenuPrincipal.MenuMainActivity;
+
 import com.example.anna.R;
-import com.example.anna.Register.MainActivity;
 import com.example.anna.databinding.EditProfileBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 public class EditProfile extends AppCompatActivity {
 
@@ -46,8 +34,7 @@ public class EditProfile extends AppCompatActivity {
     private TextView changePassword, userEmail;
     private SharedPreferences userInfoPrefs;
     private SharedPreferences.Editor userInfoEditor;
-    private ImageView profileImageView, backArrow;
-    private EditProfileBinding binding;
+    private ImageView profileImageView;
     private FloatingActionButton editButton;
     private boolean clicked;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
@@ -63,14 +50,14 @@ public class EditProfile extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference("users").child(userInfoPrefs.getString("userKey", null));
         userInfoEditor = userInfoPrefs.edit();
 
-        binding = EditProfileBinding.inflate(getLayoutInflater());
+        com.example.anna.databinding.EditProfileBinding binding = EditProfileBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
         setContentView(root);
 
         userName = binding.profileUsername;
         userEmail = binding.editprofileUseremail;
         profileImageView = binding.editProfileUserImage;
-        backArrow = binding.editProfileArrowBack;
+        ImageView backArrow = binding.editProfileArrowBack;
         changePassword = binding.editprofileCambiarcontra;
         editButton = binding.editnamebutton;
 
@@ -78,54 +65,34 @@ public class EditProfile extends AppCompatActivity {
         initializeUserEmail();
         initializeUserPicture(storageReference);
 
-        selectImage = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-            @Override
-            public void onActivityResult(Uri result) {
-                Glide.with(getApplicationContext()).load(result).into(profileImageView);
-                storageReference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getApplicationContext(),"Profile picture changed successfully!",Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"Could not change profile picture. Try later. ",Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        selectImage = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+            Glide.with(getApplicationContext()).load(result).into(profileImageView);
+            storageReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(),"Profile picture changed successfully!",Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),"Could not change profile picture. Try later. ",Toast.LENGTH_SHORT).show());
         });
-        profileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePicture();
-            }
-        });
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        profileImageView.setOnClickListener(v -> changePicture());
+        backArrow.setOnClickListener(v -> finish());
+
+        editButton.setOnClickListener(view -> {
+            if (clicked) {
+                userName.setEnabled(false);
+                clicked = false;
+                editButton.setImageResource(R.drawable.ic_edit);
+                changedUsername();
+                Toast.makeText(getApplicationContext(), "Username edited!", Toast.LENGTH_LONG).show();
+            } else {
+                userName.setEnabled(true);
+                clicked = true;
+                editButton.setImageResource(R.drawable.ic_tick);
             }
         });
 
-        editButton.setOnClickListener(new View.OnClickListener() {
+        changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (clicked) {
-                    userName.setEnabled(false);
-                    clicked = false;
-                    editButton.setImageResource(R.drawable.ic_edit);
-                    changedUsername();
-                    Toast.makeText(getApplicationContext(), "Username edited!", Toast.LENGTH_LONG).show();
-                } else {
-                    userName.setEnabled(true);
-                    clicked = true;
-                    editButton.setImageResource(R.drawable.ic_tick);
-                }
-
+                ChangePasswordDialog dialog = new ChangePasswordDialog();
+                dialog.show(getSupportFragmentManager(),"CHANGE PASSWORD");
             }
         });
-
 
 
     }
@@ -142,21 +109,13 @@ public class EditProfile extends AppCompatActivity {
 
     public void initializeUserPicture(StorageReference storageReference) {
         storageReference.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(getApplicationContext()).load(uri).into(profileImageView);
+                .addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(uri).into(profileImageView))
+                .addOnFailureListener(exception -> {
+                    int errorCode = ((StorageException) exception).getErrorCode();
+                    if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                        profileImageView.setImageResource(R.drawable.user_icon);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        int errorCode = ((StorageException) exception).getErrorCode();
-                        if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                            profileImageView.setImageResource(R.drawable.user_icon);
-                        }
 
-                    }
                 });
     }
 

@@ -11,7 +11,7 @@ public class HotNews {
     private String title;
     private String description;
     private Date endDate;
-    private Uri uri;
+    private String key;
     private String author;
 
     public String getAuthor() {
@@ -40,12 +40,12 @@ public class HotNews {
         this.description = description;
     }
 
-    public Uri getUri() {
-        return uri;
+    public String getKey() {
+        return key;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Date getEndDate(){

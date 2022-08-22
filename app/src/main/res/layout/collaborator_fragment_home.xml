@@ -27,7 +27,7 @@
             android:text="@string/hi"
             android:textColor="@color/black"
             android:layout_marginRight="20dp"
-            android:textSize="48sp"
+            android:textSize="38sp"
             android:fontFamily="@font/magra_bold" />
 
         <TextView
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
-        android:text="Be the first one to benefit from our offers and experiences."
+        android:text="@string/postAdMessage"
         android:fontFamily="@font/magra"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -72,9 +72,9 @@
         android:id="@+id/addYourAddButton"
         android:layout_width="344dp"
         android:layout_height="54dp"
-        android:backgroundTint="#468C32"
+        android:backgroundTint="#04BF17"
         android:drawableLeft="@drawable/ic_plus"
-        android:text="Add your advertisement!"
+        android:text="@string/addAdvert"
         android:fontFamily="@font/magra"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -9,6 +9,6 @@
     <item
         android:id="@+id/collaborator_bottom_profile"
         android:icon="@drawable/ic_person"
-        android:title="Profile"/>
+        android:title="@string/profile"/>
 
 </menu>

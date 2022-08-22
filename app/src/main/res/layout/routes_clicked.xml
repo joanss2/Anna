@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:textSize="36sp" />
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,10 +36,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="CATEGORY"
+                android:text="@string/category"
+                android:textAllCaps="true"
                 android:fontFamily="@font/magra"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/routesClickedCategory"
@@ -48,7 +49,7 @@
                 android:textColor="@color/white"
                 android:fontFamily="@font/magra"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -70,10 +71,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Nº STAGES"
+                android:text="@string/numberStages"
                 android:fontFamily="@font/magra"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/routesClickedNumberStages"
@@ -81,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:fontFamily="@font/magra"/>
 
         </LinearLayout>

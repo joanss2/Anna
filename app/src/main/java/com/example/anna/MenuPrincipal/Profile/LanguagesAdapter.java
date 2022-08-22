@@ -17,9 +17,9 @@ import java.util.List;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageHolder> {
 
-    private Context context;
-    private List<LanguageItem> list;
-    private LanguageSelectionListener listener;
+    private final Context context;
+    private final List<LanguageItem> list;
+    private final LanguageSelectionListener listener;
 
     public LanguagesAdapter(Context context, List<LanguageItem> list, LanguageSelectionListener listener) {
         this.context = context;
@@ -47,8 +47,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
     class LanguageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView name;
-        private ImageView imageView;
+        private final TextView name;
+        private final ImageView imageView;
         private LanguageItem currentItem;
 
         public LanguageHolder(@NonNull View itemView) {

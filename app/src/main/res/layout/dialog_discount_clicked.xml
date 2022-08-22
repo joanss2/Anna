@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/cornersrounded"
-        android:backgroundTint="#F3283314"
+        android:backgroundTint="#B0000000"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -47,11 +47,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_weight="2"
+                android:fontFamily="@font/magra"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:fontFamily="@font/magra"/>
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/infodiscount"
@@ -71,8 +71,8 @@
         android:layout_width="238dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#02882E"
-        android:text="ACTIVAR"
+        android:backgroundTint="#04BF17"
+        android:text="@string/activar"
         android:fontFamily="@font/magra"
         android:textColor="#FFFFFF"
         app:iconTint="#F16C6C" />
@@ -85,7 +85,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="#DA4E4E"
-        android:text="AHORA NO"
+        android:text="@string/notNow"
         android:fontFamily="@font/magra"
         android:textColor="#FFFFFF" />
 

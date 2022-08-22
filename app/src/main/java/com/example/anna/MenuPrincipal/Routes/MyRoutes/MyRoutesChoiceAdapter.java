@@ -30,7 +30,7 @@ public class MyRoutesChoiceAdapter extends RecyclerView.Adapter<MyRoutesChoiceAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.routechoice_cardview, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.myroute_cardview, parent, false);
         return new ViewHolder(view);
     }
 

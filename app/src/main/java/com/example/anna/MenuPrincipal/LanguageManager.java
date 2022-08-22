@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class LanguageManager {
 
-    private Context context;
+    private final Context context;
 
     public LanguageManager(Context context){
         this.context = context;

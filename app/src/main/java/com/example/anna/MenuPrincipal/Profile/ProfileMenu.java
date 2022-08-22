@@ -1,6 +1,6 @@
 package com.example.anna.MenuPrincipal.Profile;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ProfileMenu extends BottomSheetDialogFragment implements ProfileMenuAdapter.OnSettingClickListener {
 
 
-    private final String [] itemsArray = {"Language","MyDiscounts","MyRoutes","Network Settings","Privacy","Help/FAQS"};
+    private final String [] itemsArray = {"Language","MyDiscounts","MyRoutes","Privacy","Help/FAQS"};
 
     @Nullable
     @Override
@@ -47,13 +47,10 @@ public class ProfileMenu extends BottomSheetDialogFragment implements ProfileMen
                 LanguagesDialog languagesDialog = new LanguagesDialog();
                 languagesDialog.show(requireActivity().getSupportFragmentManager(),null);
             case "Privacy":
-            case "Network Settings":
-                Toast.makeText(getContext(), "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
-                this.dismiss();
                 break;
             case "MyDiscounts":
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,new FragmentMyDiscounts()).addToBackStack(null).commit();
-                this.dismiss();
+                //this.dismiss();
                 break;
             case "MyRoutes":
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentMyRoutes()).addToBackStack(null).commit();

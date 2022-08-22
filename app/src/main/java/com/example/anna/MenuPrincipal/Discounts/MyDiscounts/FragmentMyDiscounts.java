@@ -34,12 +34,11 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
     private CollectionReference discountsUsed;
     private boolean hasDiscounts;
     private View viewParent;
-    private Fragment fragmentParent;
+
 
     public FragmentMyDiscounts(){}
-    public FragmentMyDiscounts(View view, Fragment fragment){
+    public FragmentMyDiscounts(View view){
         this.viewParent = view;
-        this.fragmentParent = fragment;
     }
 
 
@@ -111,31 +110,21 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
         if (!hasDiscounts && this.viewParent!=null) {
             Snackbar snackbar = Snackbar.make(viewParent, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
 
-            snackbar.setAction("GO", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager manager = requireActivity().getSupportFragmentManager();
-                    FragmentTransaction trans = manager.beginTransaction();
-                    //trans.remove(fragmentParent);
-                    //manager.popBackStack();
-                    trans.replace(R.id.main_frame, new FragmentDiscounts()).addToBackStack(null);
-                    MenuMainActivity activity = (MenuMainActivity) getActivity();
-                    assert activity != null;
-                    activity.getBottomNavigationView().setSelectedItemId(R.id.bottom_discounts);
-                    trans.commit();
+            snackbar.setAction("GO", v -> {
+                FragmentManager manager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                //trans.remove(fragmentParent);
+                //manager.popBackStack();
+                trans.replace(R.id.main_frame, new FragmentDiscounts()).addToBackStack(null);
+                MenuMainActivity activity = (MenuMainActivity) getActivity();
+                assert activity != null;
+                activity.getBottomNavigationView().setSelectedItemId(R.id.bottom_discounts);
+                trans.commit();
 
-                }
             });
             snackbar.show();
             final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    snackbar.dismiss();
-                }
-            }, 4000);
-
-        }else{
+            handler.postDelayed(snackbar::dismiss, 4000);
 
         }
     }

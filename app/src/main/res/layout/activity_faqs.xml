@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:gravity="center"
-        android:text="@string/sendmailtitle"
+        android:text="@string/sendMailTitle"
         android:fontFamily="@font/magra"
         android:textSize="18sp" />
 
@@ -23,7 +23,7 @@
         android:id="@+id/mailfromtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/emailto"
+        android:text="@string/emailTo"
         android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
@@ -39,7 +39,7 @@
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:longClickable="false"
-        android:text="@string/supportemail"
+        android:text="@string/supportEmail"
         android:fontFamily="@font/magra"
         android:textColor="#000000"
         android:textSize="16sp" />
@@ -89,7 +89,7 @@
         android:id="@+id/buttonsendmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/buttonsend"
+        android:text="@string/buttonSend"
         android:fontFamily="@font/magra" />
 
 

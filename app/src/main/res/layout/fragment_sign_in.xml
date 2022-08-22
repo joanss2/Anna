@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -47,22 +48,23 @@
             android:textStyle="italic" />
 
 
-
         <ImageButton
             android:id="@+id/googleIn"
-            android:layout_width="126dp"
+            android:layout_width="200dp"
             android:layout_height="62dp"
             android:layout_margin="10dp"
             android:background="@drawable/cornersrounded"
             android:backgroundTint="#FFFFFF"
             android:scaleType="fitCenter"
-            android:src="@drawable/google"/>
+            android:src="@drawable/google" />
 
         <Button
             android:id="@+id/buttonsignin"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/signin"
-            android:fontFamily="@font/magra"/>
+            android:fontFamily="@font/magra"
+            android:text="@string/signIn"
+            android:textSize="18sp"
+            app:cornerRadius="15dp" />
     </LinearLayout>
 </FrameLayout>

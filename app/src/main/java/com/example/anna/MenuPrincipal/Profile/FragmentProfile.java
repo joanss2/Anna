@@ -3,7 +3,7 @@ package com.example.anna.MenuPrincipal.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,26 +13,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.anna.MenuPrincipal.Discounts.MyDiscounts.FragmentMyDiscounts;
-import com.example.anna.MenuPrincipal.Home.FragmentHome;
-import com.example.anna.MenuPrincipal.MenuMainActivity;
-import com.example.anna.MenuPrincipal.Routes.FragmentRoutes;
+
 import com.example.anna.MenuPrincipal.Routes.MyRoutes.FragmentMyRoutes;
-import com.example.anna.MenuPrincipal.Routes.RoutesClickedFragment;
 import com.example.anna.R;
 import com.example.anna.databinding.ActivityFragmentProfileBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.CollectionReference;
@@ -51,6 +43,7 @@ public class FragmentProfile extends Fragment {
     private final String[] tabsNames = {"My discounts", "My Routes"};
     private StorageReference storageReference;
     private String authorKey;
+    public static Context context;
 
 
     @Override
@@ -59,7 +52,7 @@ public class FragmentProfile extends Fragment {
         userInfoPrefs = requireActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         authorKey = userInfoPrefs.getString("userKey", null);
         storageReference = FirebaseStorage.getInstance().getReference("users").child(authorKey);
-
+        context = getContext();
     }
 
     @Nullable
@@ -90,9 +83,7 @@ public class FragmentProfile extends Fragment {
         fillActivitiesInfo(authorKey);
 
         loadPicture(storageReference, profileImageView);
-        editProfileButton.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), EditProfile.class));
-        });
+        editProfileButton.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfile.class)));
 
         menu.setOnClickListener(v -> {
             profileMenu = new ProfileMenu();
@@ -117,7 +108,7 @@ public class FragmentProfile extends Fragment {
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                return new FragmentMyDiscounts(fragment.getView(), fragment);
+                return new FragmentMyDiscounts(fragment.getView());
             } else {
                 return new FragmentMyRoutes();
             }
@@ -131,7 +122,7 @@ public class FragmentProfile extends Fragment {
 
     private void fillActivitiesInfo(String key) {
         CollectionReference discountsUsedReference = FirebaseFirestore.getInstance().collection("DiscountsUsed");
-        CollectionReference routesReference = FirebaseFirestore.getInstance().collection("Routes");
+        CollectionReference routesReference = FirebaseFirestore.getInstance().collection("CompletedRoutes");
 
         discountsUsedReference.document(key).collection("DiscountsReferenceList").get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
@@ -149,21 +140,19 @@ public class FragmentProfile extends Fragment {
     }
     private void loadPicture(StorageReference storageReference, ImageView userPicture) {
 
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(requireContext()).load(uri).into(userPicture);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                int errorCode = ((StorageException) e).getErrorCode();
-                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    userPicture.setImageResource(R.drawable.user_icon);
-                }
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(FragmentProfile.context).load(uri).into(userPicture)).addOnFailureListener(e -> {
+            int errorCode = ((StorageException) e).getErrorCode();
+            if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                userPicture.setImageResource(R.drawable.user_icon);
             }
         });
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println(requireActivity().getSupportFragmentManager().getBackStackEntryCount()+ " AL resume DE profile");
+
+    }
 }

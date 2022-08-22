@@ -76,9 +76,10 @@ public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesCl
                     assert activity != null;
                     FragmentManager manager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.main_frame, new RoutesClickedFragment(routeModel.getName(),document.getId(),routeModel.getCategory()));
-                    trans.remove(this);
-                    manager.popBackStack();
+                    trans.add(R.id.main_frame,new RouteDetailFragment(routeModel.getName(),document.getId(),routeModel.getCategory()));
+                    //trans.replace(R.id.main_frame, new RouteDetailFragment(routeModel.getName(),document.getId(),routeModel.getCategory()));
+                    //trans.remove(this);
+                    //manager.popBackStack();
                     trans.commit();
                 }
             }
@@ -87,5 +88,7 @@ public class FragmentRoutes extends Fragment implements RoutesAdapter.OnRoutesCl
         });
 
     }
+
+
 
 }

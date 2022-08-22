@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.anna.Models.HotNews;
@@ -25,7 +24,6 @@ public class FragmentHome extends Fragment {
 
     private ActivityFragmentHomeBinding binding;
     private SharedPreferences userInfoPrefs;
-    private RecyclerView recyclerView;
     private HomeFragmentAdapter adapter;
 
 
@@ -41,12 +39,8 @@ public class FragmentHome extends Fragment {
         binding = ActivityFragmentHomeBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
 
-        ////////////
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        System.out.println("back stack in homefragment: "+fragmentManager.getBackStackEntryCount());
-        ////////////
 
-        recyclerView = binding.homeRecyclerView;
+        RecyclerView recyclerView = binding.homeRecyclerView;
         WrapContentLayoutManagerHome managerHome = new WrapContentLayoutManagerHome(getContext(), 2);
         recyclerView.setLayoutManager(managerHome);
 
