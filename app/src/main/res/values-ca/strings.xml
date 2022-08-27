@@ -112,5 +112,13 @@
 
     <string name="stationVerified">The station has been verified successfully</string>
     <string name="stationRejected">The station has not been recognized</string>
+    <string name="stationAlreadyVisited">This station has already been visited, let\'s go for the next one</string>
+    <string name="completedRoute">Congratulations! That was the last station. You have completed the route.</string>
+    <string name="firstStation">First Station in this route, just visited. Well done!</string>
+    <string name="discountVerified">The discount has been verified successfully</string>
+    <string name="discountRejected">The discount has not been recognized</string>
+    <string name="discountAlreadyUsed">Sorry! The discount has already been used</string>
+    <string name="scanVerification">Scan Verification Response</string>
+
 
 </resources>

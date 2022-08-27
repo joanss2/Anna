@@ -3,12 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00FFFFFF"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/routechoiceRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,13 +31,19 @@ public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAd
         holder.routeTitle.setText(model.getName());
         switch (model.getCategory()) {
             case "gold":
-                holder.cardview.setBackgroundColor(Color.parseColor("#FFD700"));
+                holder.starIcon.setImageResource(R.drawable.ic_star_gold);
+                holder.routeTitle.setTextColor(Color.parseColor("#FFD700"));
+                //holder.cardview.setBackgroundColor(Color.parseColor("#FFD700"));
                 break;
             case "silver":
-                holder.cardview.setBackgroundColor(Color.parseColor("#C0C0C0"));
+                holder.starIcon.setImageResource(R.drawable.ic_star_silver);
+                holder.routeTitle.setTextColor(Color.parseColor("#C0C0C0"));
+                //holder.cardview.setBackgroundColor(Color.parseColor("#C0C0C0"));
                 break;
             case "bronze":
-                holder.cardview.setBackgroundColor(Color.parseColor("#CD7F32"));
+                holder.starIcon.setImageResource(R.drawable.ic_star_bronze);
+                holder.routeTitle.setTextColor(Color.parseColor("#CD7F32"));
+                //holder.cardview.setBackgroundColor(Color.parseColor("#CD7F32"));
                 break;
             default:
                 break;
@@ -55,11 +62,12 @@ public class RoutesAdapter extends FirestoreRecyclerAdapter<RouteModel, RoutesAd
 
         private final TextView routeTitle;
         private final CardView cardview;
+        private final ImageView starIcon;
         private RouteModel routeModel;
 
         public RouteHolder(@NonNull View itemView) {
             super(itemView);
-
+            starIcon = itemView.findViewById(R.id.icon_route_available_routes);
             routeTitle = itemView.findViewById(R.id.routeInAllTitle);
             cardview = itemView.findViewById(R.id.titleholderroutes);
             itemView.setOnClickListener(this);

@@ -21,6 +21,7 @@ import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.ScanMode;
+import com.example.anna.MenuPrincipal.ScanResponseDialog;
 import com.example.anna.Models.RouteModel;
 import com.example.anna.Models.Station;
 import com.example.anna.R;
@@ -31,7 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScannerFragment extends Fragment {
+public class ScannerFragmentStation extends Fragment {
 
     private CodeScanner mCodeScanner;
     private final int CAMERA_REQUEST_CODE = 101;
@@ -43,7 +44,7 @@ public class ScannerFragment extends Fragment {
     private RouteModel routeNeeded;
     private Map<String, Object> map1;
 
-    public ScannerFragment(String stationKey, String routeKey) {
+    public ScannerFragmentStation(String stationKey, String routeKey) {
         this.stationKey = stationKey;
         this.routeKey = routeKey;
     }
@@ -88,10 +89,12 @@ public class ScannerFragment extends Fragment {
 
     private void processResultat(String resultat) {
         if (resultat.equals(stationKey)) {
-            setRouteAsVerified(stationKey, routeKey);
-            new StationConfirmationDialog(this).show(getChildFragmentManager(), "STATION VERIFIED");
+            setRouteAsVerified(stationKey, routeKey);            new ScanResponseDialog(this, getString(R.string.stationVerified)).show(getChildFragmentManager(),"STATION VERIFIED");
+
+            //new StationConfirmationDialog(this).show(getChildFragmentManager(), "STATION VERIFIED");
         } else {
-            new StationRejectionDialog(this).show(getChildFragmentManager(), "STATION NOT RECOGNIZED");
+            new ScanResponseDialog(this,getString(R.string.stationRejected)).show(getChildFragmentManager(),"STATION NOT RECOGNIZED");
+           // new StationRejectionDialog(this).show(getChildFragmentManager(), "STATION NOT RECOGNIZED");
         }
     }
 
@@ -137,7 +140,6 @@ public class ScannerFragment extends Fragment {
                                     if (task1.isSuccessful()) {
                                         if (!task1.getResult().exists()) {
                                             ///////////// EXISTEIX ROUTES PER A L'USUARI PERO NO AQUESTA RUTA /////////////
-                                            System.out.println("NO EXISTE ESTA RUTA TODAVIA");
                                             FirebaseFirestore.getInstance().collection("Routes").document(routeKey).get().addOnSuccessListener(
                                                     documentSnapshot -> {
                                                         routeNeeded = documentSnapshot.toObject(RouteModel.class);
@@ -150,7 +152,7 @@ public class ScannerFragment extends Fragment {
                                                                 .addOnCompleteListener(task11 -> {
                                                             if (task11.isSuccessful())
                                                                 //////// PRIMERA ESTACIO VISITADA DE LA RUTA ////////
-                                                                Toast.makeText(getContext(), "Station visited in Route just Started", Toast.LENGTH_LONG).show();
+                                                                new ScanResponseDialog(this, getString(R.string.firstStation)).show(getChildFragmentManager(),"STATION VERIFIED");
                                                         }));
                                                     }
                                             );
@@ -160,7 +162,6 @@ public class ScannerFragment extends Fragment {
                             }
                     );
                 } else {
-                    System.out.println("CHECK ALREADY VISITED");
                     checkAlreadyVisitedStation(objectStation);
                 }
             }
@@ -175,13 +176,11 @@ public class ScannerFragment extends Fragment {
 
         startedRouteCollection.collection("Stations").document(stationKey).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                System.out.println("AQUI ARRIBO");
                 if (task.getResult().exists()) {
-                    Toast.makeText(getContext(), "STATION ALREADY VISITED, LET'S GO FOR THE NEXT", Toast.LENGTH_LONG).show();
+                    new ScanResponseDialog(this, getString(R.string.stationAlreadyVisited)).show(getChildFragmentManager(),"STATION NOT VERIFIED");
                     mCodeScanner.stopPreview();
                 } else {
                     startedRouteCollection.collection("Stations").document(stationKey).set(station).addOnSuccessListener(unused -> {
-                        Toast.makeText(getContext(), "STATION VERIFIED SUCCESSFULLY", Toast.LENGTH_LONG).show();
                         checkForCompletedRoute(startedRouteCollection);
                     });
                 }
@@ -198,7 +197,6 @@ public class ScannerFragment extends Fragment {
             startedRouteCollection.collection("Stations").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     if (task.getResult().size() == routeStages) {
-                        System.out.println("Congratulations, ROUTE " + routeModel.getName() + " completed!!!");
                         Map<String, String> map = new HashMap<>();
                         map.put("key", userInfoPrefs.getString("userKey", null));
                         map.put("username", userInfoPrefs.getString("username", null));
@@ -208,10 +206,12 @@ public class ScannerFragment extends Fragment {
                                         completedRef.collection("Routes").document(routeKey).set(routeModel).addOnSuccessListener(
                                                 unused1 -> {
                                                     Toast.makeText(getContext(), "Route " + routeModel.getName() + " added to routes completed", Toast.LENGTH_SHORT).show();
+                                                    new ScanResponseDialog(this, getString(R.string.completedRoute)).show(getChildFragmentManager(),"STATION VERIFIED");
                                                     mCodeScanner.stopPreview();
                                                 }
                                         ));
                     } else {
+                        new ScanResponseDialog(this, getString(R.string.stationVerified)).show(getChildFragmentManager(),"STATION VERIFIED");
                         mCodeScanner.stopPreview();
                     }
                 } else {

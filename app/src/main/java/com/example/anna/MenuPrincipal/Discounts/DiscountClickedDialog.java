@@ -2,6 +2,7 @@ package com.example.anna.MenuPrincipal.Discounts;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.anna.MenuPrincipal.Discounts.Verification.ScannerFragmentDiscount;
 import com.example.anna.MenuPrincipal.MenuMainActivity;
+import com.example.anna.MenuPrincipal.Routes.Verification.ScannerFragmentStation;
 import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -60,7 +63,14 @@ public class DiscountClickedDialog {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
             alertDialog.setTitle("Confirm Discount activation")
                     .setMessage("Do you really want to activate this discount?")
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> createDiscountUsedEntry())
+                    //.setPositiveButton(R.string.yes, (dialogInterface, i) -> createDiscountUsedEntry())
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_parentlayout, new ScannerFragmentDiscount(discount.getKey())).commit();
+                            bottomSheetDialog.dismiss();
+                        }
+                    })
                     .setNegativeButton(R.string.no, (dialogInterface, i) -> {
                     })
                     .show();

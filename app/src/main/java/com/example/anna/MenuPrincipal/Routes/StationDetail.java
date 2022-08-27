@@ -3,11 +3,13 @@ package com.example.anna.MenuPrincipal.Routes;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -16,8 +18,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.anna.MenuPrincipal.MenuMainActivity;
-import com.example.anna.MenuPrincipal.Routes.Verification.ScannerFragment;
+import com.example.anna.MenuPrincipal.Routes.Verification.ScannerFragmentStation;
 import com.example.anna.R;
 
 import java.util.ArrayList;
@@ -43,18 +44,18 @@ public class StationDetail extends AppCompatActivity {
         TextView description = findViewById(R.id.stationdetailDescription);
         description.setText(descriptionStation);
         title.setText(stationName);
+        LinearLayout locationLayout = findViewById(R.id.stationdetailLocationLayoutClickable);
 
         List<String> receivedStrings = getIntent().getStringArrayListExtra("uriStrings");
-
-        System.out.println(receivedStrings.size());
-
         receivedUris = toUris(receivedStrings);
+        Double latitude = getIntent().getDoubleExtra("latitude",0);
+        Double longitude = getIntent().getDoubleExtra("longitude",0);
 
         ImageButton nextButton = findViewById(R.id.imageswitcherbutton);
         ImageButton backSwitcherButton = findViewById(R.id.imageswitcherbackbutton);
         ImageButton backButton = findViewById(R.id.stationdetailBackButton);
         ImageButton button = findViewById(R.id.buttonCertificateVisit);
-        button.setOnClickListener(v -> getSupportFragmentManager().beginTransaction().replace(R.id.wrapperScanner, new ScannerFragment(stationKey, routeID)).commit());
+        button.setOnClickListener(v -> getSupportFragmentManager().beginTransaction().replace(R.id.wrapperScanner, new ScannerFragmentStation(stationKey, routeID)).commit());
 
         imageSwitcher = findViewById(R.id.imageSwitcher);
 
@@ -74,6 +75,16 @@ public class StationDetail extends AppCompatActivity {
         imageSwitcher.setOutAnimation(out);
         imageSwitcher.setInAnimation(in);
 
+        locationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gMapsIntent = new Intent(Intent.ACTION_VIEW);
+                gMapsIntent.setData(Uri.parse("geo:"+latitude+","+longitude+"?q="+getIntent().getStringExtra("stationName")));
+                Intent chooser = Intent.createChooser(gMapsIntent,"launch Maps");
+                startActivity(chooser);
+            }
+        });
+
 
         nextButton.setOnClickListener(view -> {
             counter++;
@@ -92,16 +103,12 @@ public class StationDetail extends AppCompatActivity {
 
         });
         backButton.setOnClickListener(view -> {
-            //startActivity(new Intent(getApplicationContext(), MenuMainActivity.class));
-            //finishAffinity();
             finish();
         });
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                //startActivity(new Intent(getApplicationContext(), MenuMainActivity.class));
-                //finishAffinity();
                 finish();
             }
         };

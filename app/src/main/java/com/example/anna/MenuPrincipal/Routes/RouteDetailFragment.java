@@ -318,6 +318,8 @@ public class RouteDetailFragment extends Fragment implements RouteDetailAdapter.
         bundle.putString("routeID", documentID);
         bundle.putString("stationKey", station.getKey());
         bundle.putString("stationDescription", station.getDescription());
+        bundle.putDouble("latitude",station.getGeoLocation().getLatitude());
+        bundle.putDouble("longitude",station.getGeoLocation().getLongitude());
 
 
         downloadPictures(station.getName());
