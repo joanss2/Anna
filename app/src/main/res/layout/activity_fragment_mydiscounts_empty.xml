@@ -10,7 +10,7 @@
         android:layout_width="244dp"
         android:layout_height="195dp"
         android:gravity="center"
-        android:text="YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING"
+        android:text="@string/emptyMyDiscounts"
         android:fontFamily="@font/magra"
         android:textSize="16sp"
         android:textColor="@color/black"

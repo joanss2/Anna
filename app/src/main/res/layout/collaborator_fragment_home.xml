@@ -7,9 +7,21 @@
     android:background="@drawable/wallpapaer"
     tools:context=".MenuPrincipal.Home.CollaboratorFragmentHome">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        app:shapeAppearance="@style/circleImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logoruralsecrets"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="331dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAE2E2"
         android:padding="5dp"
@@ -18,35 +30,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.075">
+        app:layout_constraintVertical_bias="0.186">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/magra_bold"
             android:text="@string/hi"
             android:textColor="@color/black"
-            android:layout_marginRight="20dp"
-            android:textSize="38sp"
-            android:fontFamily="@font/magra_bold" />
+            android:textSize="38sp" />
 
         <TextView
             android:id="@+id/hiCollaboratorUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/magra_bold"
             android:textColor="@color/black"
-            android:textSize="38sp"
-            android:fontFamily="@font/magra_bold"/>
+            android:textSize="26sp" />
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/magra"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:text="@string/postAdMessage"
-        android:fontFamily="@font/magra"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,12 +66,12 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.194" />
+        app:layout_constraintVertical_bias="0.265" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeCollaboratorRecyclerView"
-        android:layout_width="344dp"
-        android:layout_height="454dp"
+        android:layout_width="350dp"
+        android:layout_height="420dp"
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,14 +86,14 @@
         android:layout_height="54dp"
         android:backgroundTint="#04BF17"
         android:drawableLeft="@drawable/ic_plus"
-        android:text="@string/addAdvert"
         android:fontFamily="@font/magra"
+        android:text="@string/addAdvert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.273" />
+        app:layout_constraintVertical_bias="0.319" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

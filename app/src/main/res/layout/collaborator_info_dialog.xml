@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/magra_bold"
-        android:text="ACCOUNT AS A COLLABORATOR"
+        android:text="@string/accountAsACollaborator"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
@@ -23,11 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/magra"
-        android:text="A collaborator account is a premium service that will allow
-the user to post, edit and delete own-created ads within the period of time established
-in the subscription details. These advertisements will be published in the home page of the app
-and non-collaborator users will be notified of each premium post made. \nPlease bear in mind that
-ads will not appear in order so the last posted are on the top."
+        android:text="@string/collaboratorInfo"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="16sp" />

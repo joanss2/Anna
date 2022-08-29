@@ -16,7 +16,6 @@ public class Station{
         this.geoLocation = geoLocation;
         this.description = description;
         this.routeParentKey = routeParentKey;
-        this.imageRefs = imageRefs;
     }
 
     public Station() {
@@ -69,6 +68,7 @@ public class Station{
     public void setImageRefs(List<String> imageRefs) {
         this.imageRefs = imageRefs;
     }
+
 
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="string_more">
-        <item>Edit</item>
-        <item>Delete</item>
+        <item>@string/edit</item>
+        <item>@string/Delete</item>
     </string-array>
 </resources>

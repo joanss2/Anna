@@ -68,7 +68,7 @@ public class CollaboratorFragmentProfile extends Fragment {
         editProfileButton.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfile.class)));
 
         menu.setOnClickListener(v -> {
-            profileMenu = new ProfileMenu();
+            profileMenu = new ProfileMenu(getContext());
             profileMenu.show(requireActivity().getSupportFragmentManager(), "bottomSheetSettings");
         });
 

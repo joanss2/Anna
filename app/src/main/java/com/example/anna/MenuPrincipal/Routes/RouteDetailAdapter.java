@@ -1,10 +1,13 @@
 package com.example.anna.MenuPrincipal.Routes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,10 @@ import com.example.anna.Models.Station;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -25,12 +32,14 @@ public class RouteDetailAdapter extends FirestoreRecyclerAdapter<Station, RouteD
 
     private final Context context;
     private final OnStationClickListener onStationClickListener;
+    private SharedPreferences userInfoPrefs;
 
 
     public RouteDetailAdapter(@NonNull FirestoreRecyclerOptions<Station> options, Context context, OnStationClickListener onStationClickListener) {
         super(options);
         this.context = context;
         this.onStationClickListener = onStationClickListener;
+        this.userInfoPrefs = context.getSharedPreferences("USERINFO",Context.MODE_PRIVATE);
     }
 
     @Override
@@ -50,11 +59,13 @@ public class RouteDetailAdapter extends FirestoreRecyclerAdapter<Station, RouteD
         ImageView imageView;
         TextView stationNameView;
         Station currentStation;
+        LinearLayout container;
 
         public StationsImageHolder(@NonNull View itemView) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.routesClickedStationImageView);
             this.stationNameView = itemView.findViewById(R.id.routesClickedStationName);
+            this.container = itemView.findViewById(R.id.stationContainerInRouteDetail);
 
             stationNameView.setOnClickListener(this);
         }
@@ -63,9 +74,22 @@ public class RouteDetailAdapter extends FirestoreRecyclerAdapter<Station, RouteD
             currentStation = station;
             stationNameView.setText(station.getName());
 
+            FirebaseFirestore.getInstance().collection("StartedRoutes").document(userInfoPrefs.getString("userKey",null)).collection("Routes")
+                    .document(station.getRouteParentKey()).collection("Stations").whereEqualTo("key",station.getKey()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        if(!task.getResult().isEmpty()){
+                            container.setBackgroundColor(Color.parseColor("#E91E63"));
+                        }else{
+                            container.setBackgroundColor(Color.parseColor("#CDDC39"));
+                        }
+                    }
+                }
+            });
+
             List<String> stationsImg = station.getImageRefs();
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(stationsImg.get(0));
-
             storageReference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(uri).into(imageView)).addOnFailureListener(e -> {
 
             });

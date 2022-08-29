@@ -1,5 +1,5 @@
 <resources>
-    <string name="welcome">WELCOME To RURAL SECRETS</string>
+    <string name="welcome">BENVINGUT a RURAL SECRETS</string>
 
     <string name="app_name">Anna</string>
     <string name="error">Error</string>
@@ -7,7 +7,7 @@
     <string name="yes">Sí</string>
     <string name="hi">Hola</string>
     <string name="ok">OK</string>
-    <string name="signup">Registra\'t</string>
+    <string name="signup">Registri\'s</string>
     <string name="Register">Registrar-se</string>
     <string name="signIn">Inicia sessió</string>
     <string name="email">Email</string>
@@ -15,65 +15,66 @@
     <string name="confirmPassword">Confirma Contrasenya</string>
     <string name="username">Nom usuari</string>
     <string name="collaborator">Col·laborador</string>
-    <string name="haveAccount">Ja tens un compte?</string>
-    <string name="profile">Profile</string>
+    <string name="haveAccount">Ja disposa d\' un compte?</string>
+    <string name="profile">Perfil</string>
 
     <string name="myRoute">Rutes</string>
-    <string name="routeListTitle">AVAILABLE ROUTES LIST</string>
-    <string name="category">Category</string>
-    <string name="numberStages">Nº STAGES</string>
+    <string name="routeListTitle">RUTES DISPONIBLES</string>
+    <string name="category">Categoria</string>
+    <string name="numberStages">Nº ETAPES</string>
     <string name="discounts">Descomptes</string>
-    <string name="discountsUpperCase">DISCOUNTS</string>
-    <string name="myDiscountsUpperCase">MY DISCOUNTS</string>
-    <string name="noDiscountsUsedMessage">YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING</string>
+    <string name="discountsUpperCase">DESCOMPTES</string>
+    <string name="myDiscounts">Els meus descomptes</string>
+    <string name="myDiscountsUpperCase">ELS MEUS DESCOMPTES</string>
+    <string name="noDiscountsUsedMessage">ENCARA NO HA UTILITZAT CAP DESCOMPTE, AFANYNI\'S! L\'ESTAN ESPERANT</string>
     <string name="activar">Activar</string>
-    <string name="notNow">Not now</string>
-    <string name="CommentHint">Add a comment</string>
-    <string name="comments">Comments</string>
-    <string name="discountPercentageUsedDetail">Discount Percentage:</string>
-    <string name="dateUsedDetail">Date:</string>
+    <string name="notNow">Ara no</string>
+    <string name="CommentHint">Afegeixi un comentari</string>
+    <string name="comments">Comentaris</string>
+    <string name="discountPercentageUsedDetail">Percentatge a descomptar:</string>
+    <string name="dateUsedDetail">Data:</string>
 
-    <string name="editProfile">Edit Profile</string>
+    <string name="editProfile">Editar Perfil</string>
 
-    <string name="endedSubMessage">Your subscription has ended. Please renew it to keep active as a collaborator.</string>
-    <string name="collaboratorAccountCreation">Create collaborator account</string>
-    <string name="pay">Pay now</string>
+    <string name="endedSubMessage">"La seva subscripció ha finalitzat. Si us plau renovi-la per continuar com a col·laborador. "</string>
+    <string name="collaboratorAccountCreation">Crei un compte de col·laborador</string>
+    <string name="pay">Pagar ara</string>
 
-    <string name="resetPasswordMessage">Please, introduce your email you registered with. Then you will receive automatically an email with following instructions to make the corresponding changes. Thank you.</string>
+    <string name="resetPasswordMessage">Si us plau, introdueix-hi l\'email amb el qual es vas registrar. Seguidament rebrà un correu electrònic amb noves instruccions per a realitzar els canvis corresponents. Gràcies.</string>
 
     <string name="faqs">Faqs</string>
     <string name="ajustes">Eines</string>
-    <string name="contactus"><u>Necessites ajuda? Contacta\'ns!</u></string>
-    <string name="sendMailTitle">Com et podem ajudar?</string>
-    <string name="hint_email">El teu email aquí</string>
-    <string name="buttonSend">Envia mail</string>
+    <string name="contactus"><u>Necessitea ajuda? Contacti\'ns!</u></string>
+    <string name="sendMailTitle">Com el podem ajudar?</string>
+    <string name="hint_email">El seu email aquí</string>
+    <string name="buttonSend">Envii mail</string>
     <string name="emailTo">a</string>
     <string name="hint_subject">Assumpte</string>
     <string name="hint_message">Missatge</string>
     <string name="supportEmail">annaApp.support@gmail.com</string>
 
-    <string name="advertCreationTitle">ADVERT CREATION</string>
-    <string name="advertEditionTitle">ADVERT EDITION</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="descriptionExplanation">Detailed Information about the advertisement</string>
-    <string name="endDate">End Date</string>
-    <string name="postAd">POST ADVERTISEMENT</string>
-    <string name="addPicture">ADD PICTURE</string>
-    <string name="updateAd">UPDATE ADVERTISEMENT</string>
-    <string name="postAdMessage">Post your new offers and ads now !</string>
-    <string name="addAdvert">Add advertisement</string>
+    <string name="advertCreationTitle">CREACIÓ D\'UN ANUNCI</string>
+    <string name="advertEditionTitle">EDICIÓ D\'ANUNCI</string>
+    <string name="title">Títol</string>
+    <string name="description">Descripció</string>
+    <string name="descriptionExplanation">Informació detallada de l\'anunci</string>
+    <string name="endDate">Data final</string>
+    <string name="postAd">PUBLICAR ANUNCI</string>
+    <string name="addPicture">AFEGEIR IMATGE</string>
+    <string name="updateAd">ACTUALITZAR ANUNCI</string>
+    <string name="postAdMessage">Publiqui les seves noves ofertes i anuncis !</string>
+    <string name="addAdvert">Afegeixi anunci</string>
 
-    <string name="completedRoutes">Completed Routes</string>
-    <string name="startedRoutes">Started Routes</string>
+    <string name="completedRoutes">Rutes Completades</string>
+    <string name="startedRoutes">Rutes Començades</string>
 
-    <string name="verifyAccount">Verify</string>
-    <string name="resendCode">Resend Code</string>
+    <string name="verifyAccount">Verificar</string>
+    <string name="resendCode">Reenviar codi</string>
 
-    <string name="changePassword">CHANGE PASSWORD</string>
+    <string name="changePassword">CANVIAR CONTRASENYA</string>
 
-    <string name="validateStation">Validate your visit</string>
-    <string name="howGeTtoStation">How can we get there?</string>
+    <string name="validateStation">Validi la seva visita</string>
+    <string name="howGeTtoStation">Com arribar-hi?</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -107,18 +108,50 @@
     <string name="french">Francès</string>
     <string name="german">Alemany</string>
 
-    <string name="clientHomeMessage">Be the first one to benefit from our offers and experiences.</string>
+    <string name="clientHomeMessage">Sigui el/la primer/a en beneficar-se de les nostres ofertes i experiències.</string>
 
 
-    <string name="stationVerified">The station has been verified successfully</string>
-    <string name="stationRejected">The station has not been recognized</string>
-    <string name="stationAlreadyVisited">This station has already been visited, let\'s go for the next one</string>
-    <string name="completedRoute">Congratulations! That was the last station. You have completed the route.</string>
-    <string name="firstStation">First Station in this route, just visited. Well done!</string>
-    <string name="discountVerified">The discount has been verified successfully</string>
-    <string name="discountRejected">The discount has not been recognized</string>
-    <string name="discountAlreadyUsed">Sorry! The discount has already been used</string>
-    <string name="scanVerification">Scan Verification Response</string>
+    <string name="stationVerified">L\'estació ha estat verificada correctament.</string>
+    <string name="stationRejected">L\'estació no s\'ha reconegut.</string>
+    <string name="stationAlreadyVisited">Aquesta estació ja ha estat visitada, a per la següent!</string>
+    <string name="completedRoute">Felicitats! Ha verificat la última estació. Ha completat la ruta.</string>
+    <string name="firstStation">Primera estació visitada de la ruta. Ben fet!</string>
+    <string name="discountVerified">El descompte s\'ha verificat correctament.</string>
+    <string name="discountRejected">El descompte no s\'ha reconegut.</string>
+    <string name="discountAlreadyUsed">Ho sentim! Aquest descompte ja s\'ha utilitzat.</string>
+    <string name="scanVerification">Resposta de verificació de l\'scaneig</string>
+
+    <string name="numberDiscountsUsed">Nº Descomptes Utilitzats</string>
+    <string name="numberRoutesFinished">Nº Rutes acabades</string>
+    <string name="goToDiscounts">VÉS A DESCOMPTES</string>
+    <string name="emptyMyDiscounts">ENCARA NO HA UTILITZAT CAP DESCOMPTE. AFANYI\'S!! ESTAN ESPERANT.</string>
+    <string name="usernameEdited">Nom d\'usuari editat</string>
+    <string name="userPictureChanged">Foto d\'usuari canviada correctament!</string>
+    <string name="userPictureNotChanged">No s\'ha pogut canviar la foto d\'usuari. Provi-ho més tard </string>
+    <string name="language">Idioma</string>
+    <string name="myRoutes">Les meves rutes</string>
+    <string name="privacy">Privacitat</string>
+    <string name="helpFAQS">Ajuda/FAQS</string>
+    <string name="shop">BOTIGA</string>
+    <string name="edit">Editar</string>
+    <string name="Delete">Eliminar</string>
+    <string name="options">Opcions</string>
+    <string name="noAdsYet">ENCARA NO HI HA CAP ANUNCI. SIGUI EL PRIMER I PENJI EL SEU.</string>
+    <string name="collaboratorInfo">El compte de col·laborador és un servei premium que li permetrà a l\'usuari
+        publicar, editar i eliminar anuncis propis durant el període que dura la subscripció contractada. Aquests
+        anuncis es publiquen a la pàgina principal de l\'app i els usuaris no col·laboradors seran notificats quan
+        es publiqui un anunci. \nSi us plau, recordi que els anuncis no apareixeran en ordre tal que els últims
+        publicats apareixin els primers.</string>
+    <string name="accountAsACollaborator">COMPTE DE COL·LABORADOR</string>
+    <string name="paymentSuccess">Pagament realitzat amb èxit!</string>
+
+    <string name="visited">Visitat</string>
+    <string name="notVisited">Encara no visitat</string>
+
+
+
+
+
 
 
 </resources>

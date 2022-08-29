@@ -67,7 +67,8 @@ public class EditProfile extends AppCompatActivity {
 
         selectImage = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             Glide.with(getApplicationContext()).load(result).into(profileImageView);
-            storageReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(),"Profile picture changed successfully!",Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),"Could not change profile picture. Try later. ",Toast.LENGTH_SHORT).show());
+            storageReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(),getString(R.string.userPictureChanged),Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),getString(R.string.userPictureNotChanged),Toast.LENGTH_SHORT).show());
         });
         profileImageView.setOnClickListener(v -> changePicture());
         backArrow.setOnClickListener(v -> finish());
@@ -78,7 +79,7 @@ public class EditProfile extends AppCompatActivity {
                 clicked = false;
                 editButton.setImageResource(R.drawable.ic_edit);
                 changedUsername();
-                Toast.makeText(getApplicationContext(), "Username edited!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.usernameEdited), Toast.LENGTH_LONG).show();
             } else {
                 userName.setEnabled(true);
                 clicked = true;
@@ -165,92 +166,6 @@ public class EditProfile extends AppCompatActivity {
             });
         }
 
-
     }
 
-
-
-
-    /*
-
-        private String urlPicture;
-
-
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        userInfoPrefs = getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
-        userInfoEditor = userInfoPrefs.edit();
-        clicked = false;
-
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        binding = ActivityFragmentProfileBinding.inflate(getLayoutInflater());
-        View root = binding.getRoot();
-        userName = binding.profileUsername;
-        userName.setClickable(false);
-        userName.setEnabled(false);
-        userName.setText(userInfoPrefs.getString("username", null));
-        userMail = binding.profileUseremail;
-        userMail.setText(userInfoPrefs.getString("email", null));
-        userMail.setClickable(false);
-        userMail.setEnabled(false);
-        userTel = binding.profileUsertelefono;
-        userTel.setText(userInfoPrefs.getString("usertel", null));
-        profileImageView = binding.profileImageView;
-        urlPicture = userInfoPrefs.getString("fotourl", null);//
-        Glide.with(getContext()).load(urlPicture).into(profileImageView);
-
-        editButton = (FloatingActionButton) root.findViewById(R.id.editnamebutton);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clicked) {
-                    userName.setEnabled(false);
-                    clicked = false;
-                    editButton.setImageResource(R.drawable.ic_edit);
-                    changedUsername();
-                    Toast.makeText(getContext(), "Username edited!", Toast.LENGTH_LONG).show();
-                } else {
-                    userName.setEnabled(true);
-                    clicked = true;
-                    editButton.setImageResource(R.drawable.ic_tick);
-                }
-
-            }
-        });
-
-
-        return root;
-    }
-
-    public void changedUsername() {
-        userInfoEditor.remove("username");
-        userInfoEditor.putString("username", userName.getText().toString());
-        userInfoEditor.commit();
-        Query query = reference.orderByChild("email").equalTo(FragmentProfile.this.userInfoPrefs.getString("email", null));
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        DatabaseReference dr = database.getReference("users/" + ds.getKey());
-                        dr.child("username").setValue(userName.getText().toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
-     */
 }

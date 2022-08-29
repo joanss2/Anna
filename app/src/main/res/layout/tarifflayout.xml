@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/fondotarifa">
+            android:background="#B2000000">
 
             <TextView
                 android:id="@+id/tarifaPreu"
@@ -27,10 +27,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
                 android:layout_weight="3"
+                android:background="#000000"
+                android:fontFamily="@font/magra_bold"
                 android:gravity="center_vertical"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="40sp"
-                android:fontFamily="@font/magra_bold"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -45,20 +47,22 @@
                     android:id="@+id/tarifaCondicio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textStart"
+                    android:background="#000000"
+                    android:fontFamily="@font/magra_bold"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:fontFamily="@font/magra_bold"/>
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tarifaCondicioDescripcio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:background="#000000"
+                    android:fontFamily="@font/magra_bold"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/magra_bold"/>
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

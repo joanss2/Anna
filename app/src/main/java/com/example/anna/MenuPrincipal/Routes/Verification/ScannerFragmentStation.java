@@ -89,7 +89,8 @@ public class ScannerFragmentStation extends Fragment {
 
     private void processResultat(String resultat) {
         if (resultat.equals(stationKey)) {
-            setRouteAsVerified(stationKey, routeKey);            new ScanResponseDialog(this, getString(R.string.stationVerified)).show(getChildFragmentManager(),"STATION VERIFIED");
+            setRouteAsVerified(stationKey, routeKey);
+            //new ScanResponseDialog(this, getString(R.string.stationVerified)).show(getChildFragmentManager(),"STATION VERIFIED");
 
             //new StationConfirmationDialog(this).show(getChildFragmentManager(), "STATION VERIFIED");
         } else {

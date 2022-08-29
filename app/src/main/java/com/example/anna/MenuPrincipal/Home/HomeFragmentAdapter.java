@@ -54,7 +54,7 @@ public class HomeFragmentAdapter extends FirestoreRecyclerAdapter<HotNews, HomeF
     @NonNull
     @Override
     public HotNewsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.add_template, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.ad_template, parent, false);
         return new HotNewsHolder(view);
     }
 

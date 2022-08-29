@@ -42,7 +42,7 @@ public class AppCompat extends AppCompatActivity {
                             assert user != null;
                             if(!Locale.getDefault().getLanguage().equals(user.getLanguage())) {
                                 languageManager.updateResource(user.getLanguage());
-                                //recreate();
+                                recreate();
                             }
 
                         }

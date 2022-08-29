@@ -40,7 +40,7 @@ public class FragmentProfile extends Fragment {
     private ProfileMenu profileMenu;
     private SharedPreferences userInfoPrefs;
     private final int[] icons = {R.drawable.ic_discount, R.drawable.ic_myroutes};
-    private final String[] tabsNames = {"My discounts", "My Routes"};
+    //private final String[] tabsNames = {"My discounts", "My Routes"};
     private StorageReference storageReference;
     private String authorKey;
     public static Context context;
@@ -71,6 +71,7 @@ public class FragmentProfile extends Fragment {
         TabLayout tabLayout = binding.profileTablayout;
         TextView profileName = binding.profileName;
         ImageButton menu = binding.menuProfile;
+        String[] tabsNames = {getString(R.string.myDiscounts), getString(R.string.myRoutes)};
 
         FragmentStateAdapter pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager2.setAdapter(pagerAdapter);
@@ -86,7 +87,7 @@ public class FragmentProfile extends Fragment {
         editProfileButton.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfile.class)));
 
         menu.setOnClickListener(v -> {
-            profileMenu = new ProfileMenu();
+            profileMenu = new ProfileMenu(getContext());
             profileMenu.show(requireActivity().getSupportFragmentManager(), "bottomSheetSettings");
         });
 
@@ -149,10 +150,4 @@ public class FragmentProfile extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println(requireActivity().getSupportFragmentManager().getBackStackEntryCount()+ " AL resume DE profile");
-
-    }
 }

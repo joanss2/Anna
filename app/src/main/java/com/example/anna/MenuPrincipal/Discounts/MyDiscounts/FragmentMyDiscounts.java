@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -51,7 +53,12 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
         discountsUsed = firebaseFirestore.collection("DiscountsUsed").document(userInfoPrefs.getString("userKey", null))
         .collection("DiscountsReferenceList");
         hasDiscounts = userInfoPrefs.getBoolean("hasDiscounts", false);
-
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed(){
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Nullable
@@ -108,7 +115,7 @@ public class FragmentMyDiscounts extends Fragment implements MyDiscountsAdapter.
         super.onViewCreated(view, savedInstanceState);
 
         if (!hasDiscounts && this.viewParent!=null) {
-            Snackbar snackbar = Snackbar.make(viewParent, "GO TO DISCOUNTS PAGE", Snackbar.LENGTH_INDEFINITE);
+            Snackbar snackbar = Snackbar.make(viewParent, getString(R.string.goToDiscounts), Snackbar.LENGTH_INDEFINITE);
 
             snackbar.setAction("GO", v -> {
                 FragmentManager manager = requireActivity().getSupportFragmentManager();

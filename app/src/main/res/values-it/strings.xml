@@ -24,6 +24,7 @@
     <string name="numberStages">Nº STAGES</string>
     <string name="discounts">Discounts</string>
     <string name="discountsUpperCase">DISCOUNTS</string>
+    <string name="myDiscounts">My Discounts</string>
     <string name="myDiscountsUpperCase">MY DISCOUNTS</string>
     <string name="noDiscountsUsedMessage">YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING</string>j
     <string name="activar">Activar</string>
@@ -122,5 +123,30 @@
     <string name="discountAlreadyUsed">Sorry! The discount has already been used</string>
     <string name="scanVerification">Scan Verification Response</string>
 
+    <string name="numberDiscountsUsed">Nº Discounts Used</string>
+    <string name="numberRoutesFinished">Nº Routes Finished</string>
+    <string name="goToDiscounts">GO TO DISCOUNTS PAGE</string>
+    <string name="emptyMyDiscounts">YOU STILL HAVE NOT USED ANY DISCOUNT. HURRY UP!! THEY ARE WAITING</string>
+    <string name="usernameEdited">Username edited!</string>
+    <string name="userPictureChanged">Profile picture changed successfully!</string>
+    <string name="userPictureNotChanged">Could not change profile picture. Try later. </string>
+    <string name="language">Language</string>
+    <string name="myRoutes">My Routes</string>
+    <string name="privacy">Privacy</string>
+    <string name="helpFAQS">Help/FAQS</string>
+    <string name="shop">SHOP</string>
+    <string name="edit">Edit</string>
+    <string name="Delete">Delete</string>
+    <string name="options">Options</string>
+    <string name="noAdsYet">NO ADS YET. BE THE FIRST ONE AND POST YOURS</string>
+    <string name="collaboratorInfo">A collaborator account is a premium service that will allow
+the user to post, edit and delete own-created ads within the period of time established
+in the subscription details. These advertisements will be published in the home page of the app
+and non-collaborator users will be notified of each premium post made. \nPlease bear in mind that
+ads will not appear in order so the last posted are on the top.</string>
+    <string name="accountAsACollaborator">ACCOUNT AS A COLLABORATOR</string>
+    <string name="paymentSuccess">Payment successful!</string>
+    <string name="visited">Visited</string>
+    <string name="notVisited">Not visited yet</string>
 
 </resources>

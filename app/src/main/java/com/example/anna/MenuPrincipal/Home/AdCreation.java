@@ -27,7 +27,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -35,7 +34,6 @@ import com.google.firebase.storage.StorageReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -55,7 +53,7 @@ public class AdCreation extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_creation);
+        setContentView(R.layout.ad_creation);
 
         userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
         storageReference = FirebaseStorage.getInstance().getReference("advertisements");

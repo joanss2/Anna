@@ -16,7 +16,6 @@ public class MyRoutesClickedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toast.makeText(this, "NEW ACTIVITY", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.my_routes_clicked_choice_activity);
         String choiceType = getIntent().getStringExtra("choice");
 
@@ -43,7 +42,5 @@ public class MyRoutesClickedActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "BYE BYE ACTIVITY", Toast.LENGTH_SHORT).show();
-
     }
 }

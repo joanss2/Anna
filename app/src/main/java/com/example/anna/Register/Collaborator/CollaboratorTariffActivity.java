@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
@@ -68,7 +67,6 @@ public class CollaboratorTariffActivity extends AppCompatActivity implements Sho
 
     @Override
     public void onTariffClick(Tariff tariff) {
-        Toast.makeText(this,"You have clicked the "+tariff.getCondition()+" tariff. Enjoy!",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, PaymentSelected.class);
         intent.putExtra("price",tariff.getPrice());
         intent.putExtra("tariff",tariff);

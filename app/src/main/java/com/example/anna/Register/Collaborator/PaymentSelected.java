@@ -4,6 +4,7 @@ package com.example.anna.Register.Collaborator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -68,6 +69,21 @@ public class PaymentSelected extends AppCompatActivity {
         PaymentConfiguration.init(this, PUBLISH_KEY);
 
         paymentSheet = new PaymentSheet(this, this::onPaymentResult);
+        payButton.setEnabled(false);
+
+        final Runnable r = new Runnable() {
+            public void run() {
+            }
+        };
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                payButton.setEnabled(true);
+            }
+        }, 3000);
+
 
         payButton.setOnClickListener(view -> paymentFlow());
 
@@ -75,7 +91,6 @@ public class PaymentSelected extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(response);
                 customerID = object.getString("id");
-                Toast.makeText(getApplicationContext(),"customerID "+customerID,Toast.LENGTH_SHORT).show();
 
                 getEphericalKey(customerID);
 
@@ -100,7 +115,7 @@ public class PaymentSelected extends AppCompatActivity {
 
     private void onPaymentResult(PaymentSheetResult paymentSheetResult) {
         if(paymentSheetResult instanceof PaymentSheetResult.Completed){
-            Toast.makeText(this,"Payment success!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.paymentSuccess),Toast.LENGTH_LONG).show();
             prefsDeletable = false;
 
             createSubscription();
@@ -115,8 +130,6 @@ public class PaymentSelected extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(response);
                 ephericalKey = object.getString("id");
-                Toast.makeText(getApplicationContext(),"ephericalKey "+ephericalKey,Toast.LENGTH_SHORT).show();
-
                 getClientSecret(customerID, ephericalKey);
 
             } catch (JSONException e) {
@@ -153,7 +166,6 @@ public class PaymentSelected extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(response);
                 clientSecret = object.getString("client_secret");
-                Toast.makeText(getApplicationContext(),"client secret "+clientSecret,Toast.LENGTH_SHORT).show();
 
             } catch (JSONException e) {
                 e.printStackTrace();

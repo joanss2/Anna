@@ -4,12 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#5A0101"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/magra_bold"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="@string/shop"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shopRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"/>
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"/>
 </LinearLayout>

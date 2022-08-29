@@ -43,7 +43,6 @@ public class CollaboratorFragmentHome extends Fragment implements HomeFragmentAd
         CollectionReference adsReference = FirebaseFirestore.getInstance().collection("Advertisements").document(userInfoPrefs.getString("userKey",null)).collection("AdsOfUser");
         adsReference.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                System.out.println(task.getResult().size());
                 if(task.getResult().isEmpty()){
                     try {
                         Thread.sleep(1500);

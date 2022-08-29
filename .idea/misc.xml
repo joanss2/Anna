@@ -48,6 +48,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_main_menu.xml" value="0.130859375" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_menu_main.xml" value="0.117578125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_my_route2.xml" value="0.1" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/ad_creation.xml" value="0.26015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_creation.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_edition.xml" value="0.26015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_template.xml" value="0.19230769230769232" />
@@ -91,6 +92,8 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/main_toolbar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/main_with_bottom_menu.xml" value="0.181640625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/my_routes_clicked_choice_activity.xml" value="0.189453125" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/myroute_cardview.xml" value="0.10078125" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/myroutes_routechoice.xml" value="0.10078125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/naturlandiacard.xml" value="0.153125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_main.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/nav_header_menu_main.xml" value="0.18" />
