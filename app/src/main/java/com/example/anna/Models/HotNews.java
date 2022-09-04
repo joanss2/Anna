@@ -8,11 +8,8 @@ import java.util.Date;
 
 public class HotNews {
 
-    private String title;
-    private String description;
+    private String title, description, key, author;
     private Date endDate;
-    private String key;
-    private String author;
 
     public String getAuthor() {
         return author;

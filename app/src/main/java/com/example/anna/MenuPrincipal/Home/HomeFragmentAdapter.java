@@ -2,6 +2,7 @@ package com.example.anna.MenuPrincipal.Home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +18,27 @@ import com.example.anna.Models.HotNews;
 import com.example.anna.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeFragmentAdapter extends FirestoreRecyclerAdapter<HotNews, HomeFragmentAdapter.HotNewsHolder> {
 
     private final Context context;
     private FragmentManager manager;
-    private MoreClickListener moreClickListener;
+    private AdClickListener adClickListener;
 
     public HomeFragmentAdapter(@NonNull FirestoreRecyclerOptions<HotNews> options, Context context) {
         super(options);
         this.context = context;
     }
 
-    public HomeFragmentAdapter(@NonNull FirestoreRecyclerOptions<HotNews> options, Context context,MoreClickListener moreClickListener) {
+    public HomeFragmentAdapter(@NonNull FirestoreRecyclerOptions<HotNews> options, Context context, AdClickListener adClickListener) {
         super(options);
         this.context = context;
-        this.moreClickListener = moreClickListener;
+        this.adClickListener = adClickListener;
     }
 
     @Override
@@ -45,9 +48,14 @@ public class HomeFragmentAdapter extends FirestoreRecyclerAdapter<HotNews, HomeF
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         holder.dateEnd.setText(simpleDateFormat.format(model.getEndDate()));
         FirebaseStorage.getInstance().getReference("advertisements").child(model.getKey()).getDownloadUrl().addOnSuccessListener(
-                uri -> Glide.with(context).load(uri).into(holder.picture)
+                new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(context).load(uri).into(holder.picture);
+                        holder.onBind(model, uri);
+                    }
+                }
         );
-        holder.onBind(model);
 
     }
 
@@ -63,6 +71,7 @@ public class HomeFragmentAdapter extends FirestoreRecyclerAdapter<HotNews, HomeF
         TextView title, description, dateEnd;
         ImageView picture, more;
         HotNews hotNews;
+        Uri uri;
 
         public HotNewsHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,24 +82,33 @@ public class HomeFragmentAdapter extends FirestoreRecyclerAdapter<HotNews, HomeF
             more = itemView.findViewById(R.id.adMoreOptions);
 
             more.setOnClickListener(this);
+            title.setOnClickListener(this);
+            description.setOnClickListener(this);
+            picture.setOnClickListener(this);
         }
 
-        public void onBind(HotNews hotNews){
+        public void onBind(HotNews hotNews, Uri uri) {
             this.hotNews = hotNews;
+            this.uri = uri;
         }
 
         @Override
         public void onClick(View view) {
-            if(moreClickListener==null)
-                System.out.println("MORE CLIKCK LISTENER NULL");
-            else
-                moreClickListener.OnMoreClick(hotNews);
-
+            switch (view.getId()){
+                case R.id.adMoreOptions:
+                    adClickListener.OnAdMoreClick(hotNews);
+                    break;
+                default:
+                    adClickListener.OnAdClick(hotNews, uri);
+                    break;
+            }
         }
     }
 
-    public interface MoreClickListener{
-        void OnMoreClick(HotNews hotNews);
+    public interface AdClickListener {
+
+        void OnAdMoreClick(HotNews hotNews);
+        void OnAdClick(HotNews hotnews, Uri uri);
     }
 
 }

@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.example.anna.Models.Alert;
 
-public class NonExistentAccount extends Alert {
-    public NonExistentAccount(Context context) {
+public class NonExistentAccountAlert extends Alert {
+    public NonExistentAccountAlert(Context context) {
         super(context);
     }
 

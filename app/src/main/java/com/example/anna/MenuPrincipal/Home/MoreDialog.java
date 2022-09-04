@@ -83,8 +83,8 @@ public class MoreDialog extends DialogFragment {
 
     private void deleteAd(HotNews hotNews) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Delete Confirmation")
-        .setMessage("Are you sure you want to delete this ad ? It will be deleted from our databases as well.")
+        builder.setTitle(getString(R.string.deleteConfirmationTitle))
+        .setMessage(getString(R.string.deleteConfirmation))
         .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

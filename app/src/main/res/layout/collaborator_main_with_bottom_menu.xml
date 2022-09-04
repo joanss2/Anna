@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#533030"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="#FFFFFF"
+            app:itemIconTint="@color/collaborator_menu_bottom_selector"
+            app:itemTextColor="@color/collaborator_menu_bottom_selector"
             android:fontFamily="@font/magra"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/collaborator_bottom_main">

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -40,14 +41,15 @@ public class EditProfile extends AppCompatActivity {
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://annaapp-322219-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference reference = database.getReference("users");
     private final DatabaseReference referenceAdmin = database.getReference("collaborators");
-    private StorageReference storageReference;
+    private StorageReference storageUserReference, storageCollaboratorReference;
     private ActivityResultLauncher<String> selectImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userInfoPrefs = getSharedPreferences("USERINFO", MODE_PRIVATE);
-        storageReference = FirebaseStorage.getInstance().getReference("users").child(userInfoPrefs.getString("userKey", null));
+        storageUserReference = FirebaseStorage.getInstance().getReference("users").child(userInfoPrefs.getString("userKey", null));
+        storageCollaboratorReference = FirebaseStorage.getInstance().getReference("collaborators").child(userInfoPrefs.getString("userKey", null));
         userInfoEditor = userInfoPrefs.edit();
 
         com.example.anna.databinding.EditProfileBinding binding = EditProfileBinding.inflate(getLayoutInflater());
@@ -63,12 +65,22 @@ public class EditProfile extends AppCompatActivity {
 
         initializeUserName();
         initializeUserEmail();
-        initializeUserPicture(storageReference);
+        if (userInfoPrefs.getString("usertype", null).equals("collaborator"))
+            initializeUserPicture(storageCollaboratorReference);
+        else
+            initializeUserPicture(storageUserReference);
+
 
         selectImage = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             Glide.with(getApplicationContext()).load(result).into(profileImageView);
-            storageReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(),getString(R.string.userPictureChanged),Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),getString(R.string.userPictureNotChanged),Toast.LENGTH_SHORT).show());
+            if (userInfoPrefs.getString("usertype", null).equals("collaborator")) {
+                storageCollaboratorReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.userPictureChanged), Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), getString(R.string.userPictureNotChanged), Toast.LENGTH_SHORT).show());
+            } else {
+                storageUserReference.putFile(result).addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.userPictureChanged), Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), getString(R.string.userPictureNotChanged), Toast.LENGTH_SHORT).show());
+            }
+
         });
         profileImageView.setOnClickListener(v -> changePicture());
         backArrow.setOnClickListener(v -> finish());
@@ -91,7 +103,7 @@ public class EditProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ChangePasswordDialog dialog = new ChangePasswordDialog();
-                dialog.show(getSupportFragmentManager(),"CHANGE PASSWORD");
+                dialog.show(getSupportFragmentManager(), "CHANGE PASSWORD");
             }
         });
 
@@ -109,6 +121,7 @@ public class EditProfile extends AppCompatActivity {
     }
 
     public void initializeUserPicture(StorageReference storageReference) {
+
         storageReference.getDownloadUrl()
                 .addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(uri).into(profileImageView))
                 .addOnFailureListener(exception -> {
@@ -129,7 +142,7 @@ public class EditProfile extends AppCompatActivity {
         userInfoEditor.putString("username", userName.getText().toString());
         userInfoEditor.commit();
 
-        if(userInfoPrefs.getString("usertype",null).equals("client")){
+        if (userInfoPrefs.getString("usertype", null).equals("client")) {
             Query query = reference.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -147,7 +160,7 @@ public class EditProfile extends AppCompatActivity {
                 }
             });
         }
-        if(userInfoPrefs.getString("usertype",null).equals("collaborator")){
+        if (userInfoPrefs.getString("usertype", null).equals("collaborator")) {
             Query query = referenceAdmin.orderByChild("email").equalTo(this.userInfoPrefs.getString("email", null));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

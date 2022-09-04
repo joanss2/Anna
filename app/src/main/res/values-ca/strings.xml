@@ -44,7 +44,7 @@
 
     <string name="faqs">Faqs</string>
     <string name="ajustes">Eines</string>
-    <string name="contactus"><u>Necessitea ajuda? Contacti\'ns!</u></string>
+    <string name="contactus"><u>Necessita ajuda? Contacti\'ns!</u></string>
     <string name="sendMailTitle">Com el podem ajudar?</string>
     <string name="hint_email">El seu email aquí</string>
     <string name="buttonSend">Envii mail</string>
@@ -147,6 +147,8 @@
 
     <string name="visited">Visitat</string>
     <string name="notVisited">Encara no visitat</string>
+    <string name="deleteConfirmation">Està segur que vol eliminar l\'anunci? Serà eliminat també de les nostres bases de dades.</string>
+    <string name="deleteConfirmationTitle">Confirmació d\'eliminació</string>
 
 
 

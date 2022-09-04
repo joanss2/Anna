@@ -23,7 +23,7 @@ public class FragmentFaqs extends Fragment {
         View root = binding.getRoot();
 
         TextView contactlink = binding.contactusFromFaqs;
-        contactlink.setOnClickListener(v -> startActivity(new Intent(getActivity(), Faqs.class)));
+        contactlink.setOnClickListener(v -> startActivity(new Intent(getActivity(), ContactUs.class)));
 
         return root;
     }

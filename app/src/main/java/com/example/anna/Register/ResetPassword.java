@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.anna.Alerts.AlertManager;
-import com.example.anna.Alerts.NonExistentAccount;
+import com.example.anna.Alerts.NonExistentAccountAlert;
 import com.example.anna.databinding.ResetPasswordActivityBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +55,7 @@ public class ResetPassword extends AppCompatActivity {
                         if(snapshot.exists()){
                             sendPasswordResetMail(email);
                         }else{
-                            alertManager.showAlert(new NonExistentAccount(getApplicationContext()));
+                            alertManager.showAlert(new NonExistentAccountAlert(getApplicationContext()));
                         }
                     }
 

@@ -8,6 +8,7 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable-v24/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.247" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/collaborator_bottom_menu_selector.xml" value="0.328" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/cornersrounded.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/dialog_rounded_background.xml" value="0.3365" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.1" />
@@ -49,6 +50,8 @@
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_menu_main.xml" value="0.117578125" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/activity_my_route2.xml" value="0.1" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/ad_creation.xml" value="0.26015625" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/ad_detail.xml" value="0.13558743169398907" />
+        <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/ad_template.xml" value="0.20546875" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_creation.xml" value="0.22" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_edition.xml" value="0.26015625" />
         <entry key="..\:/Users/joans/AndroidStudioProjects/Anna/app/src/main/res/layout/add_template.xml" value="0.19230769230769232" />
