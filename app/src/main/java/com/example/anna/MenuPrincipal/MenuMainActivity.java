@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.anna.MenuPrincipal.Discounts.FragmentDiscounts;
 import com.example.anna.MenuPrincipal.Home.FragmentHome;
@@ -22,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 
 public class MenuMainActivity extends AppCompat {
@@ -47,7 +45,7 @@ public class MenuMainActivity extends AppCompat {
         setContentView(view);
 
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.id_bottom_navigation);
+        bottomNavigationView = findViewById(R.id.id_bottom_navigation);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FragmentHome()).commit();
 
 
@@ -87,16 +85,15 @@ public class MenuMainActivity extends AppCompat {
 
     public void leaving_confirmation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Exit Confirmation");
-        builder.setTitle("Are you sure you want to log out?");
-        builder.setPositiveButton("YES", (dialog, which) -> {
+        builder.setTitle(getString(R.string.exitConfirmation));
+        builder.setTitle(getString(R.string.exitConfirmationQuestion));
+        builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> {
             userInfoEditor.clear().commit();
-            Toast.makeText(getApplicationContext(), "i have been clicked", Toast.LENGTH_SHORT).show();
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             finishAffinity();
         });
-        builder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

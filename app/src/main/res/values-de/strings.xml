@@ -17,6 +17,10 @@
     <string name="collaborator">Mitarbeiter</string>
     <string name="haveAccount">Haben Sie bereits ein Konto?</string>
     <string name="profile">Profile</string>
+    <string name="ends">Ends:</string>
+    <string name="exitConfirmation">Exit confirmation</string>
+    <string name="exitConfirmationQuestion">Are you sure you want to log out?</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="myRoute">Routen</string>

@@ -17,6 +17,10 @@
     <string name="collaborator">Collaborator</string>
     <string name="haveAccount">Do you already have an account?</string>
     <string name="profile">Profile</string>
+    <string name="ends">Ends:</string>
+    <string name="exitConfirmation">Exit confirmation</string>
+    <string name="exitConfirmationQuestion">Are you sure you want to log out?</string>
+
 
     <string name="myRoute">Routes</string>
     <string name="routeListTitle">AVAILABLE ROUTES LIST</string>

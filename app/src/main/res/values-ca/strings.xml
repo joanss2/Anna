@@ -17,6 +17,12 @@
     <string name="collaborator">Col·laborador</string>
     <string name="haveAccount">Ja disposa d\' un compte?</string>
     <string name="profile">Perfil</string>
+    <string name="ends">Finalitza:</string>
+    <string name="exitConfirmation">Confirmació de sortida</string>
+    <string name="exitConfirmationQuestion">Està segur que vol tancar la sessió?</string>
+
+
+
 
     <string name="myRoute">Rutes</string>
     <string name="routeListTitle">RUTES DISPONIBLES</string>

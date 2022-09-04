@@ -16,7 +16,7 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
 
 
     private Intent emailIntent;
-    private EditText editTextsubject, editTextmessage;
+    private EditText editTextSubject, editTextMessage;
     private TextView addressTo;
 
 
@@ -26,10 +26,10 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_contact_us);
 
         emailIntent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-        Button sendButton = (Button) findViewById(R.id.buttonsendmail);
-        addressTo = (TextView) findViewById(R.id.addressmail);
-        editTextsubject = (EditText) findViewById(R.id.subjectmail);
-        editTextmessage = (EditText) findViewById(R.id.messagemail);
+        Button sendButton = findViewById(R.id.buttonsendmail);
+        addressTo = findViewById(R.id.addressmail);
+        editTextSubject = findViewById(R.id.subjectmail);
+        editTextMessage = findViewById(R.id.messagemail);
         sendButton.setOnClickListener(this);
 
 
@@ -47,8 +47,8 @@ public class ContactUs extends AppCompatActivity implements View.OnClickListener
         String[] TO = {correu};
         emailIntent.setType("text/plain");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO); // * configurar email aquí!
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, editTextsubject.getText().toString());
-        emailIntent.putExtra(Intent.EXTRA_TEXT, editTextmessage.getText().toString());
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, editTextSubject.getText().toString());
+        emailIntent.putExtra(Intent.EXTRA_TEXT, editTextMessage.getText().toString());
         startActivity(emailIntent);
     }
 

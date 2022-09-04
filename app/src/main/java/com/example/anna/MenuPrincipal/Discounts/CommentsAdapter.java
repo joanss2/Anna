@@ -23,7 +23,6 @@ import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsAdapter.CommentHolder> {
 

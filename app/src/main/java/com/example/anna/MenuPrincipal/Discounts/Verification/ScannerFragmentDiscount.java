@@ -22,21 +22,14 @@ import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.ScanMode;
-import com.example.anna.MenuPrincipal.MenuMainActivity;
 import com.example.anna.MenuPrincipal.ScanResponseDialog;
 import com.example.anna.Models.Discount;
-import com.example.anna.Models.RouteModel;
-import com.example.anna.Models.Station;
 import com.example.anna.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,12 +40,8 @@ public class ScannerFragmentDiscount extends Fragment{
 
     private CodeScanner mCodeScanner;
     private final int CAMERA_REQUEST_CODE = 101;
-    private int routeStages;
-    private Station objectStation;
     private SharedPreferences userInfoPrefs;
-    private String discountKey;
-    private RouteModel routeNeeded;
-    private Map<String, Object> map1;
+    private final String discountKey;
     private CollectionReference discountsByUserReference;
     private DocumentReference userDocumentReference;
     private String userKey, username;
@@ -129,15 +118,12 @@ public class ScannerFragmentDiscount extends Fragment{
 
 
     private void checkAlreadyUsedDiscount(){
-        discountsByUserReference.whereEqualTo("key",discountKey).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    if(task.getResult().isEmpty())
-                        createDiscountUsedEntry();
-                    else
-                        new ScanResponseDialog(ScannerFragmentDiscount.this,getString(R.string.discountAlreadyUsed)).show(getChildFragmentManager(),"DISCOUNT NOT RECOGNIZED");
-                }
+        discountsByUserReference.whereEqualTo("key",discountKey).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if(task.getResult().isEmpty())
+                    createDiscountUsedEntry();
+                else
+                    new ScanResponseDialog(ScannerFragmentDiscount.this,getString(R.string.discountAlreadyUsed)).show(getChildFragmentManager(),"DISCOUNT NOT RECOGNIZED");
             }
         });
     }
@@ -166,9 +152,7 @@ public class ScannerFragmentDiscount extends Fragment{
         fieldKey.put("key",userKey);
         fieldKey.put("username",username);
         userDocumentReference.set(fieldKey).addOnSuccessListener(unused -> userDocumentReference.collection("DiscountsReferenceList")
-                .add(discount).addOnSuccessListener(documentReference -> {
-                    new ScanResponseDialog(ScannerFragmentDiscount.this,getString(R.string.discountVerified)).show(getChildFragmentManager(),"DISCOUNT APPLIED");
-                }));
+                .add(discount).addOnSuccessListener(documentReference -> new ScanResponseDialog(ScannerFragmentDiscount.this,getString(R.string.discountVerified)).show(getChildFragmentManager(),"DISCOUNT APPLIED")));
     }
 
     private void setUpPermissions() {

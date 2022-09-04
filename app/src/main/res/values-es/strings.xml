@@ -17,6 +17,10 @@
     <string name="username">Username</string>
     <string name="haveAccount">Ya tienes una cuenta?</string>
     <string name="profile">Profile</string>
+    <string name="ends">Ends:</string>
+    <string name="exitConfirmation">Exit confirmation</string>
+    <string name="exitConfirmationQuestion">Are you sure you want to log out?</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="myRoute">Rutas</string>

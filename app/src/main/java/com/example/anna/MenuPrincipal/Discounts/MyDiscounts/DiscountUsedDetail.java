@@ -1,6 +1,5 @@
 package com.example.anna.MenuPrincipal.Discounts.MyDiscounts;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -22,7 +21,6 @@ import com.example.anna.Models.Discount;
 import com.example.anna.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +59,7 @@ public class DiscountUsedDetail extends Fragment {
         TextView discountPercentage = view.findViewById(R.id.discountPercentageEditTextDetail);
 
         discountPercentage.setText(String.valueOf(discount.getDiscountPercentage()));
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //@SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         //endDate.setText(simpleDateFormat.format(discount.ge));
 
         Glide.with(requireContext()).load(discount.getUriImg()).into(imageView);

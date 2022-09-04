@@ -17,10 +17,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.anna.Models.HotNews;
+import com.example.anna.Models.User;
 import com.example.anna.databinding.CollaboratorFragmentHomeBinding;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 
 public class CollaboratorFragmentHome extends Fragment implements HomeFragmentAdapter.AdClickListener {
@@ -112,5 +120,38 @@ public class CollaboratorFragmentHome extends Fragment implements HomeFragmentAd
 
 
     @Override
-    public void OnAdClick(HotNews hotnews, Uri uri) {}
+    public void OnAdClick(HotNews hotnews, Uri uri) {
+        FirebaseDatabase.getInstance().getReference("collaborators").child(hotnews.getAuthor()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    assert user != null;
+                    FirebaseStorage.getInstance().getReference("collaborators").child(hotnews.getAuthor()).getDownloadUrl().addOnSuccessListener(
+                            new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uriUserImage) {
+                                    AdDetailDialog adDetailDialog = new AdDetailDialog(hotnews,uri,uriUserImage,user.getUsername());
+                                    adDetailDialog.show(requireActivity().getSupportFragmentManager(),"AD INFO DETAIL");
+                                }
+                            }
+                    ).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            AdDetailDialog adDetailDialog = new AdDetailDialog(hotnews,uri,null,user.getUsername());
+                            adDetailDialog.show(requireActivity().getSupportFragmentManager(),"AD INFO DETAIL");
+                        }
+                    });
+
+                }else{
+                    System.out.println("NADA NADA");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }

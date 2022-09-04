@@ -77,7 +77,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="@font/magra"
-                android:text="Finalitza:"
+                android:text="@string/ends"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
