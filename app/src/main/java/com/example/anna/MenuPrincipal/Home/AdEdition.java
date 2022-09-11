@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +26,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -191,14 +195,26 @@ public class AdEdition extends AppCompatActivity {
             exception.printStackTrace();
         }
 
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("AllAds").document(adKey);
-        documentReference.update("title", title.getText().toString(),
-                "description", description.getText().toString(),
-                "endDate", date).addOnCompleteListener(new OnCompleteListener<Void>() {
+        Query query = FirebaseFirestore.getInstance().collection("AllAds").whereEqualTo("key",adKey);
+        Date finalDate = date;
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                //finish();
-                updatePictureInStorage();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        FirebaseFirestore.getInstance().collection("AllAds").document(document.getId()).update("title", title.getText().toString(),
+                                "description", description.getText().toString(),
+                                "endDate", finalDate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                //finish();
+                                updatePictureInStorage();
+                            }
+                        });
+                    }
+                } else {
+                    Log.d("ERROR", "Error getting documents: ", task.getException());
+                }
             }
         });
     }
